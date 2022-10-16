@@ -1,6 +1,7 @@
 # vue2-big-screen
 
 ![示例图片](./src/assets/docs/demo.png)
+![示例图片](./src/assets/docs/2.png)
 
 > 基于 vue2 进行搭建的大屏设计器项目，后续会陆续推出 vue3 版本 、react版本等
 
