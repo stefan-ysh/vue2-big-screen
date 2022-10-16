@@ -451,6 +451,7 @@ export default {
     },
 
     handleKeyDown (e) {
+      e.preventDefault()
       if (this.currentCptIndex !== -1) {
         const key = e.key
         let idx = 0
