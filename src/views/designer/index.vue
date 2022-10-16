@@ -451,9 +451,11 @@ export default {
     },
 
     handleKeyDown (e) {
-      e.preventDefault()
       if (this.currentCptIndex !== -1) {
         const key = e.key
+        if (['ArrowDown', 'Arrow', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+          e.preventDefault()
+        }
         let idx = 0
         switch (key) {
           // 方向键移动当前组件
