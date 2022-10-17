@@ -11,6 +11,7 @@
           class="operation-handler icon-btn hidden-left-btn"
           :class="{ 'pane-active': cptPaneWidth === 200 }"
           placement="bottom"
+          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
         >
           <div slot="content">物料</div>
           <i class="btn el-icon-brush" @click="hiddenPane('left')" />
@@ -19,6 +20,7 @@
           class="operation-handler icon-btn hidden-right-btn"
           :class="{ 'pane-active': configPaneWidth === 300 }"
           placement="bottom"
+          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
         >
           <div slot="content">配置</div>
           <i class="btn el-icon-setting" @click="hiddenPane('right')" />
@@ -27,6 +29,7 @@
           class="operation-handler icon-btn lattice-btn"
           :class="{ 'pane-active': canvasBgStyle === 'lattice' }"
           placement="bottom"
+          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
         >
           <div slot="content">点阵背景</div>
           <i class="btn el-icon-date" @click="changeCanvasBgStyle('lattice')" />
@@ -35,6 +38,7 @@
           class="operation-handler icon-btn grid-btn"
           :class="{ 'pane-active': canvasBgStyle === 'grid' }"
           placement="bottom"
+          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
         >
           <div slot="content">网格背景</div>
           <i class="btn el-icon-s-grid" @click="changeCanvasBgStyle('grid')" />
@@ -48,9 +52,71 @@
           :max="2"
           :step="0.01"
         />
-        <el-tooltip class="operation-handler icon-btn" placement="bottom">
+        <el-tooltip
+          class="operation-handler icon-btn"
+          placement="bottom"
+          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
+        >
           <div slot="content">恢复比例</div>
           <i class="btn el-icon-aim" @click="$store.dispatch('bigScreen/initContainerSize')" />
+        </el-tooltip>
+        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
+          <div slot="content">上对齐</div>
+          <img
+            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
+            src="@/assets/icon/align-top.svg"
+            alt=""
+            @click.stop="handleAlign('top')"
+          >
+        </el-tooltip>
+        <!-- <el-tooltip
+          class="operation-handler icon-btn"
+          placement="bottom"
+          @click.stop="handleAlign('top')"
+        >
+          <div slot="content">水平居中</div>
+          <img
+            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
+            src="@/assets/icon/align-horizontal-center.svg"
+            alt=""
+            @click.stop="handleAlign('horizontal-center')"
+          >
+        </el-tooltip> -->
+        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 5px">
+          <div slot="content">下对齐</div>
+          <img
+            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
+            src="@/assets/icon/align-bottom.svg"
+            alt=""
+            @click.stop="handleAlign('bottom')"
+          >
+        </el-tooltip>
+        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 5px">
+          <div slot="content">左对齐</div>
+          <img
+            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
+            src="@/assets/icon/align-left.svg"
+            alt=""
+            @click.stop="handleAlign('left')"
+          >
+        </el-tooltip>
+        <!-- <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 5px">
+          <div slot="content">垂直居中对齐</div>
+          <img
+            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
+            src="@/assets/icon/align-vertical-center.svg"
+            alt=""
+            @click.stop="handleAlign('vertical-center')"
+          >
+        </el-tooltip> -->
+        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 5px">
+          <div slot="content">右对齐</div>
+          <img
+            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
+            src="@/assets/icon/align-right.svg"
+            alt=""
+            @click.stop="handleAlign('right')"
+          >
         </el-tooltip>
       </el-col>
       <!-- 右侧操作按钮 -->
@@ -115,12 +181,26 @@ export default {
   components: {
     BigScreenPreview
   },
+  props: {
+    multipleCpts: {
+      type: Object,
+      default: () => {}
+    },
+    multipleCptPositions: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data () {
     return {
       isPreview: false
     }
   },
   computed: {
+    isMultiple () {
+      console.log('[ Object.keys(this.multipleCpts).length ] >', Object.keys(this.multipleCpts).length)
+      return Object.keys(this.multipleCpts).length >= 2
+    },
     // 画布背景风格
     canvasBgStyle () {
       return this.$store.state.bigScreen.canvasBgStyle
@@ -163,6 +243,93 @@ export default {
     }
   },
   methods: {
+    // TODO 改为状态管理
+    handleAlign (type) {
+      if (!Object.keys(this.multipleCpts).length) {
+        return
+      }
+      const posArr = []
+      if (type === 'top') {
+        let val = 0
+        for (const key in this.multipleCpts) {
+          if (Object.hasOwnProperty.call(this.multipleCpts, key)) {
+            const el = this.multipleCpts[key]
+            posArr.push(el.cptY)
+          }
+        }
+        val = Math.min(...posArr)
+        Object.keys(this.multipleCpts).forEach((key) => {
+          // eslint-disable-next-line vue/no-mutating-props
+          this.multipleCpts[key].cptY = val
+        })
+      } else if (type === 'horizontal-center') {
+        // todo 水平居中对齐
+        // 1. 找出中间组件
+        // 2. 查看中间组件的 y 值
+        // 3. 将 y 值加上自身 height / 2 ，保存为 result
+        // 4. 其他组件的中心点在 result 上
+        //  4.1 如果中心在
+      } else if (type === 'bottom') {
+        for (const key in this.multipleCpts) {
+          if (Object.hasOwnProperty.call(this.multipleCpts, key)) {
+            const el = this.multipleCpts[key]
+            posArr.push({ height: el.cptHeight, max: el.cptHeight + el.cptY })
+          }
+        }
+        const arr = posArr.map((v) => v.max)
+        const max = Math.max(...arr)
+        Object.keys(this.multipleCpts).forEach((key) => {
+          // eslint-disable-next-line vue/no-mutating-props
+          this.multipleCpts[key].cptY = max - this.multipleCpts[key].cptHeight
+        })
+      } else if (type === 'left') {
+        let val = 0
+        for (const key in this.multipleCpts) {
+          if (Object.hasOwnProperty.call(this.multipleCpts, key)) {
+            const el = this.multipleCpts[key]
+            posArr.push(el.cptX)
+          }
+        }
+        val = Math.min(...posArr)
+        Object.keys(this.multipleCpts).forEach((key) => {
+          // eslint-disable-next-line vue/no-mutating-props
+          this.multipleCpts[key].cptX = val
+        })
+      } else if (type === 'vertical-center') {
+        // todo 垂直居中对齐
+        for (const key in this.multipleCpts) {
+          if (Object.hasOwnProperty.call(this.multipleCpts, key)) {
+            const el = this.multipleCpts[key]
+            posArr.push({ height: el.cptWidth, max: el.cptWidth + el.cptX })
+          }
+        }
+        const arr = posArr.map((v) => v.max)
+        const max = Math.max(...arr)
+        Object.keys(this.multipleCpts).forEach((key) => {
+          // eslint-disable-next-line vue/no-mutating-props
+          this.multipleCpts[key].cptX = max - this.multipleCpts[key].cptWidth
+        })
+      } else if (type === 'right') {
+        for (const key in this.multipleCpts) {
+          if (Object.hasOwnProperty.call(this.multipleCpts, key)) {
+            const el = this.multipleCpts[key]
+            posArr.push({ height: el.cptWidth, max: el.cptWidth + el.cptX })
+          }
+        }
+        const arr = posArr.map((v) => v.max)
+        const max = Math.max(...arr)
+        Object.keys(this.multipleCpts).forEach((key) => {
+          // eslint-disable-next-line vue/no-mutating-props
+          this.multipleCpts[key].cptX = max - this.multipleCpts[key].cptWidth
+        })
+      }
+      Object.keys(this.multipleCptPositions).forEach((key) => {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.multipleCptPositions[key].cptX = this.multipleCpts[key].cptX
+        // eslint-disable-next-line vue/no-mutating-props
+        this.multipleCptPositions[key].cptY = this.multipleCpts[key].cptY
+      })
+    },
     changeCanvasBgStyle (style) {
       this.$store.dispatch('bigScreen/changeCanvasBgStyle', style)
     },
@@ -348,7 +515,7 @@ export default {
         margin: 0 5px;
       }
       .scale-bar{
-        width: 100px;
+        min-width: 80px;
       }
     }
     &-right {

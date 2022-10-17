@@ -1,7 +1,7 @@
 <template>
   <div class="bigscreen-designer">
     <!-- 顶部操作栏 -->
-    <Toolbar @clearMultipleCpts="clearMultipleCpts" />
+    <Toolbar :multipleCptPositions="multipleCptPositions" :multipleCpts="multipleCpts" @clearMultipleCpts="clearMultipleCpts" />
     <!-- 底部设计区 -->
     <div
       class="design-area"
@@ -576,20 +576,13 @@ export default {
       // 设置多选组件集合
       this.setMultipleCpt(e, item)
       // 刷新属性栏数据，页面上拖动的组件执行点击事件来更新组件的属性栏
-      // 刷新属性栏数据，页面上拖动的组件执行click事件来更新组件的属性栏
       this.$store.dispatch('bigScreen/setCurComponent', item)
       this.$store.dispatch('bigScreen/setCurComponentIndex', index)
       if (this.$refs['div' + item.componentName + index]) {
         // 聚焦 用于多选移动
         this.$refs['div' + item.componentName + index][0].focus()
       }
-      if (!e.ctrlKey) {
-        // 未按住ctrl键
-        this.cacheChoices = {}
-      }
       this.$refs.configPane.showCptConfig(item)
-      this.cacheChoices[item.id] = item
-      this.cacheChoicesFixed[item.id] = JSON.parse(JSON.stringify(item))
     },
     dragStart (copyDom) {
       // 从组件栏拿起组件
@@ -666,7 +659,9 @@ export default {
           return delete this.multipleCpts[cpt.id]
         }
       }
-      this.multipleCpts[cpt.id] = cpt
+      // 修复修改时无响应问题
+      // this.multipleCpts[cpt.id] = cpt
+      this.$set(this.multipleCpts, [cpt.id], cpt)
       this.multipleCptPositions[cpt.id] = JSON.parse(JSON.stringify(cpt))
     },
     // 清空多选组件
