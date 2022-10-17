@@ -189,7 +189,7 @@ export default {
       // 取消聚焦组件
       this.$store.dispatch('bigScreen/setCurComponentIndex', -1)
       this.$store.dispatch('bigScreen/setCurComponent', {})
-      this.cacheChoices = {}
+      this.$emit('clearMultipleCpts')
     },
     // 隐藏设置面板
     hiddenPane (type) {

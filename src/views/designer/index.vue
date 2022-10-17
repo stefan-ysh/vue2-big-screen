@@ -1,7 +1,7 @@
 <template>
   <div class="bigscreen-designer">
     <!-- 顶部操作栏 -->
-    <Toolbar />
+    <Toolbar @clearMultipleCpts="clearMultipleCpts" />
     <!-- 底部设计区 -->
     <div
       class="design-area"
@@ -17,8 +17,7 @@
         :style="{ width: cptPaneWidth + 'px' }"
       >
         <component-pane
-          :selectedComponents="cacheComponents"
-          :currentCptIndex="currentCptIndex"
+          @setMultipleCpt="setMultipleCpt"
           @dragStart="dragStart"
           @showConfigPane="showConfigPane"
           @copyCpt="copyCpt"
@@ -109,7 +108,7 @@
                 class="active-mask"
                 :data-index="index"
                 :style="
-                  cacheChoices[item.id] ? { border: '1px solid #B6BFCE' } : {}
+                  multipleCpts[item.id] ? { border: '1px solid #B6BFCE' } : {}
                 "
               />
               <div class="cpt-wrap">
@@ -202,13 +201,16 @@ export default {
           if (binding.value === 'move') {
             cptX = meScaleClientX - disX
             cptY = meScaleClientY - disY
-            Object.keys(that.cacheChoices).forEach((key) => {
-              that.cacheChoices[key].cptX =
-                that.cacheChoicesFixed[key].cptX +
+            // 遍历已经多选的组件，并更新改其位置
+            // new position = old position + moving distance
+            Object.keys(that.multipleCpts).forEach((key) => {
+              const newX = that.multipleCptPositions[key].cptX +
                 Math.round(meScaleClientX - scaleClientX)
-              that.cacheChoices[key].cptY =
-                that.cacheChoicesFixed[key].cptY +
+              const newY = that.multipleCptPositions[key].cptY +
                 Math.round(meScaleClientY - scaleClientY)
+
+              that.multipleCpts[key].cptX = newX
+              that.multipleCpts[key].cptY = newY
             })
           } else {
             switch (binding.value) {
@@ -262,9 +264,10 @@ export default {
         document.onmouseup = function () {
           that.bgOpacity = 1
           document.onmousemove = document.onmouseup = null
-          that.cacheChoicesFixed = JSON.parse(
-            JSON.stringify(that.cacheChoices)
-          ) // 解决多选移动未松开ctrl键第二次以后拖动定位还原
+          // 解决多选移动未松开ctrl键第二次以后拖动定位还原
+          that.multipleCptPositions = JSON.parse(
+            JSON.stringify(that.multipleCpts)
+          )
         }
         return false
       }
@@ -315,8 +318,9 @@ export default {
         }
       ]),
       copyDom: '',
-      cacheChoices: {},
-      cacheChoicesFixed: {} // 记录移动前选中组件的位置 自定义事件内部无法处理，放在了外面。
+      multipleCpts: {},
+      // 记录组件原来位置
+      multipleCptPositions: {}
     }
   },
   computed: {
@@ -532,7 +536,7 @@ export default {
       this.$store.dispatch('bigScreen/addCpt', copyItem)
       // todo 根据类型提示
       // 聚焦到复制的组件
-      this.$store.dispatch('bigScreen/setCurComponentIndex', 0)
+      this.$store.dispatch('bigScreen/setCurComponentIndex', this.cacheComponents.length - 1)
       this.$message.success(`${item.cptTitle} 组件复制成功！`)
     },
     refreshCptData (refName) {
@@ -548,7 +552,7 @@ export default {
       // 取消聚焦组件
       this.$store.dispatch('bigScreen/setCurComponentIndex', -1)
       this.$store.dispatch('bigScreen/setCurComponent', {})
-      this.cacheChoices = {}
+      this.clearMultipleCpts()
     },
 
     // 删除组件
@@ -569,11 +573,15 @@ export default {
     },
     // 显示配置面板
     showConfigPane (e, item, index) {
+      // 设置多选组件集合
+      this.setMultipleCpt(e, item)
+      // 刷新属性栏数据，页面上拖动的组件执行点击事件来更新组件的属性栏
       // 刷新属性栏数据，页面上拖动的组件执行click事件来更新组件的属性栏
       this.$store.dispatch('bigScreen/setCurComponent', item)
       this.$store.dispatch('bigScreen/setCurComponentIndex', index)
       if (this.$refs['div' + item.componentName + index]) {
-        this.$refs['div' + item.componentName + index][0].focus() // 聚焦 用于多选移动
+        // 聚焦 用于多选移动
+        this.$refs['div' + item.componentName + index][0].focus()
       }
       if (!e.ctrlKey) {
         // 未按住ctrl键
@@ -636,9 +644,34 @@ export default {
         id: require('uuid').v1()
       }
       this.$store.dispatch('bigScreen/addCpt', cpt)
-      this.cacheChoices = {} // 多选清空
-      this.showConfigPane({}, cpt, 0) // 丢下组件后刷新组件属性栏
+      // 多选清空
+      this.clearMultipleCpts()
+      // 丢下组件后刷新组件属性栏,并选中 push 进的最新一个组件
+      this.showConfigPane({}, cpt, this.cacheComponents.length - 1)
       this.$refs.configPane.showCptConfig()
+    },
+    // 设置多选组件
+    setMultipleCpt (e, cpt) {
+      // 未按 ctrl 键
+      if (!e.ctrlKey) {
+        // 已多选的组件中没有当前组件时
+        // 清除已多选的组件
+        if (!this.multipleCpts[cpt.id]) {
+          this.clearMultipleCpts()
+        }
+      } else {
+        // 已多选的组件中没有当前组件时
+        // 将其在已多选列表中清除
+        if (this.multipleCpts[cpt.id]) {
+          return delete this.multipleCpts[cpt.id]
+        }
+      }
+      this.multipleCpts[cpt.id] = cpt
+      this.multipleCptPositions[cpt.id] = JSON.parse(JSON.stringify(cpt))
+    },
+    // 清空多选组件
+    clearMultipleCpts () {
+      this.multipleCpts = {}
     }
   }
 }
