@@ -600,11 +600,11 @@ export default {
         // 初始化数据/图表处理函数
         if (!config.props.cptDataForm.convertData) {
           config.props.cptDataForm.convertData =
-            '(data) => {\n  return data;\n};'
+            '(data) => {\n  // data 为图表需要的显示数据，如果数据源为接口请求，则 data 为接口返回数据\n  return data;\n};'
         }
         if (!config.props.cptDataForm.convertChart) {
           config.props.cptDataForm.convertChart =
-            '(option) => {\n  return option;\n};'
+            '(option) => {\n  // option 为图表需要的样式数据，更多详情可查看 https://echarts.apache.org/zh/option.html\n  return option;\n};'
         }
       }
       const cpt = {
