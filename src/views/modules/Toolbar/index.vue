@@ -41,10 +41,6 @@
         </el-tooltip>
         <el-checkbox v-model="isShowCoord" class="operation-handler coord-bar">坐标</el-checkbox>
         <el-checkbox v-model="isShowRule" class="operation-handler rule-bar">标尺</el-checkbox>
-        <el-radio-group v-model="canvasBgStyle" size="mini">
-          <el-radio label="lattice">点阵</el-radio>
-          <el-radio label="grid">网格</el-radio>
-        </el-radio-group>
         <el-slider
           v-model="containerScale"
           class="operation-handler scale-bar"
