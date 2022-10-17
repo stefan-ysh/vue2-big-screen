@@ -28,7 +28,7 @@
       <!-- 中间组件显示区 -->
       <div
         class="canvas-area"
-        :style="{ width: windowWidth - cptPaneWidth - configPaneWidth + 'px' }"
+        :style="{ width: windowWidth - cptPaneWidth - configPaneWidth + 'px', opacity: bgOpacity }"
         @click.self="outBlur"
       >
         <div
@@ -185,6 +185,7 @@ export default {
       // 组件拉伸，移动位置
       el.onmousedown = function (e) {
         const that = vNode.context
+        that.bgOpacity = 0.8
         const scaleClientX = e.clientX / that.containerScale
         const scaleClientY = e.clientY / that.containerScale
         const rbX = scaleClientX - el.parentNode.offsetWidth
@@ -259,6 +260,7 @@ export default {
           }
         }
         document.onmouseup = function () {
+          that.bgOpacity = 1
           document.onmousemove = document.onmouseup = null
           that.cacheChoicesFixed = JSON.parse(
             JSON.stringify(that.cacheChoices)
@@ -275,6 +277,8 @@ export default {
   },
   data () {
     return {
+      // 背景透明度
+      bgOpacity: 1,
       // 缩放按钮
       resizeBars: Object.freeze([
         {
@@ -639,79 +643,6 @@ export default {
 
 <style scoped lang="less">
 .bigscreen-designer{
-  // // 顶部操作栏
-  // .operation-area {
-  //   height: 45px;
-  //   box-shadow: 0 2px 5px #2b3340 inset;
-  //   color: #fff;
-  //   overflow: hidden;
-  //   margin: 0;
-  //   font-size: 18px;
-  //   line-height: 45px;
-  //   background: #1d1e1f;
-  //   padding: 0 10px;
-  //   &-left {
-  //     .title{
-
-  //     }
-  //   }
-  //   &-center {
-  //     display: flex;
-  //     justify-content: flex-start;
-  //     align-items: center;
-  //     /deep/ .el-checkbox {
-  //       margin: 0;
-  //       &__input {
-  //         .el-checkbox__inner {
-  //           width: 12px;
-  //           height: 12px;
-  //         }
-  //       }
-  //       &__label {
-  //         padding-left: 5px !important;
-  //       }
-  //     }
-  //     .icon-btn {
-  //       width:24px;
-  //       height:24px;
-  //       line-height:24px;
-  //       border-radius: 5px;
-  //       text-align:center;
-  //       background: #303640;
-  //       font-size:15px;
-  //       margin-right:5px;
-  //       &.pane-active {
-  //         background:#2681ff;
-  //       }
-  //     }
-  //     .operation-handler {
-  //       cursor: pointer;
-  //       margin: 0 5px;
-  //     }
-  //     .scale-bar{
-  //       width: 100px;
-  //     }
-  //   }
-  //   &-right {
-  //     height: 100%;
-  //     display:flex;
-  //     align-items: center;
-  //     justify-content: flex-end;
-  //     .btn {
-  //       width: 40px;
-  //       // height: 100%;
-  //       text-align: center;
-  //       line-height: 45px;
-  //       color: #909399;
-  //       cursor: pointer;
-  //       transition: all .5s;
-  //       &:hover {
-  //         font-weight: 999;
-  //         background: #414b5d;
-  //       }
-  //     }
-  //   }
-  // }
   // 设计区
   .design-area{
     display: flex;
