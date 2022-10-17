@@ -2,11 +2,11 @@
   <div class="b-toolbar">
     <el-row class="operation-area">
       <!-- 左侧 -->
-      <el-col :span="8" class="operation-area-left">
+      <el-col :span="4" class="operation-area-left">
         <span class="title">这块儿可以是标题或者其他啥玩意儿</span>
       </el-col>
       <!-- 中间画布设置栏 -->
-      <el-col :span="8" class="operation-area-center">
+      <el-col :span="14" class="operation-area-center">
         <el-tooltip
           class="operation-handler icon-btn hidden-left-btn"
           :class="{ 'pane-active': cptPaneWidth === 200 }"
@@ -120,7 +120,7 @@
         </el-tooltip>
       </el-col>
       <!-- 右侧操作按钮 -->
-      <el-col class="operation-area-right" :span="8" @click.self.native="outBlur">
+      <el-col class="operation-area-right" :span="6" @click.self.native="outBlur">
         <el-tooltip placement="bottom">
           <div slot="content">清空画布</div>
           <i class="btn el-icon-delete" @click="clearDesign" />
