@@ -69,7 +69,7 @@
       id="files"
       ref="refFile"
       type="file"
-      accept=".cd"
+      accept=".json"
       @change="fileLoad"
     >
     <!-- 预览抽屉 -->
@@ -177,19 +177,34 @@ export default {
       this.$refs.refFile.dispatchEvent(new MouseEvent('click'))
     },
     fileLoad () {
-      // const that = this
-      // const selectedFile = this.$refs.refFile.files[0]
-      // const reader = new FileReader()
-      // reader.readAsText(selectedFile)
-      // reader.onload = function() {
-      //   const fileJson = JSON.parse(this.result) // 文件大小、合法性待校验
-      //   fileJson.id = that.designData.id
-      //   that.$store.dispatch('bigScreen/initBigScreenData', fileJson)
-      //   that.$store.dispatch('bigScreen/initComponentList', fileJson.components)
-      //   this.$store.dispatch('bigScreen/setBigScreenData', { components: [] })
-      //   that.$message.success('导入成功')
-      // }
-      // this.$refs.refFile.value = ''
+      const that = this
+      // 选择导入的文件
+      const importedFile = this.$refs.refFile.files[0]
+      if (!importedFile) {
+        return this.$message.info('文件上传失败，请检查后重试')
+      }
+      // 文件名字
+      const fileName = importedFile.name
+      // 文件阅读器
+      const reader = new FileReader()
+      // 读取文件内容
+      reader.readAsText(importedFile)
+      // 文件加载
+      reader.onload = function () {
+        // todo 文件合法性校验待完善
+        const fileJson = JSON.parse(reader.result)
+        fileJson.id = that.designData.id
+        that.$store.dispatch('bigScreen/initBigScreenData', fileJson)
+        that.$store.dispatch('bigScreen/initComponentList', fileJson.components)
+        // 清空现有大屏组件列表
+        // that.$store.dispatch('bigScreen/setBigScreenData', { components: [] })
+        that.$message.success(`文件 ${fileName} 导入成功!`)
+      }
+      // 读取错误
+      reader.onerror = function () {
+        that.$message.success(`文件 ${fileName} 读取失败，请检查后重试`)
+      }
+      this.$refs.refFile.value = ''
     },
     // 保存数据
     saveDesignData () {
