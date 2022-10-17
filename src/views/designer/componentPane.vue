@@ -165,12 +165,6 @@ export default {
   components: {
     draggable
   },
-  props: {
-    selectedComponents: {
-      type: Array,
-      default: () => []
-    }
-  },
   data () {
     return {
       searchCptResult: [],
@@ -182,14 +176,17 @@ export default {
       componentList,
       cptGroupKeys: [],
       // 图层是否可拖拽
-      isLayerDraggable: true,
-      layerList: []
+      isLayerDraggable: true
     }
   },
   computed: {
     // 历史使用组件记录
     historyUsedCpts () {
       return this.$store.state.bigScreen.historyUsedCpts
+    },
+    // 图层列表
+    layerList () {
+      return this.$store.state.bigScreen.componentList
     }
   },
   watch: {
@@ -206,13 +203,6 @@ export default {
           })
         })
       }
-    },
-    selectedComponents: {
-      handler (newVal, oldVal) {
-        this.layerList = newVal
-      },
-      deep: true,
-      immediate: true
     }
   },
   methods: {
