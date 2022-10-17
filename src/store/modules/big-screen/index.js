@@ -27,6 +27,8 @@ const state = {
   historyUsedCpts: [],
   // 当前选中的组件
   curComponent: { cptOption: undefined },
+  // 画布背景风格 分为点阵和网格 lattice / grid
+  canvasBgStyle: 'lattice',
   // 当前选中组件的下标
   curComponentIndex: -1,
   // 是否显示标尺
@@ -57,6 +59,10 @@ const actions = {
   // 设置显示标尺 or not
   setRuleShowStatus ({ commit, state, dispatch }, data) {
     commit('SET_RULE_SHOW_STATUS', data)
+  },
+  // 更改画布背景风格
+  changeCanvasBgStyle ({ commit, state, dispatch }, style) {
+    state.canvasBgStyle = style
   },
   // 切换组件及属性设置面板显示状态
   changePaneDisplayStatus ({ commit, state, dispatch }, type) {
@@ -186,7 +192,17 @@ const mutations = {
     }
   }
 }
-const getters = {}
+const getters = {
+  // 画布背景 分为点阵和网格 lattice / grid
+  canvasBackground (state) {
+    if (state.canvasBgStyle === 'lattice') {
+      return `url('${require('@/assets/images/port.png')}') repeat`
+    } else {
+      // 竖线  竖线背景 横线 横线背景
+      return 'linear-gradient(-90deg, #545d63 1px, transparent 0px) 0px 0px / 20px 20px, linear-gradient(0deg, #545d63 1px, #2b2e33 0px) 0px 0px / 20px 20px'
+    }
+  }
+}
 
 export default {
   namespaced: true,

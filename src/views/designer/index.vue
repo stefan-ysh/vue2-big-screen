@@ -7,7 +7,7 @@
       class="design-area"
       :style="{
         height: windowHeight - 45 + 'px',
-        background: 'url(' + require('@/assets/images/port.png') + ') repeat',
+        background: canvasBackground,
       }"
       @click.self="outBlur"
     >
@@ -320,6 +320,9 @@ export default {
     }
   },
   computed: {
+    canvasBackground () {
+      return this.$store.getters['bigScreen/canvasBackground']
+    },
     containerScale () {
       return this.$store.state.bigScreen.containerScale
     },
