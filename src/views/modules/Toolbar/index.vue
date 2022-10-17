@@ -23,6 +23,22 @@
           <div slot="content">配置</div>
           <i class="btn el-icon-setting" @click="hiddenPane('right')" />
         </el-tooltip>
+         <el-tooltip
+          class="operation-handler icon-btn lattice-btn"
+          :class="{ 'pane-active': canvasBgStyle === 'lattice' }"
+          placement="bottom"
+        >
+          <div slot="content">点阵背景</div>
+          <i class="btn el-icon-date" @click="changeCanvasBgStyle('lattice')" />
+        </el-tooltip>
+        <el-tooltip
+          class="operation-handler icon-btn grid-btn"
+          :class="{ 'pane-active': canvasBgStyle === 'grid' }"
+          placement="bottom"
+        >
+          <div slot="content">网格背景</div>
+          <i class="btn el-icon-s-grid" @click="changeCanvasBgStyle('grid')" />
+        </el-tooltip>
         <el-checkbox v-model="isShowCoord" class="operation-handler coord-bar">坐标</el-checkbox>
         <el-checkbox v-model="isShowRule" class="operation-handler rule-bar">标尺</el-checkbox>
         <el-radio-group v-model="canvasBgStyle" size="mini">
@@ -109,6 +125,10 @@ export default {
     }
   },
   computed: {
+    // 画布背景风格
+    canvasBgStyle () {
+      return this.$store.state.bigScreen.canvasBgStyle
+    },
     cacheComponents () {
       return this.$store.state.bigScreen.componentList
     },
@@ -118,15 +138,6 @@ export default {
       },
       set (val) {
         this.$store.dispatch('bigScreen/changeScale', val)
-      }
-    },
-    // 画布背景风格
-    canvasBgStyle: {
-      get () {
-        return this.$store.state.bigScreen.canvasBgStyle
-      },
-      set (val) {
-        this.$store.dispatch('bigScreen/changeCanvasBgStyle', val)
       }
     },
     cptPaneWidth () {
@@ -156,6 +167,9 @@ export default {
     }
   },
   methods: {
+    changeCanvasBgStyle (style) {
+      this.$store.dispatch('bigScreen/changeCanvasBgStyle', style)
+    },
     // 导出
     handleExport (command) {
       if (command === 'img') {
