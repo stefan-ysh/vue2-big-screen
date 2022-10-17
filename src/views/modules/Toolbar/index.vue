@@ -82,7 +82,7 @@
             @click.stop="handleAlign('horizontal-center')"
           >
         </el-tooltip> -->
-        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 5px">
+        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
           <div slot="content">下对齐</div>
           <img
             :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
@@ -91,7 +91,7 @@
             @click.stop="handleAlign('bottom')"
           >
         </el-tooltip>
-        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 5px">
+        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
           <div slot="content">左对齐</div>
           <img
             :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
@@ -100,7 +100,7 @@
             @click.stop="handleAlign('left')"
           >
         </el-tooltip>
-        <!-- <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 5px">
+        <!-- <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
           <div slot="content">垂直居中对齐</div>
           <img
             :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
@@ -109,7 +109,7 @@
             @click.stop="handleAlign('vertical-center')"
           >
         </el-tooltip> -->
-        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 5px">
+        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
           <div slot="content">右对齐</div>
           <img
             :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
