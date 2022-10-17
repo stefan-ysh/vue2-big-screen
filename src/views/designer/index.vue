@@ -653,7 +653,7 @@ export default {
     // 设置多选组件
     setMultipleCpt (e, cpt) {
       // 未按 ctrl 键
-      if (!e.ctrlKey) {
+      if (!e.ctrlKey && !e.metaKey) {
         // 已多选的组件中没有当前组件时
         // 清除已多选的组件
         if (!this.multipleCpts[cpt.id]) {
