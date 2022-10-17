@@ -153,7 +153,7 @@ const mutations = {
     localStorage.setItem('frequentlyUsedCpts', cpts)
   },
   ADD_CPT (state, cpt) {
-    state.componentList.unshift(cpt)
+    state.componentList.push(cpt)
   },
   DEL_CPT (state, index) {
     state.componentList.splice(index, 1)
