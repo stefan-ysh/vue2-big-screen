@@ -137,11 +137,7 @@
             v-else
             class="no-cpt-placeholder"
           >
-            <embed
-              class="no-cpt-tip-img"
-              :src="require('@/assets/icons/svg/building.svg')"
-              type="image/svg+xml"
-            >
+            <SvgIcon class="no-cpt-tip-img" icon-class="building" />
             <span class="no-cpt-tips">
               暂无组件，请从左侧组件面板拖入进行设计
             </span>
