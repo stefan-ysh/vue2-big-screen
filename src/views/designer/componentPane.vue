@@ -4,7 +4,10 @@
     <el-tabs v-model="activeTab" @tab-click="changeTab">
       <el-tab-pane label="组件" name="component" class="cpt-list">
         <div slot="label" style="display:flex; align-items: center;">
-          <img style="width: 15px;margin-right: 5px" src="@/assets/icons/svg/puzzle.svg" alt="">
+            <SvgIcon
+              style="width: 15px;margin-right: 5px"
+              icon-class="puzzle"
+            />
           组件
         </div>
         <div class="search-cpt">
@@ -22,7 +25,11 @@
                 @dragstart="dragStart"
               >
                 <div style="line-height: 40px">
-                  <embed v-if="item.icon" style="width: 20px" :src="require('@/assets/icons/svg/' + item.icon + '.svg')" type="image/svg+xml">
+                  <SvgIcon
+                    v-if="item.icon"
+                    style="width: 20px;"
+                    :icon-class="item.icon"
+                  />
                   <i v-else style="font-size: 20px" class="el-icon-question" />
                 </div>
                 <div style="font-size: 13px">{{ item.name }}</div>
@@ -33,7 +40,11 @@
         <el-collapse v-model="activeCptGroupNames" @change="changeCollapse">
           <el-collapse-item v-if="historyUsedCpts.length > 0" title="最近使用" name="最近使用">
             <template slot="title">
-              <img style="width: 15px;margin-right: 10px;" src="@/assets/icons/svg/history.svg" alt="">
+              <SvgIcon
+                style="width: 15px;margin-right: 10px;"
+                class="cpt-icon"
+                icon-class="history"
+              />
               <span>
                 最近使用
               </span>
@@ -53,7 +64,11 @@
                     @dragstart="dragStart"
                   >
                     <!-- 图标 -->
-                    <img v-if="item.icon" style="width: 50%" :src="require(`@/assets/icons/svg/${item.icon}.svg`)" alt="">
+                      <SvgIcon
+                        v-if="item.icon"
+                        class="cpt-icon"
+                        :icon-class="item.icon"
+                      />
                     <!-- 未设置图标时的占位图标 -->
                     <i v-else style="font-size: 10px" class="el-icon-question" />
                   </div>
@@ -78,11 +93,11 @@
                   >
                     <div class="cpt-icon-wrap">
                       <!-- 组件图标 -->
-                      <img
+                      <SvgIcon
                         v-if="item.icon"
                         class="cpt-icon"
-                        :src="require('@/assets/icons/svg/' + item.icon + '.svg')"
-                      >
+                        :icon-class="item.icon"
+                      />
                       <!-- 未设置图标时的占位图标 -->
                       <i v-else class="cpt-icon-placeholder el-icon-question" />
                     </div>
@@ -96,7 +111,11 @@
       </el-tab-pane>
       <el-tab-pane label="图层" name="layer">
         <div slot="label" style="display:flex; align-items: center;">
-          <img style="width: 15px;margin-right: 5px" src="@/assets/icons/svg/layer.svg" alt="">
+            <SvgIcon
+              style="width: 15px;margin-right: 5px"
+              icon-class="layer"
+            />
+
           图层
         </div>
         <div
