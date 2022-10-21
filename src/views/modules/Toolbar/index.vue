@@ -11,7 +11,6 @@
           class="operation-handler icon-btn hidden-left-btn"
           :class="{ 'pane-active': cptPaneWidth === 200 }"
           placement="bottom"
-          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
         >
           <div slot="content">物料</div>
           <i class="btn el-icon-brush" @click="hiddenPane('left')" />
@@ -20,16 +19,14 @@
           class="operation-handler icon-btn hidden-right-btn"
           :class="{ 'pane-active': configPaneWidth === 300 }"
           placement="bottom"
-          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
         >
           <div slot="content">配置</div>
           <i class="btn el-icon-setting" @click="hiddenPane('right')" />
         </el-tooltip>
-         <el-tooltip
+        <el-tooltip
           class="operation-handler icon-btn lattice-btn"
           :class="{ 'pane-active': canvasBgStyle === 'lattice' }"
           placement="bottom"
-          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
         >
           <div slot="content">点阵背景</div>
           <i class="btn el-icon-date" @click="changeCanvasBgStyle('lattice')" />
@@ -38,7 +35,6 @@
           class="operation-handler icon-btn grid-btn"
           :class="{ 'pane-active': canvasBgStyle === 'grid' }"
           placement="bottom"
-          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
         >
           <div slot="content">网格背景</div>
           <i class="btn el-icon-s-grid" @click="changeCanvasBgStyle('grid')" />
@@ -55,94 +51,129 @@
         <el-tooltip
           class="operation-handler icon-btn"
           placement="bottom"
-          style="width: 25px;height:25px;padding: 0 5px;line-height: 25px;"
         >
           <div slot="content">恢复比例</div>
           <i class="btn el-icon-aim" @click="$store.dispatch('bigScreen/initContainerSize')" />
         </el-tooltip>
-        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
+        <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">上对齐</div>
-          <img
-            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
-            src="@/assets/icon/align-top.svg"
-            alt=""
+          <SvgIcon
+            :style="{
+              opacity: isMultiple ? 1 : 0.5,
+              transition: 'all .4s',
+              cursor: isMultiple ? 'pointer' : 'not-allowed',
+              'font-size': '18px',
+              background: isMultiple ? '#2681ff' : ''
+            }"
+            class="align-top"
+            icon-class="align-top"
             @click.stop="handleAlign('top')"
-          >
+          />
         </el-tooltip>
-        <!-- <el-tooltip
-          class="operation-handler icon-btn"
+        <el-tooltip
+          class="align-btn"
           placement="bottom"
-          @click.stop="handleAlign('top')"
         >
           <div slot="content">水平居中</div>
-          <img
-            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
-            src="@/assets/icon/align-horizontal-center.svg"
-            alt=""
+          <SvgIcon
+            :style="{
+              opacity: isMultiple ? 1 : 0.5,
+              cursor: isMultiple ? 'pointer' : 'not-allowed',
+              transition: 'all .4s',
+              'font-size': '18px',
+              background: isMultiple ? '#2681ff' : ''
+            }"
+            class="align-horizontal-center"
+            icon-class="align-horizontal-center"
             @click.stop="handleAlign('horizontal-center')"
-          >
-        </el-tooltip> -->
-        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
+          />
+        </el-tooltip>
+        <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">下对齐</div>
-          <img
-            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
-            src="@/assets/icon/align-bottom.svg"
-            alt=""
+          <SvgIcon
+            :style="{
+              transition: 'all .4s',
+              opacity: isMultiple ? 1 : 0.5,
+              cursor: isMultiple ? 'pointer' : 'not-allowed',
+              'font-size': '18px',
+              background: isMultiple ? '#2681ff' : ''
+            }"
+            class="align-bottom"
+            icon-class="align-bottom"
             @click.stop="handleAlign('bottom')"
-          >
+          />
         </el-tooltip>
-        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
+        <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">左对齐</div>
-          <img
-            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
-            src="@/assets/icon/align-left.svg"
-            alt=""
+          <SvgIcon
+            :style="{
+              transition: 'all .4s',
+              opacity: isMultiple ? 1 : 0.5,
+              cursor: isMultiple ? 'pointer' : 'not-allowed',
+              'font-size': '18px',
+              background: isMultiple ? '#2681ff' : ''
+            }"
+            class="align-left"
+            icon-class="align-left"
             @click.stop="handleAlign('left')"
-          >
+          />
         </el-tooltip>
-        <!-- <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
+        <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">垂直居中对齐</div>
-          <img
-            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
-            src="@/assets/icon/align-vertical-center.svg"
-            alt=""
+          <SvgIcon
+            :style="{
+              transition: 'all .4s',
+              opacity: isMultiple ? 1 : 0.5,
+              cursor: isMultiple ? 'pointer' : 'not-allowed',
+              'font-size': '18px',
+              background: isMultiple ? '#2681ff' : ''
+            }"
+            class="align-vertical-center"
+            icon-class="align-vertical-center"
             @click.stop="handleAlign('vertical-center')"
-          >
-        </el-tooltip> -->
-        <el-tooltip class="operation-handler icon-btn" placement="bottom" style="width: 25px;height:25px;padding: 0 5px">
+          />
+        </el-tooltip>
+        <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">右对齐</div>
-          <img
-            :style="{opacity: isMultiple ? 1 : 0.5, cursor: isMultiple ? 'pointer' : 'not-allowed'}"
-            src="@/assets/icon/align-right.svg"
-            alt=""
+          <SvgIcon
+            :style="{
+              transition: 'all .4s',
+              opacity: isMultiple ? 1 : 0.5,
+              cursor: isMultiple ? 'pointer' : 'not-allowed',
+              'font-size': '18px',
+              background: isMultiple ? '#2681ff' : ''
+            }"
+            class="align-right"
+            icon-class="align-right"
             @click.stop="handleAlign('right')"
-          >
+          />
         </el-tooltip>
       </el-col>
       <!-- 右侧操作按钮 -->
       <el-col class="operation-area-right" :span="6" @click.self.native="outBlur">
-        <el-tooltip placement="bottom">
+        <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">清空画布</div>
-          <i class="btn el-icon-delete" @click="clearDesign" />
+          <SvgIcon icon-class="delete" @click="clearDesign" />
         </el-tooltip>
-        <el-tooltip placement="bottom">
+        <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">导入</div>
-          <i class="btn el-icon-download" @click="importDesign()" />
+          <SvgIcon icon-class="import" @click="importDesign" />
         </el-tooltip>
-        <el-dropdown @command="handleExport">
-          <i class="btn el-icon-upload2" />
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="img">图片</el-dropdown-item>
-            <el-dropdown-item command="json">json</el-dropdown-item>
+        <!-- line-height 为了调整el-dropdown 和 tooltip 按钮水平对齐 想到了更好的可以来替换 T_T -->
+        <el-dropdown title="导出" trigger="click" style="line-height: 0;" @command="handleExport">
+          <SvgIcon class="export-btn" icon-class="export" />
+          <el-dropdown-menu slot="dropdown" class="big-screen-dropdown">
+            <el-dropdown-item command="img">图片文件</el-dropdown-item>
+            <el-dropdown-item command="json">json文件</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-tooltip placement="bottom">
+        <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">预览</div>
-          <i class="btn el-icon-view" @click="preview" />
+          <SvgIcon icon-class="eye-open" @click="preview" />
         </el-tooltip>
-        <el-tooltip placement="bottom">
+        <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">保存</div>
-          <i class="btn el-icon-circle-check" @click="saveDesignData" />
+          <SvgIcon icon-class="save" @click="saveDesignData" />
         </el-tooltip>
       </el-col>
     </el-row>
@@ -173,7 +204,7 @@
 
 <script>
 import { clearCptInterval, fileDownload, base64toFile } from '@/utils/big-screen'
-import BigScreenPreview from '@/views/preview'
+import BigScreenPreview from '../../preview'
 import html2canvas from 'html2canvas'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -198,12 +229,7 @@ export default {
   },
   computed: {
     isMultiple () {
-      console.log('[ Object.keys(this.multipleCpts).length ] >', Object.keys(this.multipleCpts).length)
       return Object.keys(this.multipleCpts).length >= 2
-    },
-    // 画布背景风格
-    canvasBgStyle () {
-      return this.$store.state.bigScreen.canvasBgStyle
     },
     cacheComponents () {
       return this.$store.state.bigScreen.componentList
@@ -215,6 +241,10 @@ export default {
       set (val) {
         this.$store.dispatch('bigScreen/changeScale', val)
       }
+    },
+    // 画布背景风格
+    canvasBgStyle () {
+      return this.$store.state.bigScreen.canvasBgStyle
     },
     cptPaneWidth () {
       return this.$store.state.bigScreen.componentPaneWidth
@@ -258,29 +288,37 @@ export default {
           }
         }
         val = Math.min(...posArr)
-        Object.keys(this.multipleCpts).forEach((key) => {
-          // eslint-disable-next-line vue/no-mutating-props
-          this.multipleCpts[key].cptY = val
+        Object.values(this.multipleCpts).forEach((_c) => {
+          _c.cptY = val
         })
       } else if (type === 'horizontal-center') {
-        // todo 水平居中对齐
-        // 1. 找出中间组件
-        // 2. 查看中间组件的 y 值
-        // 3. 将 y 值加上自身 height / 2 ，保存为 result
-        // 4. 其他组件的中心点在 result 上
-        //  4.1 如果中心在
+        /**
+         * 水平居中
+         * Y = selfY + selfHeight / 2
+         * Y 中心到顶部的距离
+         * selfY 自身 y 值
+         * selfHeight 自身高度
+         */
+        let Y = 0
+        Object.values(this.multipleCpts).forEach((_c, _i) => {
+          const halfHeight = _c.cptHeight / 2
+          if (_i === 0) {
+            Y = _c.cptY + halfHeight
+          } else {
+            _c.cptY = Y - halfHeight
+          }
+        })
       } else if (type === 'bottom') {
         for (const key in this.multipleCpts) {
           if (Object.hasOwnProperty.call(this.multipleCpts, key)) {
             const el = this.multipleCpts[key]
-            posArr.push({ height: el.cptHeight, max: el.cptHeight + el.cptY })
+            posArr.push({ max: el.cptHeight + el.cptY })
           }
         }
         const arr = posArr.map((v) => v.max)
         const max = Math.max(...arr)
-        Object.keys(this.multipleCpts).forEach((key) => {
-          // eslint-disable-next-line vue/no-mutating-props
-          this.multipleCpts[key].cptY = max - this.multipleCpts[key].cptHeight
+        Object.values(this.multipleCpts).forEach((_c) => {
+          _c.cptY = max - _c.cptHeight
         })
       } else if (type === 'left') {
         let val = 0
@@ -291,23 +329,25 @@ export default {
           }
         }
         val = Math.min(...posArr)
-        Object.keys(this.multipleCpts).forEach((key) => {
-          // eslint-disable-next-line vue/no-mutating-props
-          this.multipleCpts[key].cptX = val
+        Object.values(this.multipleCpts).forEach((_c) => {
+          _c.cptX = val
         })
       } else if (type === 'vertical-center') {
-        // todo 垂直居中对齐
-        for (const key in this.multipleCpts) {
-          if (Object.hasOwnProperty.call(this.multipleCpts, key)) {
-            const el = this.multipleCpts[key]
-            posArr.push({ height: el.cptWidth, max: el.cptWidth + el.cptX })
+        /**
+         * 垂直居中
+         * X = selfX + selfWidth / 2
+         * X 中心到顶部的距离
+         * selfX 自身 x 值
+         * selfWidth 自身高度
+         */
+        let X = 0
+        Object.values(this.multipleCpts).forEach((_c, _i) => {
+          const halfWidth = _c.cptWidth / 2
+          if (_i === 0) {
+            X = _c.cptX + halfWidth
+          } else {
+            _c.cptX = X - halfWidth
           }
-        }
-        const arr = posArr.map((v) => v.max)
-        const max = Math.max(...arr)
-        Object.keys(this.multipleCpts).forEach((key) => {
-          // eslint-disable-next-line vue/no-mutating-props
-          this.multipleCpts[key].cptX = max - this.multipleCpts[key].cptWidth
         })
       } else if (type === 'right') {
         for (const key in this.multipleCpts) {
@@ -318,11 +358,11 @@ export default {
         }
         const arr = posArr.map((v) => v.max)
         const max = Math.max(...arr)
-        Object.keys(this.multipleCpts).forEach((key) => {
-          // eslint-disable-next-line vue/no-mutating-props
-          this.multipleCpts[key].cptX = max - this.multipleCpts[key].cptWidth
+        Object.values(this.multipleCpts).forEach((_c) => {
+          _c.cptX = max - _c.cptWidth
         })
       }
+      // 更新存储多选组件的位置的息
       Object.keys(this.multipleCptPositions).forEach((key) => {
         // eslint-disable-next-line vue/no-mutating-props
         this.multipleCptPositions[key].cptX = this.multipleCpts[key].cptX
@@ -398,7 +438,7 @@ export default {
     },
     // 保存数据
     saveDesignData () {
-      this.$message.info('保存中，请稍后...')
+      this.$modal.loading('保存中，请稍后...')
       // 保存
       this.$store.dispatch('bigScreen/setComponentList', { components: this.cacheComponents })
       localStorage.setItem('designCache', JSON.stringify(this.designData))
@@ -421,7 +461,7 @@ export default {
         //     // todo 接入后端保存api 保存 designData
         //   }
         // )
-        this.$message.success('保存成功')
+        this.$modal.closeLoading()
       })
     },
     // 预览画布
@@ -444,7 +484,8 @@ export default {
       this.$confirm('此操作将会清空画布，是否继续？', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
+        customClass: 'big-screen-confirm-dialog'
       })
         .then(() => {
           // 可考虑优化为一个方法
@@ -472,7 +513,6 @@ export default {
     color: #fff;
     overflow: hidden;
     margin: 0;
-    font-size: 18px;
     line-height: 45px;
     background: #1d1e1f;
     padding: 0 10px;
@@ -514,6 +554,13 @@ export default {
         cursor: pointer;
         margin: 0 5px;
       }
+      .align-btn{
+        margin: 0 5px;
+        width: 24px;
+        height: 24px;
+        padding: 3px;
+        border-radius: 5px;
+      }
       .scale-bar{
         min-width: 80px;
       }
@@ -534,6 +581,65 @@ export default {
         &:hover {
           font-weight: 999;
           background: #414b5d;
+        }
+      }
+      .big-screen-opetatin-btn {
+        width: 30px;
+        padding: 0 5px;
+        height: 30px;
+        cursor: pointer;
+        margin-left: 5px;
+        transition: all .2s;
+        border-left: 1px solid #33B8EC;
+        border-top: 1px solid #33B8EC;
+        border-right: 3px solid #000;
+        border-bottom: 3px solid #000;
+        &:active {
+          border-right: 1px solid #33B8EC;
+          border-bottom: 1px solid #33B8EC;
+          border-left: 3px solid #000;
+          border-top: 3px solid #000;
+        }
+      }
+      .export-btn {
+        font-size: 30px;
+        padding: 0 5px;
+        // height: 100vh;
+        margin-left: 5px;
+        transition: all .2s;
+        cursor: pointer;
+          border-left: 1px solid #33B8EC;
+          border-top: 1px solid #33B8EC;
+          border-right: 3px solid #000;
+          border-bottom: 3px solid #000;
+        &:active {
+          border-right: 1px solid #33B8EC;
+          border-bottom: 1px solid #33B8EC;
+          border-left: 3px solid #000;
+          border-top: 3px solid #000;
+        }
+      }
+    }
+    // 重写 el-silder 样式
+    /deep/ .el-slider {
+      // 进度条整体
+      .el-slider__runway {
+        background: #454547;
+        height: 2px;
+        // 已滑动的进度条
+        .el-slider__bar {
+          height: 100%;
+          border-radius: 0 !important;
+        }
+        .el-slider__button-wrapper {
+          height: 32px;
+          // 滑块
+          .el-slider__button {
+            width: 5px;
+            height: 5px;
+            border-radius: 0;
+            border-width: 1px;
+          }
         }
       }
     }

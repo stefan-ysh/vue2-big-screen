@@ -139,7 +139,7 @@
           >
             <embed
               class="no-cpt-tip-img"
-              :src="require('@/assets/icon/building.svg')"
+              :src="require('@/assets/icons/svg/building.svg')"
               type="image/svg+xml"
             >
             <span class="no-cpt-tips">

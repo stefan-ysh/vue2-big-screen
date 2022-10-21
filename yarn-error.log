@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/ysh/.nvm/versions/node/v14.20.0/bin/node /Users/ysh/.yarn/bin/yarn.js add echarts4.9.0 --save
+  /Users/ysh/.nvm/versions/node/v14.20.0/bin/node /Users/ysh/.yarn/bin/yarn.js add svg-sprite-loader --save-dev
 
 PATH: 
   /Users/ysh/.nvm/versions/node/v14.20.0/bin:/Users/ysh/myFlutter/flutter/bin::/Users/ysh/.yarn/bin:/Users/ysh/.config/yarn/global/node_modules/.bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion Tech Preview.app/Contents/Public:/Library/Apple/usr/bin:/Users/ysh/.nvm/versions/node/v14.20.0/bin:/Users/ysh/myFlutter/flutter/bin:/Users/ysh/.yarn/bin:/Users/ysh/.config/yarn/global/node_modules/.bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/opt/homebrew/bin:/opt/homebrew/sbin
@@ -14,17 +14,10 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.npmjs.org/echarts4.9.0: Not found
-      at Request.params.callback [as _callback] (/Users/ysh/.yarn/lib/cli.js:66145:18)
-      at Request.self.callback (/Users/ysh/.yarn/lib/cli.js:140890:22)
-      at Request.emit (events.js:400:28)
-      at Request.<anonymous> (/Users/ysh/.yarn/lib/cli.js:141862:10)
-      at Request.emit (events.js:400:28)
-      at IncomingMessage.<anonymous> (/Users/ysh/.yarn/lib/cli.js:141784:12)
-      at Object.onceWrapper (events.js:519:28)
-      at IncomingMessage.emit (events.js:412:35)
-      at endReadableNT (internal/streams/readable.js:1333:12)
-      at processTicksAndRejections (internal/process/task_queues.js:82:21)
+  Error: https://registry.npmjs.org/svg-sprite-loader: ETIMEDOUT
+      at Timeout._onTimeout (/Users/ysh/.yarn/lib/cli.js:141550:19)
+      at listOnTimeout (internal/timers.js:557:17)
+      at processTimers (internal/timers.js:500:7)
 
 npm manifest: 
   {
@@ -32,15 +25,18 @@ npm manifest:
     "version": "0.1.0",
     "private": true,
     "scripts": {
-      "serve": "vue-cli-service serve",
+      "dev": "vue-cli-service serve",
       "build": "vue-cli-service build",
       "lint": "vue-cli-service lint"
     },
     "dependencies": {
+      "@jiaminghi/data-view": "^2.10.0",
       "core-js": "^3.8.3",
       "dayjs": "1.11.5",
+      "echarts": "4.9.0",
       "element-ui": "^2.15.10",
       "html2canvas": "1.4.1",
+      "uuid": "^9.0.0",
       "vue": "^2.6.14",
       "vue-router": "^3.5.1",
       "vue2-ace-editor": "0.0.15",
@@ -1016,7 +1012,7 @@ Lockfile:
       "@babel/types" "^7.4.4"
       esutils "^2.0.2"
   
-  "@babel/runtime@^7.12.13", "@babel/runtime@^7.8.4":
+  "@babel/runtime@^7.12.13", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4":
     version "7.19.4"
     resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.19.4.tgz#a42f814502ee467d55b38dd1c256f53a7b885c78"
     integrity sha512-EXpLCrk55f+cYqmHsSR+yD/0gAIMxxA9QK9lnQWzhMCvt+YmoBN7Zx94s++Kv0+unHk39vxNO8t+CMA2WSS3wA==
@@ -1097,6 +1093,53 @@ Lockfile:
     version "1.2.1"
     resolved "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
     integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
+  
+  "@jiaminghi/bezier-curve@*":
+    version "0.0.9"
+    resolved "https://registry.npmjs.org/@jiaminghi/bezier-curve/-/bezier-curve-0.0.9.tgz#5196aca93c8b061a612b4c3eabcedf9490cef6ee"
+    integrity sha512-u9xJPOEl6Dri2E9FfmJoGxYQY7vYJkURNX04Vj64tdi535tPrpkuf9Sm0lNr3QTKdHQh0DdNRsaa62FLQNQEEw==
+    dependencies:
+      "@babel/runtime" "^7.5.5"
+  
+  "@jiaminghi/c-render@^0.4.3":
+    version "0.4.3"
+    resolved "https://registry.npmjs.org/@jiaminghi/c-render/-/c-render-0.4.3.tgz#982ebd8f71b443bb9507834227834973ebd9b6d8"
+    integrity sha512-FJfzj5hGj7MLqqqI2D7vEzHKbQ1Ynnn7PJKgzsjXaZpJzTqs2Yw5OSeZnm6l7Qj7jyPAP53lFvEQNH4o4j6s+Q==
+    dependencies:
+      "@babel/runtime" "^7.5.5"
+      "@jiaminghi/bezier-curve" "*"
+      "@jiaminghi/color" "*"
+      "@jiaminghi/transition" "*"
+  
+  "@jiaminghi/charts@*":
+    version "0.2.18"
+    resolved "https://registry.npmjs.org/@jiaminghi/charts/-/charts-0.2.18.tgz#63ded95200789fc1a1fd04b7fd9e56f58d22d90f"
+    integrity sha512-K+HXaOOeWG9OOY1VG6M4mBreeeIAPhb9X+khG651AbnwEwL6G2UtcAQ8GWCq6GzhczcLwwhIhuaHqRygwHC0sA==
+    dependencies:
+      "@babel/runtime" "^7.5.5"
+      "@jiaminghi/c-render" "^0.4.3"
+  
+  "@jiaminghi/color@*":
+    version "0.1.1"
+    resolved "https://registry.npmjs.org/@jiaminghi/color/-/color-0.1.1.tgz#bddf9012dfce6982d3829a983ffeb91ee9dda7b6"
+    integrity sha512-M09+Sb5HGqVim0zo+nG5gU1v+6gXT8ptr0BZR6dMGt83XmCJgnZtO8s7llTW4hLFFFM5co6geZvTekqLpSPAAQ==
+    dependencies:
+      "@babel/runtime" "^7.5.5"
+  
+  "@jiaminghi/data-view@^2.10.0":
+    version "2.10.0"
+    resolved "https://registry.npmjs.org/@jiaminghi/data-view/-/data-view-2.10.0.tgz#2146d8fc71b9f24be808238ca050ddb7a4c8949f"
+    integrity sha512-Cud2MTiMcqc5k2KWabR/svuVQmXHANqURo+yj40370/LdI/gyUJ6LG203hWXEnT1nMCeiv/SLVmxv3PXLScCeA==
+    dependencies:
+      "@babel/runtime" "^7.5.5"
+      "@jiaminghi/charts" "*"
+  
+  "@jiaminghi/transition@*":
+    version "1.1.11"
+    resolved "https://registry.npmjs.org/@jiaminghi/transition/-/transition-1.1.11.tgz#576d8af092434b34201eba5eaecc79dd33c8ad8c"
+    integrity sha512-owBggipoHMikDHHDW5Gc7RZYlVuvxHADiU4bxfjBVkHDAmmck+fCkm46n2JzC3j33hWvP9nSCAeh37t6stgWeg==
+    dependencies:
+      "@babel/runtime" "^7.5.5"
   
   "@jridgewell/gen-mapping@^0.1.0":
     version "0.1.1"
@@ -2901,6 +2944,13 @@ Lockfile:
     version "1.0.1"
     resolved "https://registry.npmjs.org/easy-stack/-/easy-stack-1.0.1.tgz#8afe4264626988cabb11f3c704ccd0c835411066"
     integrity sha512-wK2sCs4feiiJeFXn3zvY0p41mdU5VUgbgs1rNsc/y5ngFUijdWd+iIN8eoyuZHKB8xN6BL4PdWmzqFmxNg6V2w==
+  
+  echarts@4.9.0:
+    version "4.9.0"
+    resolved "https://registry.npmjs.org/echarts/-/echarts-4.9.0.tgz#a9b9baa03f03a2a731e6340c55befb57a9e1347d"
+    integrity sha512-+ugizgtJ+KmsJyyDPxaw2Br5FqzuBnyOWwcxPKO6y0gc5caYcfnEUIlNStx02necw8jmKmTafmpHhGo4XDtEIA==
+    dependencies:
+      zrender "4.3.2"
   
   ee-first@1.1.1:
     version "1.1.1"
@@ -6336,6 +6386,11 @@ Lockfile:
     resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
     integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
   
+  uuid@^9.0.0:
+    version "9.0.0"
+    resolved "https://registry.npmjs.org/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
+    integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
+  
   v8-compile-cache@^2.0.3:
     version "2.3.0"
     resolved "https://registry.npmjs.org/v8-compile-cache/-/v8-compile-cache-2.3.0.tgz#2de19618c66dc247dcfb6f99338035d8245a2cee"
@@ -6719,3 +6774,8 @@ Lockfile:
       is-ci "^1.0.10"
       normalize-path "^1.0.0"
       strip-indent "^2.0.0"
+  
+  zrender@4.3.2:
+    version "4.3.2"
+    resolved "https://registry.npmjs.org/zrender/-/zrender-4.3.2.tgz#ec7432f9415c82c73584b6b7b8c47e1b016209c6"
+    integrity sha512-bIusJLS8c4DkIcdiK+s13HiQ/zjQQVgpNohtd8d94Y2DnJqgM1yjh/jpDb8DoL6hd7r8Awagw8e3qK/oLaWr3g==

@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/style/reset.css'
 import './utils/RegisterMap'
 import rightContext from './utils/big-screen/rightMenu'
-
+import './assets/icons'
 // 注册大屏设计器相关组件
 import bigScreenCpt from '@/components/register/index.js'
 import * as echarts from 'echarts'
