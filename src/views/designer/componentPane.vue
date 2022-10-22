@@ -82,7 +82,7 @@
                 <el-col
                   v-if="!item.hidden"
                   :key="item.name + index"
-                  :span="12"
+                  :span="8"
                 >
                   <div
                     draggable="true"
