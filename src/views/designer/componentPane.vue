@@ -432,7 +432,8 @@ export default {
   .cpt-icon-wrap {
     line-height: 40px;
     .cpt-icon {
-      width: 20px;
+      // width: 20px;
+      font-size: 16px;
     }
     .cpt-icon-placeholder {
       font-size: 20px;
