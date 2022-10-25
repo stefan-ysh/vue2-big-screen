@@ -30,27 +30,12 @@
         :style="{ width: windowWidth - cptPaneWidth - configPaneWidth + 'px', opacity: bgOpacity }"
         @click.self="outBlur"
       >
-        <div
-          v-show="isShowRule"
-          style="height: 10px; margin-left: 10px"
-          :style="{ width: 1920 * containerScale + 'px' }"
-        >
-          <!--顶部刻度线-->
-          <ScaleMarkX />
-        </div>
-        <div
-          v-show="isShowRule"
-          style="position: absolute; width: 10px"
-          :style="{
-            height:
-              ((1920 * containerScale) / designData.scaleX) *
-              designData.scaleY +
-              'px',
-          }"
-        >
-          <!--左侧刻度线-->
-          <ScaleMarkY />
-        </div>
+        <!-- todo 参数优化 -->
+        <SketchRuler
+          :scale="containerScale"
+          :width=" windowWidth - cptPaneWidth - configPaneWidth + -27"
+          :height="windowHeight - 73"
+        />
         <div
           ref="webContainer"
           class="web-container"
@@ -162,15 +147,13 @@
 import ComponentPane from '@/views/designer/componentPane'
 import ConfigPane from '@/views/designer/configPane'
 import { clearCptInterval } from '@/utils/big-screen'
-import ScaleMarkX from '../modules/ScaleMark/ScaleMarkX.js'
-import ScaleMarkY from '../modules/ScaleMark/ScaleMarkY.js'
 import Toolbar from '../modules/Toolbar'
+import SketchRuler from '../modules/SketchRuler'
 
 export default {
   name: 'BigScreenDesigner',
   components: {
-    ScaleMarkY,
-    ScaleMarkX,
+    SketchRuler,
     ConfigPane,
     ComponentPane,
     Toolbar
