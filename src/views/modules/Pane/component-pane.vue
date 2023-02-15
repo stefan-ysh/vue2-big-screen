@@ -4,28 +4,51 @@
     <el-tabs v-model="activeTab" @tab-click="changeTab">
       <el-tab-pane label="组件" name="component" class="cpt-list">
         <div slot="label" style="display: flex; align-items: center">
-          <SvgIcon style="width: 15px; margin-right: 5px" icon-class="puzzle" />
+          <BSvgIcon fill="red" style="width: 15px; margin-right: 5px" icon-class="puzzle" />
           组件
         </div>
         <div class="search-cpt">
-          <el-input v-model="searchKeys" placeholder="搜索组件" size="mini" clearable />
-          <div v-show="searchCptResult.length > 0">
-            搜索结果
-            <el-col v-for="(item, index) in searchCptResult" :key="item.name + index" :span="12">
-              <div draggable="true" :config="JSON.stringify(item)" class="cpt-item" @dragstart="dragStart">
+          <div class="search-operation">
+            <el-input v-model="searchKeys" placeholder="搜索组件" class="search-ipt" size="mini" clearable />
+            <div class="switch-cpt-view-mode">
+              <span
+                title="双列显示"
+                :class="`switch-cpt-view-mode-btn ${cptItemSpan === 12 ? 'active' : ''}`"
+                @click="changeColSpan(12)"
+              >
+                <i class="el-icon-menu"></i>
+              </span>
+              <span
+                title="三列显示"
+                :class="`switch-cpt-view-mode-btn ${cptItemSpan === 8 ? 'active' : ''}`"
+                @click="changeColSpan(8)"
+              >
+                <i class="el-icon-s-grid"></i>
+              </span>
+            </div>
+          </div>
+          <div v-show="searchCptResult.length > 0" class="search-result">
+            <div v-for="(item, index) in searchCptResult" :key="item.name + index">
+              <div
+                draggable="true"
+                :data-config="JSON.stringify(item)"
+                class="search-result-cpt-item"
+                :title="item.name"
+                @dragstart="dragStart"
+              >
                 <div style="line-height: 40px">
-                  <SvgIcon v-if="item.icon" style="width: 20px" :icon-class="item.icon" />
+                  <BSvgIcon v-if="item.icon" style="width: 20px" :icon-class="item.icon" />
                   <i v-else style="font-size: 20px" class="el-icon-question" />
                 </div>
                 <div style="font-size: 13px">{{ item.name }}</div>
               </div>
-            </el-col>
+            </div>
           </div>
         </div>
         <el-collapse v-model="activeCptGroupNames" @change="changeCollapse">
           <el-collapse-item v-if="historyUsedCpts.length > 0" title="最近使用" name="最近使用">
             <template slot="title">
-              <SvgIcon style="width: 15px; margin-right: 10px" class="cpt-icon" icon-class="history" />
+              <BSvgIcon style="width: 15px; margin-right: 10px" icon-class="history" />
               <span> 最近使用 </span>
             </template>
             <div class="history-used-cpts">
@@ -33,13 +56,13 @@
                 <el-col v-for="(item, index) in historyUsedCpts" :key="item.name + index" :span="6">
                   <div
                     draggable="true"
-                    :config="JSON.stringify(item)"
+                    :data-config="JSON.stringify(item)"
                     class="history-cpt-item"
                     :title="item.name"
                     @dragstart="dragStart"
                   >
                     <!-- 图标 -->
-                    <SvgIcon v-if="item.icon" class="cpt-icon" :icon-class="item.icon" />
+                    <BSvgIcon v-if="item.icon" class="history-cpt-icon" :icon-class="item.icon" />
                     <!-- 未设置图标时的占位图标 -->
                     <i v-else style="font-size: 10px" class="el-icon-question" />
                   </div>
@@ -50,21 +73,32 @@
           <el-collapse-item v-for="group in componentList" :key="group.name" :title="group.name" :name="group.name">
             <el-row :gutter="2">
               <template v-for="(item, index) in group.children">
-                <el-col v-if="!item.hidden" :key="item.name + index" :span="8">
+                <el-col v-if="!item.hidden" :key="item.name + index" :span="cptItemSpan" style="transition: width 0.3s">
                   <div
                     draggable="true"
-                    :config="JSON.stringify(item)"
+                    :data-config="JSON.stringify(item)"
                     class="cpt-item"
                     :title="item.name"
+                    :style="{
+                      height: cptItemSpan === 8 ? '40px' : '70px'
+                    }"
                     @dragstart="dragStart"
                   >
                     <div class="cpt-icon-wrap">
                       <!-- 组件图标 -->
-                      <SvgIcon v-if="item.icon" class="cpt-icon" :icon-class="item.icon" />
+                      <BSvgIcon
+                        v-if="item.icon"
+                        class="cpt-icon"
+                        :style="{
+                          'font-size': cptItemSpan === 8 ? '20px' : '30px',
+                          transition: 'all .3s'
+                        }"
+                        :icon-class="item.icon"
+                      />
                       <!-- 未设置图标时的占位图标 -->
                       <i v-else class="cpt-icon-placeholder el-icon-question" />
                     </div>
-                    <div class="cpt-title">{{ item.name }}</div>
+                    <div v-show="cptItemSpan !== 8" class="cpt-title">{{ item.name }}</div>
                   </div>
                 </el-col>
               </template>
@@ -74,8 +108,7 @@
       </el-tab-pane>
       <el-tab-pane label="图层" name="layer">
         <div slot="label" style="display: flex; align-items: center">
-          <SvgIcon style="width: 15px; margin-right: 5px" icon-class="layer" />
-
+          <BSvgIcon style="width: 15px; margin-right: 5px" icon-class="layer" />
           图层
         </div>
         <div v-show="layerList.length === 0" style="text-align: center; line-height: 50px">
@@ -93,6 +126,7 @@
           <!-- 图层 -->
           <el-row
             v-for="(item, index) in layerList"
+            :id="`layer${item.id}`"
             :key="item.id"
             class="selected-item"
             :gutter="1"
@@ -106,7 +140,7 @@
             </el-col>
             <!-- 图层图标 -->
             <el-col :span="4" style="display: flex">
-              <embed class="cpt-icon" :src="require('@/assets/icons/svg/' + item.icon + '.svg')" type="image/svg+xml" />
+              <BSvgIcon class="cpt-icon" :icon-class="item.icon" />
             </el-col>
             <!-- 图层名称 -->
             <el-col
@@ -141,7 +175,9 @@ export default {
   },
   data() {
     return {
+      cptItemSpan: 12,
       searchCptResult: [],
+      show: false,
       searchKeys: '',
       // 当前激活的 tab 面板
       activeTab: 'component',
@@ -180,6 +216,9 @@ export default {
     }
   },
   methods: {
+    changeColSpan(span) {
+      this.cptItemSpan = span
+    },
     changeCptVisible(cpt) {
       const { id, hidden } = cpt
       const params = {
@@ -272,10 +311,12 @@ export default {
       overflow-y: scroll;
       .el-tab-pane {
         .el-collapse {
-          border-top: none;
+          border: none;
           margin-top: 10px;
           &-item {
             &__header {
+              height: 35px !important;
+              // margin-bottom: 5px;
               padding: 0 10px;
               color: #fff;
               background: #39393a;
@@ -286,6 +327,7 @@ export default {
             }
             &__content {
               background: #2d333f;
+              padding-bottom: 5px;
               color: #fff;
             }
           }
@@ -294,11 +336,80 @@ export default {
       .cpt-list {
         .search-cpt {
           margin-top: 10px;
-          .el-input {
-            &__inner {
-              background: #39393a;
-              color: #fff;
-              border-color: #666666;
+          .search-operation {
+            // width: 100%;
+            display: flex;
+            align-items: center;
+            // flex-wrap: nowrap;
+            overflow: hidden;
+            .el-input {
+              margin-right: 5px;
+              &__inner {
+                background: #39393a;
+                color: #fff;
+                border-color: #666666;
+                padding: 0 5px;
+              }
+              input {
+                width: 100%;
+                transition: all 0.3s;
+                &:focus {
+                  width: 180px;
+                  box-shadow: 0 0 5px rgb(127, 170, 181);
+                  padding: 3px 0px 3px 3px;
+                  // margin: 5px 1px 3px 0px;
+                  border: 1px solid rgb(131, 168, 179);
+                }
+              }
+            }
+            .switch-cpt-view-mode {
+              display: flex;
+              align-items: center;
+              &-btn {
+                display: inline-block;
+                font-size: 20px;
+                color: grey;
+                transition: color 0.3s;
+                cursor: pointer;
+                &:hover,
+                &.active {
+                  color: #fff;
+                }
+              }
+            }
+          }
+
+          .search-result {
+            position: absolute;
+            z-index: 999999;
+            top: 50px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            background: rgb(72, 72, 77);
+            max-height: 200px;
+            overflow: scroll;
+            overflow-x: hidden;
+            &-cpt-item {
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 0 15px;
+              margin: 5px 0;
+              &:hover {
+                background: rgb(77, 86, 86);
+                border-radius: 5px;
+                &:after {
+                  content: '';
+                  position: absolute;
+                  left: 5px;
+                  width: 2px;
+                  height: 20px;
+                  background: #78d3ac;
+                  border-radius: 5px;
+                }
+              }
             }
           }
         }
@@ -311,11 +422,14 @@ export default {
           .history-cpt-item {
             width: 40px;
             height: 40px;
-            transition: all 0.3s;
+            transition: all 0.2s;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            .history-cpt-icon {
+              font-size: 20px;
+            }
             &:hover {
               border-right: 1px solid #33b8ec;
               border-bottom: 1px solid #33b8ec;
@@ -352,7 +466,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   .cpt-icon {
-    width: 60%;
+    font-size: 20px;
   }
   .layer-name {
     // 文字长度超出限定宽度，则隐藏超出的内容
@@ -377,30 +491,31 @@ export default {
 .cpt-item {
   cursor: pointer;
   background-color: #3f4b5f;
-  height: 70px;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 5px;
   box-sizing: border-box;
   position: relative;
   box-shadow: none;
   transition: all 0.2s ease-in;
   .cpt-icon-wrap {
     line-height: 40px;
-    .cpt-icon {
-      // width: 20px;
-      font-size: 16px;
-    }
+    // .cpt-icon {
+    // font-size: 20px;
+    // }
     .cpt-icon-placeholder {
       font-size: 20px;
     }
   }
   .cpt-title {
-    font-size: 13px;
+    font-size: 0.5rem;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
   &:hover {
+    z-index: 999999;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.05), 0 8px 8px rgba(0, 0, 0, 0.1),
+      0 16px 16px rgba(0, 0, 0, 0.1), 8px 32px 32px rgba(0, 0, 0, 0.15), 8px 64px 64px rgba(0, 0, 0, 0.15);
     background-color: #4b689b;
     z-index: 2;
     transform: scale(1.1);

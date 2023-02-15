@@ -11,7 +11,7 @@
       class="design-area"
       :style="{
         height: windowHeight - 45 + 'px',
-        background: canvasBackground,
+        background: canvasBackground
       }"
       @click.self="outBlur"
     >
@@ -30,7 +30,7 @@
         class="canvas-area"
         :style="{
           width: windowWidth - cptPaneWidth - configPaneWidth + 'px',
-          opacity: bgOpacity,
+          opacity: bgOpacity
         }"
         @click.self="outBlur"
       >
@@ -47,11 +47,9 @@
             width: designData.scaleX + 'px',
             height: designData.scaleY + 'px',
             backgroundColor: designData.bgColor,
-            backgroundImage: designData.bgImg
-              ? 'url(' + designData.bgImg + ')'
-              : 'none',
+            backgroundImage: designData.bgImg ? 'url(' + designData.bgImg + ')' : 'none',
             transform: 'scale(' + containerScale + ')',
-            margin: isShowRule ? '0 10px' : '',
+            margin: isShowRule ? '0 10px' : ''
           }"
           @dragover="allowDrop"
           @drop="drop"
@@ -70,35 +68,25 @@
                 top: Math.round(item.cptY) + 'px',
                 left: Math.round(item.cptX) + 'px',
                 zIndex: currentCptIndex === index ? 1800 : item.cptZ,
-                opacity: item.hidden ? '0.3' : '1',
+                opacity: item.hidden ? '0.3' : '1'
               }"
               tabindex="0"
               @mousedown="showConfigPane($event, item, index)"
               @contextmenu.prevent="handleContextMenu"
             >
               <!-- 组件坐标显示 -->
-              <div v-if="isShowCoord" class="cpt-coordinate">
-                ({{ item.cptX }}, {{ item.cptY }})
-              </div>
+              <div v-if="isShowCoord" class="cpt-coordinate">({{ item.cptX }}, {{ item.cptY }})</div>
               <!--顶部辅助线-->
-              <div
-                v-show="currentCptIndex === index"
-                class="x-auxiliary-line"
-              />
+              <div v-show="currentCptIndex === index" class="x-auxiliary-line" />
               <!--左侧辅助线-->
-              <div
-                v-show="currentCptIndex === index"
-                class="y-auxiliary-line"
-              />
+              <div v-show="currentCptIndex === index" class="y-auxiliary-line" />
               <!-- 新增iframe组件，防止焦点聚焦在iframe内部，添加此蒙版 -->
               <!-- todo 探索其他解决方案 -->
               <div
                 v-resize="'move'"
                 class="active-mask"
                 :data-index="index"
-                :style="
-                  multipleCpts[item.id] ? { border: '1px solid #B6BFCE' } : {}
-                "
+                :style="multipleCpts[item.id] ? { border: '1px solid #B6BFCE' } : {}"
               />
               <div class="cpt-wrap">
                 <component
@@ -108,7 +96,7 @@
                   :height="Math.round(item.cptHeight)"
                   :configProps="item.configProps"
                   :rotateDeg="{
-                    transform: `rotateX(${item.rotateX}deg) rotateY(${item.rotateY}deg) rotateZ(${item.rotateZ}deg)`,
+                    transform: `rotateX(${item.rotateX}deg) rotateY(${item.rotateY}deg) rotateZ(${item.rotateZ}deg)`
                   }"
                 />
               </div>
@@ -126,9 +114,7 @@
           <!-- 无组件提示信息 -->
           <div v-else class="no-cpt-placeholder">
             <SvgIcon class="no-cpt-tip-img" icon-class="building" />
-            <span class="no-cpt-tips">
-              暂无组件，请从左侧组件面板拖入进行设计
-            </span>
+            <span class="no-cpt-tips"> 暂无组件，请从左侧组件面板拖入进行设计 </span>
           </div>
         </div>
       </div>
@@ -141,8 +127,8 @@
 </template>
 
 <script>
-import ComponentPane from '@/views/designer/componentPane'
-import ConfigPane from '@/views/designer/configPane'
+import ComponentPane from '@/views/modules/Pane/component-pane'
+import ConfigPane from '@/views/modules/Pane/config-pane'
 import { clearCptInterval } from '@/utils'
 import Toolbar from '../modules/Toolbar'
 import SketchRuler from '../modules/SketchRuler'
@@ -158,7 +144,7 @@ export default {
   directives: {
     resize(el, binding, vNode) {
       // 组件拉伸，移动位置
-      el.onmousedown = function(e) {
+      el.onmousedown = function (e) {
         const that = vNode.context
         that.bgOpacity = 0.8
         const scaleClientX = e.clientX / that.containerScale
@@ -171,7 +157,7 @@ export default {
         const disY = scaleClientY - el.parentNode.offsetTop
         let cptWidth, cptHeight, cptX, cptY
 
-        document.onmousemove = function(me) {
+        document.onmousemove = function (me) {
           const meScaleClientX = me.clientX / that.containerScale
           const meScaleClientY = me.clientY / that.containerScale
           if (binding.value === 'move') {
@@ -179,13 +165,9 @@ export default {
             cptY = meScaleClientY - disY
             // 遍历已经多选的组件，并更新改其位置
             // new position = old position + moving distance
-            Object.keys(that.multipleCpts).forEach((key) => {
-              const newX =
-                that.multipleCptPositions[key].cptX +
-                Math.round(meScaleClientX - scaleClientX)
-              const newY =
-                that.multipleCptPositions[key].cptY +
-                Math.round(meScaleClientY - scaleClientY)
+            Object.keys(that.multipleCpts).forEach(key => {
+              const newX = that.multipleCptPositions[key].cptX + Math.round(meScaleClientX - scaleClientX)
+              const newY = that.multipleCptPositions[key].cptY + Math.round(meScaleClientY - scaleClientY)
 
               that.multipleCpts[key].cptX = newX
               that.multipleCpts[key].cptY = newY
@@ -239,13 +221,11 @@ export default {
             if (cptHeight) that.currentCpt.cptHeight = Math.round(cptHeight)
           }
         }
-        document.onmouseup = function() {
+        document.onmouseup = function () {
           that.bgOpacity = 1
           document.onmousemove = document.onmouseup = null
           // 解决多选移动未松开ctrl键第二次以后拖动定位还原
-          that.multipleCptPositions = JSON.parse(
-            JSON.stringify(that.multipleCpts)
-          )
+          that.multipleCptPositions = JSON.parse(JSON.stringify(that.multipleCpts))
         }
         return false
       }
@@ -264,43 +244,35 @@ export default {
       resizeBars: Object.freeze([
         {
           direction: 'lt',
-          style:
-            'top: 0; left: 0; cursor: nwse-resize; transform: translate(-50%, -50%);'
+          style: 'top: 0; left: 0; cursor: nwse-resize; transform: translate(-50%, -50%);'
         },
         {
           direction: 't',
-          style:
-            'top: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, -50%);'
+          style: 'top: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, -50%);'
         },
         {
           direction: 'rt',
-          style:
-            'top: 0; right: 0; cursor: nesw-resize; transform: translate(50%, -50%);'
+          style: 'top: 0; right: 0; cursor: nesw-resize; transform: translate(50%, -50%);'
         },
         {
           direction: 'l',
-          style:
-            'top: 50%; left: 0; cursor: ew-resize; transform: translate(-50%, -50%);'
+          style: 'top: 50%; left: 0; cursor: ew-resize; transform: translate(-50%, -50%);'
         },
         {
           direction: 'lb',
-          style:
-            'bottom: 0; left: 0; cursor: nesw-resize; transform: translate(-50%, 50%);'
+          style: 'bottom: 0; left: 0; cursor: nesw-resize; transform: translate(-50%, 50%);'
         },
         {
           direction: 'b',
-          style:
-            'bottom: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, 50%);'
+          style: 'bottom: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, 50%);'
         },
         {
           direction: 'rb',
-          style:
-            'bottom: 0; right: 0; cursor: nwse-resize; transform: translate(50%, 50%);'
+          style: 'bottom: 0; right: 0; cursor: nwse-resize; transform: translate(50%, 50%);'
         },
         {
           direction: 'r',
-          style:
-            'top: 50%; right: 0; cursor:ew-resize; transform: translate(50%, -50%);'
+          style: 'top: 50%; right: 0; cursor:ew-resize; transform: translate(50%, -50%);'
         }
       ]),
       copyDom: '',
@@ -417,7 +389,7 @@ export default {
         activeColor: '#23434f'
       }
       this.$rightCtx(rightMenuOptions)
-        .then((res) => {
+        .then(res => {
           switch (res.key) {
             case 'layerUp':
               this.currentCpt.cptZ++
@@ -442,7 +414,7 @@ export default {
               break
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log('右键操作取消/失败', err)
         })
     },
@@ -471,22 +443,14 @@ export default {
           // 删除键(delete) 和 退回键(back space) 触发删除组件
           // 避免有输入框聚焦时影响输入，此处判断是否存在聚焦中的输入框
           case 'Delete':
-            if (
-              !['INPUT', 'TEXTAREA'].includes(document.activeElement.nodeName)
-            ) {
-              idx = this.cacheComponents.findIndex(
-                (c) => c.id === this.currentCpt.id
-              )
+            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.nodeName)) {
+              idx = this.cacheComponents.findIndex(c => c.id === this.currentCpt.id)
               this.delCpt(this.currentCpt, idx)
             }
             break
           case 'Backspace':
-            if (
-              !['INPUT', 'TEXTAREA'].includes(document.activeElement.nodeName)
-            ) {
-              idx = this.cacheComponents.findIndex(
-                (c) => c.id === this.currentCpt.id
-              )
+            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.nodeName)) {
+              idx = this.cacheComponents.findIndex(c => c.id === this.currentCpt.id)
               this.delCpt(this.currentCpt, idx)
             }
             break
@@ -511,10 +475,7 @@ export default {
         this.$message.info('加载完毕')
       } else {
         // 模拟无 id，初始化数据进行新建
-        localStorage.setItem(
-          'designCache',
-          JSON.stringify(this.$store.state.bigScreen.bigScreenData)
-        )
+        localStorage.setItem('designCache', JSON.stringify(this.$store.state.bigScreen.bigScreenData))
         this.$message.info('初始化画布已完成')
       }
       this.initContainerSize()
@@ -530,10 +491,7 @@ export default {
       this.$store.dispatch('bigScreen/addCpt', copyItem)
       // todo 根据类型提示
       // 聚焦到复制的组件
-      this.$store.dispatch(
-        'bigScreen/setCurComponentIndex',
-        this.cacheComponents.length - 1
-      )
+      this.$store.dispatch('bigScreen/setCurComponentIndex', this.cacheComponents.length - 1)
       this.$message.success(`${item.cptTitle} 组件复制成功！`)
     },
     refreshCptData(refName) {
@@ -617,9 +575,7 @@ export default {
         icon: config.icon,
         hidden: false,
         componentName: config.componentName,
-        setterName: config.setterName
-          ? config.setterName
-          : config.componentName + '-setter',
+        setterName: config.setterName ? config.setterName : config.componentName + '-setter',
         configProps: config.props,
         cptX: Math.round(e.offsetX),
         cptY: Math.round(e.offsetY),
