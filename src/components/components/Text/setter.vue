@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'BTextSetter',
   components: { BColorPicker },
@@ -96,7 +96,7 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
       textFamilyList: ['微软雅黑', '黑体', '宋体', '仿宋', '楷体', '华文宋体'],
       textDecorationList: [
@@ -107,7 +107,7 @@ export default {
         // { label: '闪烁(存在兼容问题)', value: 'blink' }
       ]
     }
-  }
+  },
 }
 </script>
 

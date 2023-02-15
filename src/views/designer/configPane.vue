@@ -29,7 +29,11 @@
           />
         </div>
       </el-tab-pane>
-      <el-tab-pane v-if="currentCpt.configProps && currentCpt.configProps.interaction" label="交互" name="interaction">
+      <el-tab-pane
+        v-if="currentCpt.configProps && currentCpt.configProps.interaction"
+        label="交互"
+        name="interaction"
+      >
         <span slot="label"><i class="el-icon-connection" /> 交互</span>
         <InteractionConfig />
       </el-tab-pane>
@@ -96,7 +100,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.config-pane{
+.config-pane {
   width: 100%;
   height: 100%;
   background: #2d333f;

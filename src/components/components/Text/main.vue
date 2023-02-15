@@ -11,7 +11,7 @@
       backgroundColor: configProps.attribute.bgColor,
       fontFamily: configProps.attribute.textFamily,
       textDecoration: configProps.attribute.textDecoration,
-      ...rotateDeg
+      ...rotateDeg,
     }"
     @click="redirect"
   >
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'BText',
@@ -28,30 +28,30 @@ export default {
     rotateDeg: { type: Object, default: () => {} },
     configProps: { type: Object, default: () => {} }
   },
-  data () {
+  data() {
     return {
       cptData: {},
       uuid: null
     }
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
-      })
+      });
     },
-    redirect () {
+    redirect() {
       if (this.configProps.attribute.url) {
         if (this.configProps.attribute.url.startsWith('view')) {
           this.$router.push(this.configProps.attribute.url)
-          this.$emit('reload')
+          this.$emit('reload');
         } else {
           window.open(this.configProps.attribute.url)
         }

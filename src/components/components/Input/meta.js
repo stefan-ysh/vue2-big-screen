@@ -14,7 +14,7 @@ export default {
       type: 'text',
       labelWidth: 80,
       labelPosition: 'left',
-      formSize: 'mini'
+      formSize: 'mini',
     }
   }
 }

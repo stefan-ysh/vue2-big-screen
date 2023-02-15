@@ -1,6 +1,6 @@
 <template>
   <table
-    :style="{ width: width + 'px', height: height + 'px', ...rotateDeg}"
+    :style="{ width: width + 'px', height: height + 'px', ...rotateDeg }"
     style="border-collapse: collapse; color: #fff; text-align: center"
   >
     <colgroup v-if="configProps.attribute.showIndex" style="width: 60px" />
@@ -71,7 +71,7 @@
                   ? temp[column.colKey]
                   : uploadUrl + temp[column.colKey]
               "
-            >
+            />
             <span v-else>{{ temp[column.colKey] }}</span>
           </div>
         </td>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 export default {
   name: 'ScrollTable2',
   props: {
@@ -93,7 +93,7 @@ export default {
     height: Number,
     show: Boolean
   },
-  data () {
+  data() {
     return {
       // todo 文件上传url
       uploadUrl: 'example/upload',
@@ -108,52 +108,52 @@ export default {
   },
   watch: {
     'configProps.attribute.showLine': {
-      handler () {
+      handler() {
         this.computeRowHeight()
         this.scrollTable()
       },
       deep: true // 深度监听
     },
-    width () {
+    width() {
       this.computeColWidth()
     },
-    height () {
+    height() {
       this.computeRowHeight()
     },
-    show (val) {
+    show(val) {
       if (val) {
         this.computeColWidth()
       }
     }
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
     this.refreshCptData()
   },
-  mounted () {
+  mounted() {
     this.computeColWidth()
     this.computeRowHeight()
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearInterval(this.timer)
   },
   methods: {
-    computeRowHeight () {
+    computeRowHeight() {
       this.rowHeight =
         (this.height - this.configProps.attribute.theadHeight) /
         this.configProps.attribute.showLine
     },
-    computeColWidth () {
+    computeColWidth() {
       const that = this
       that.colWidths = {}
       this.configProps.attribute.columns.forEach((item) => {
         that.colWidths[item.colKey] = that.$refs[item.colKey][0].clientWidth
-      })
+      });
     },
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         const parse = res
         for (let i = 0; i < parse.length; i++) {
@@ -161,14 +161,17 @@ export default {
         }
         this.tableData = parse
         this.scrollTable()
-      })
+      });
     },
-    scrollTable () {
+    scrollTable() {
       const that = this
       if (this.timer) {
         clearInterval(this.timer)
       }
-      that.rollData = that.tableData.slice(0, this.configProps.attribute.showLine)
+      that.rollData = that.tableData.slice(
+        0,
+        this.configProps.attribute.showLine
+      )
       if (this.configProps.attribute.showLine >= that.tableData.length) {
         return
       }
@@ -176,12 +179,12 @@ export default {
       this.timer = setInterval(() => {
         that.rollData.shift()
         that.rollData.push(that.tableData[i])
-        i++
+        i++;
         if (i >= that.tableData.length) {
           i = 0
         }
       }, 2000)
-    }
+    },
   }
 }
 </script>

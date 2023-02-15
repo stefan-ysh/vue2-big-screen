@@ -15,7 +15,7 @@
         <el-input-number
           v-model="attribute.titleFontSize"
           controls-position="right"
-          style="width:100%"
+          style="width: 100%"
           :min="10"
           :max="50"
         />
@@ -53,7 +53,7 @@
           <el-input-number
             v-model="attribute.legendFontSize"
             controls-position="right"
-            style="width:100%"
+            style="width: 100%"
             :min="2"
             :max="120"
           />
@@ -73,7 +73,7 @@
         <el-input-number
           v-model="attribute.radiusOutside"
           controls-position="right"
-          style="width:100%"
+          style="width: 100%"
           :min="2"
           :max="120"
         />
@@ -82,7 +82,7 @@
         <el-input-number
           v-model="attribute.radiusInside"
           controls-position="right"
-          style="width:100%"
+          style="width: 100%"
           :min="0"
           :max="100"
         />
@@ -116,7 +116,7 @@
         <el-input-number
           v-model="attribute.labelFontSize"
           controls-position="right"
-          style="width:100%"
+          style="width: 100%"
           :min="2"
           :max="120"
         />
@@ -129,7 +129,7 @@
 </template>
 <!-- eslint-disable vue/no-mutating-props -->
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'PieSetter',
   components: { BColorPicker },
@@ -139,18 +139,18 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
-      tempColor: ''
+      tempColor: '',
     }
   },
   methods: {
-    addColor () {
+    addColor() {
       this.attribute.pieColor.push(this.tempColor)
     },
-    delColor (index) {
+    delColor(index) {
       this.attribute.pieColor.splice(index, 1)
-    }
+    },
   }
 }
 </script>

@@ -1,6 +1,9 @@
 <template>
   <div style="font-family: hooge; height: 100%">
-    <table style="width: 100%; height: 100%; text-align: center" :style="{ ...rotateDeg }">
+    <table
+      style="width: 100%; height: 100%; text-align: center"
+      :style="{ ...rotateDeg }"
+    >
       <tr style="height: 100%">
         <td
           v-for="item in cptData.value.length"
@@ -29,7 +32,7 @@
 </template>
 
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'RectNum',
@@ -39,24 +42,24 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     height: Number
   },
-  data () {
+  data() {
     return {
       cptData: { value: '12345' },
       uuid: null
     }
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
-      })
+      });
     }
   }
 }

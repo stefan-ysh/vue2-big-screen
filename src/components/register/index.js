@@ -1,6 +1,6 @@
 // import '../assets/style/animation.scss'
 export default {
-  install (Vue, options) {
+  install(Vue, options) {
     // 1.读取lib文件夹下的文件
     // requeire.context('路径', 是否读取子文件夹, /正则匹配/)
     const files = require.context('../components', true, /\.vue$/)
@@ -16,5 +16,5 @@ export default {
         Vue.component(cptName, cpt)
       }
     })
-  }
+  },
 }

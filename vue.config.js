@@ -1,7 +1,7 @@
 'use strict'
 const path = require('path')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
@@ -50,7 +50,7 @@ module.exports = {
       }
     }
   },
-  chainWebpack (config) {
+  chainWebpack(config) {
     // 大屏图标
     config.module
       .rule('svg')

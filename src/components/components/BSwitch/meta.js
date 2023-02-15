@@ -9,7 +9,7 @@ export default {
       disabled: false,
       width: 200,
       activeColor: '#409EFF',
-      inActiveColor: '#C0CCDA'
+      inActiveColor: '#C0CCDA',
     }
   }
 }

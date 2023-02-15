@@ -18,7 +18,7 @@ export default {
       rowGap: 30,
       style: {
         fontSize: 30,
-        fill: '#3de7c9'
+        fill: '#3de7c9',
       }
     }
   }

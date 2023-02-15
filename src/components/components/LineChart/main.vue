@@ -3,7 +3,7 @@
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'LineChart',
@@ -13,7 +13,7 @@ export default {
     rotateDeg: Object,
     configProps: Object
   },
-  data () {
+  data() {
     return {
       uuid: '',
       chartOption: {},
@@ -23,36 +23,36 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler (newObj) {
+      handler(newObj) {
         this.loadChart(newObj)
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
-    width () {
+    width() {
       this.chart.resize()
     },
-    height () {
+    height() {
       this.chart.resize()
-    }
+    },
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
   },
-  mounted () {
+  mounted() {
     this.chart = this.$echarts.init(document.getElementById(this.uuid))
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
-      getDataJson(this.configProps.cptDataForm).then(res => {
+    loadData() {
+      getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
         this.loadChart(this.configProps.attribute)
-      })
+      });
     },
-    loadChart (attribute) {
+    loadChart(attribute) {
       const that = this
       that.chartOption = {
         color: attribute.lineColor,
@@ -86,7 +86,8 @@ export default {
               color: attribute.xLineColor
             }
           },
-          axisTick: { // x轴刻度线
+          axisTick: {
+            // x轴刻度线
             show: attribute.xTickShow
           }
         },
@@ -102,43 +103,49 @@ export default {
               color: attribute.yLineColor
             }
           },
-          axisTick: { // y轴刻度线
+          axisTick: {
+            // y轴刻度线
             show: attribute.yTickShow
           },
-          splitLine: { // 网格线
+          splitLine: {
+            // 网格线
             show: attribute.yGridLineShow
           }
         },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'cross'
+            type: 'cross',
           }
         },
-        series: [{
-          data: that.cptData.yData.split(','),
-          type: 'line',
-          smooth: attribute.smooth,
-          areaStyle: {
-            color: new that.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-              offset: 0,
-              color: attribute.areaColor1
-            }, {
-              offset: 0.34,
-              color: attribute.areaColor2
-            }, {
-              offset: 1,
-              color: attribute.areaColor3
-            }])
+        series: [
+          {
+            data: that.cptData.yData.split(','),
+            type: 'line',
+            smooth: attribute.smooth,
+            areaStyle: {
+              color: new that.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: attribute.areaColor1
+                },
+                {
+                  offset: 0.34,
+                  color: attribute.areaColor2
+                },
+                {
+                  offset: 1,
+                  color: attribute.areaColor3
+                }
+              ])
+            }
           }
-        }]
+        ]
       }
       that.chart.setOption(that.chartOption)
-    }
+    },
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

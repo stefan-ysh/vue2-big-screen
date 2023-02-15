@@ -23,7 +23,7 @@
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Clock',
@@ -37,37 +37,37 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
-      uuid: ''
+      uuid: '',
     }
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
   },
-  mounted () {
+  mounted() {
     this.showTime()
   },
 
   methods: {
-    showTime () {
+    showTime() {
       let format = this.configProps.attribute.format
 
       if (this.configProps.attribute.am) {
         if (this.configProps.attribute.isUpperCase) {
-          format = format + ' A'
+          format = format + ' A';
         } else {
-          format = format + ' a'
+          format = format + ' a';
         }
       }
 
       if (this.configProps.attribute.showWeek) {
-        format = format + ' dddd'
+        format = format + ' dddd';
       }
       const result = dayjs().format(format)
       document.getElementById(this.uuid).innerText = result.trim()
       setTimeout(this.showTime, 1000)
-    }
+    },
   }
 }
 </script>

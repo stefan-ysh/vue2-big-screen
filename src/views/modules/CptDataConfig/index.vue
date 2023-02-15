@@ -87,11 +87,23 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" style="width: 100%" @click="refreshCptData(refName)">刷新数据</el-button>
+        <el-button
+          type="primary"
+          style="width: 100%"
+          @click="refreshCptData(refName)"
+          >刷新数据</el-button
+        >
       </el-form-item>
     </el-form>
     <!-- 代码编辑器 -->
-    <BCodeMirror v-if="codeVisible" :field="codeField" :mode="codeMode" :currentCpt="currentCpt" @confirm="confirmEditCode" @cancel="cancelEditCode" />
+    <BCodeMirror
+      v-if="codeVisible"
+      :field="codeField"
+      :mode="codeMode"
+      :currentCpt="currentCpt"
+      @confirm="confirmEditCode"
+      @cancel="cancelEditCode"
+    />
   </div>
 </template>
 
@@ -103,7 +115,7 @@ export default {
     BCodeMirror
   },
   inject: ['refreshCptData'],
-  data () {
+  data() {
     return {
       codeVisible: false,
       codeMode: '',
@@ -112,27 +124,27 @@ export default {
     }
   },
   computed: {
-    currentCptIndex () {
+    currentCptIndex() {
       return this.$store.state.bigScreen.curComponentIndex
     },
-    refName () {
+    refName() {
       return this.currentCpt.componentName + this.currentCptIndex
     },
-    windowHeight () {
+    windowHeight() {
       return this.$store.state.bigScreen.windowHeight
     },
-    currentCpt () {
+    currentCpt() {
       return this.$store.state.bigScreen.curComponent
     },
     dataPollEnable: {
-      get () {
+      get() {
         return !!(
           this.currentCpt.configProps.cptDataForm &&
           this.currentCpt.configProps.cptDataForm.pollTime &&
           this.currentCpt.configProps.cptDataForm.pollTime !== 0
         )
       },
-      set (newVal) {
+      set(newVal) {
         if (newVal) {
           this.currentCpt.configProps.cptDataForm.pollTime = 8
         } else {
@@ -146,13 +158,13 @@ export default {
     }
   },
   methods: {
-    confirmEditCode (val) {
+    confirmEditCode(val) {
       this.codeVisible = false
     },
-    cancelEditCode (val) {
+    cancelEditCode(val) {
       this.codeVisible = false
     },
-    showCodeEditor (type) {
+    showCodeEditor(type) {
       switch (type) {
         case 'val':
           this.codeMode = 'json'
@@ -181,7 +193,7 @@ export default {
       this.codeVisible = true
     },
 
-    changeDataSource (val) {
+    changeDataSource(val) {
       // 静态数据不显示轮询按钮
       if (val === 1) {
         this.currentCpt.configProps.cptDataForm.pollTime = 0

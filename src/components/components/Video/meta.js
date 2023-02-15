@@ -10,7 +10,8 @@ export default {
     // cptDataForm: {
     // },
     attribute: {
-      videoUrl: 'https://static.jeecg.com/upload/test/test_mv02_1591931970511.mov',
+      videoUrl:
+        'https://static.jeecg.com/upload/test/test_mv02_1591931970511.mov',
       autoplay: true,
       isShowControls: true,
       isLoop: false

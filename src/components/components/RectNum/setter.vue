@@ -31,7 +31,7 @@
   </el-form>
 </template>
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 
 export default {
   name: 'RectNumSetter',

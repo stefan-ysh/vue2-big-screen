@@ -43,13 +43,21 @@
         </el-select>
       </el-form-item>
       <el-form-item label="指示器段数">
-        <el-input-number v-model="attribute.splitNumber" controls-position="right" style="width: 100%" />
+        <el-input-number
+          v-model="attribute.splitNumber"
+          controls-position="right"
+          style="width: 100%"
+        />
       </el-form-item>
       <el-form-item label="指示器内容">
         <el-input v-model="attribute.indicator" type="textarea" />
       </el-form-item>
       <el-form-item label="名称轴距">
-        <el-input-number v-model="attribute.nameGap" controls-position="right" style="width: 100%" />
+        <el-input-number
+          v-model="attribute.nameGap"
+          controls-position="right"
+          style="width: 100%"
+        />
       </el-form-item>
       <el-form-item label="内圈半径">
         <el-slider v-model="attribute.radiusInside" :max="100" />
@@ -173,7 +181,7 @@
 </template>
 <!-- eslint-disable vue/no-mutating-props -->
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'RadarChartSetter',
   components: { BColorPicker },
@@ -183,18 +191,18 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
-      tempColor: ''
+      tempColor: '',
     }
   },
   methods: {
-    addColor () {
+    addColor() {
       this.attribute.pieColor.push(this.tempColor)
     },
-    delColor (index) {
+    delColor(index) {
       this.attribute.pieColor.splice(index, 1)
-    }
+    },
   }
 }
 </script>

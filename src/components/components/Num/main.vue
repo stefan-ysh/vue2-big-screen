@@ -6,7 +6,7 @@
         color: configProps.attribute.numColor,
         fontSize: configProps.attribute.numSize + 'px',
         lineHeight: configProps.attribute.numHeight + 'px',
-        ...rotateDeg
+        ...rotateDeg,
       }"
     >
       {{ cptData.value
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'BNum',
@@ -28,24 +28,24 @@ export default {
     configProps: { type: Object, default: () => {} }
   },
 
-  data () {
+  data() {
     return {
       cptData: {},
       uuid: null
     }
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
-      })
+      });
     }
   }
 }

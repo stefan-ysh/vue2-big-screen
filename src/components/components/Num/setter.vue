@@ -8,7 +8,7 @@
       <el-input-number
         v-model="attribute.numSize"
         controls-position="right"
-        style="width:100%"
+        style="width: 100%"
         :min="13"
         :max="200"
         size="mini"
@@ -22,7 +22,7 @@
         v-model="attribute.numHeight"
         controls-position="right"
         :min="10"
-        style="width:100%"
+        style="width: 100%"
         :max="200"
         size="mini"
       />
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'BNumSetter',
   components: { BColorPicker },

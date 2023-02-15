@@ -18,20 +18,20 @@ export default {
     rotateDeg: { type: Object, default: () => {} },
     configProps: { type: Object, default: () => {} }
   },
-  data () {
+  data() {
     return {
       value: false,
       uuid: null
     }
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
   },
   methods: {
-    handleSwitch (val) {
+    handleSwitch(val) {
       console.log('[ val ] >', val)
     },
-    handleClickUrl () {
+    handleClickUrl() {
       if (this.configProps.attribute.url) {
         if (this.configProps.attribute.url.startsWith('view')) {
           // 跳转到其他大屏
@@ -54,7 +54,7 @@ export default {
     // width: 100% !important;
     // height: 100%;
     // border-radius: 50%;
-    &::after{
+    &::after {
       width: auto;
       height: 100%;
       aspect-ratio: 1/1;

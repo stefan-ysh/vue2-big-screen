@@ -43,12 +43,12 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'BorderSetter',
   components: { BColorPicker },
-  props: { attribute: { type: Object, default: () => {} } },
-  data () {
+  props: { attribute: { type: Object, default: () => {} }},
+  data() {
     return {
       borderTypes: Object.freeze([
         { value: 'dv-border-box-1', label: '样式1' },
@@ -66,7 +66,7 @@ export default {
         { value: 'dv-border-box-13', label: '样式13' }
       ])
     }
-  }
+  },
 }
 </script>
 

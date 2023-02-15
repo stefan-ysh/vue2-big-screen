@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'PercentPondSetter',
   components: {

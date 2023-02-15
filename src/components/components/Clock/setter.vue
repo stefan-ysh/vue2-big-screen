@@ -40,7 +40,12 @@
       <BColorPicker field="color" :data="attribute" show-alpha />
     </el-form-item>
     <el-form-item label="字体大小">
-      <el-input-number v-model="attribute.fontSize" controls-position="right" style="width: 100%" :min="1" />
+      <el-input-number
+        v-model="attribute.fontSize"
+        controls-position="right"
+        style="width: 100%"
+        :min="1"
+      />
     </el-form-item>
     <el-form-item label="字体粗细">
       <el-select v-model="attribute.fontWeight" style="width: 100%">
@@ -73,10 +78,20 @@
       </el-select>
     </el-form-item>
     <el-form-item label="行高">
-      <el-input-number v-model="attribute.lineHeight" controls-position="right" style="width: 100%" :min="0" />
+      <el-input-number
+        v-model="attribute.lineHeight"
+        controls-position="right"
+        style="width: 100%"
+        :min="0"
+      />
     </el-form-item>
     <el-form-item label="字符间距">
-      <el-input-number v-model="attribute.letterSpace" controls-position="right" style="width: 100%" :min="0" />
+      <el-input-number
+        v-model="attribute.letterSpace"
+        controls-position="right"
+        style="width: 100%"
+        :min="0"
+      />
     </el-form-item>
     <el-form-item label="跑马灯">
       <el-switch v-model="attribute.animation" />
@@ -85,7 +100,7 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'ClockSetter',
   components: { BColorPicker },
@@ -95,7 +110,7 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
       textDecorationList: [
         { label: '无', value: 'none' },
@@ -104,10 +119,8 @@ export default {
         { label: '穿过文字', value: 'line-through' }
       ]
     }
-  }
+  },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

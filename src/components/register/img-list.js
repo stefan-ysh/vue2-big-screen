@@ -1,4 +1,3 @@
-
 // 参数：
 // directory: 说明需要检索的目录
 // useSubdirectories: 是否检索子目录
@@ -27,7 +26,9 @@ const requireBgImgModule = require.context(
 const ImgList = []
 // 图片素材
 for (let i = 0; i < requireImgModule.keys().length; i++) {
-  const src = requireImgModule.keys()[i].substr(2, requireImgModule.keys()[i].length)
+  const src = requireImgModule
+    .keys()
+    [i].substr(2, requireImgModule.keys()[i].length)
   ImgList.push({
     title: i + 1,
     id: `img${i}`,
@@ -37,7 +38,9 @@ for (let i = 0; i < requireImgModule.keys().length; i++) {
 }
 // 背景图片
 for (let i = 0; i < requireBgImgModule.keys().length; i++) {
-  const src = requireBgImgModule.keys()[i].substr(2, requireBgImgModule.keys()[i].length)
+  const src = requireBgImgModule
+    .keys()
+    [i].substr(2, requireBgImgModule.keys()[i].length)
   ImgList.push({
     title: i + 1,
     id: `bg${i}`,

@@ -21,9 +21,9 @@
     <div
       v-show="
         attribute.decorationType === 'dv-decoration-7' ||
-          attribute.decorationType === 'dv-decoration-9' ||
-          attribute.decorationType === 'dv-decoration-11' ||
-          attribute.decorationType === 'dv-decoration-12'
+        attribute.decorationType === 'dv-decoration-9' ||
+        attribute.decorationType === 'dv-decoration-11' ||
+        attribute.decorationType === 'dv-decoration-12'
       "
     >
       <el-form-item label="文本">
@@ -37,12 +37,12 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'DecorationSetter',
   components: { BColorPicker },
-  props: { attribute: { type: Object, default: () => {} } },
-  data () {
+  props: { attribute: { type: Object, default: () => {} }},
+  data() {
     return {
       decorationTypes: Object.freeze([
         { label: '样式1', value: 'dv-decoration-1' },
@@ -59,7 +59,7 @@ export default {
         { label: '样式12', value: 'dv-decoration-12' }
       ])
     }
-  }
+  },
 }
 </script>
 

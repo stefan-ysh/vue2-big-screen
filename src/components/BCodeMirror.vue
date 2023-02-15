@@ -85,7 +85,7 @@ export default {
       default: ''
     }
   },
-  data () {
+  data() {
     return {
       originVal: '',
       language: 'javascript',
@@ -124,7 +124,7 @@ export default {
   },
   watch: {
     currentCpt: {
-      handler (newVal, oldVal) {
+      handler(newVal, oldVal) {
         if (!oldVal) {
           this.originVal = newVal.configProps.cptDataForm[this.field]
         }
@@ -133,15 +133,19 @@ export default {
       immediate: true
     },
     mode: {
-      handler (newVal, oldVal) {
+      handler(newVal, oldVal) {
         this.language = newVal
       },
       immediate: true
     }
   },
   methods: {
-    editorInit: function (editor) {
-      console.log('%c [ editor ]-149', 'font-size:13px; background:pink; color:#bf2c9f;', editor)
+    editorInit: function(editor) {
+      console.log(
+        '%c [ editor ]-149',
+        'font-size:13px; background:pink; color:#bf2c9f;',
+        editor
+      )
       // console.log('debug log --> ', editor)
       // // 窗口自适应
       // // editor.resize();
@@ -152,10 +156,10 @@ export default {
       //   this.$emit('change', editor.getValue())
       // })
     },
-    confirm () {
+    confirm() {
       this.$emit('confirm')
     },
-    cancel () {
+    cancel() {
       // eslint-disable-next-line vue/no-mutating-props
       this.currentCpt.configProps.cptDataForm[this.field] = this.originVal
       this.$emit('cancel')
@@ -165,8 +169,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.code-editor-dialog{
-  /deep/ .el-dialog__body{
+.code-editor-dialog {
+  /deep/ .el-dialog__body {
     overflow: hidden !important;
   }
 }
@@ -174,7 +178,7 @@ export default {
   min-height: 300px !important;
   position: relative;
   // 代码问题提示框
-  /deep/ .ace_tooltip  {
+  /deep/ .ace_tooltip {
     top: 0 !important;
     left: 0 !important;
   }

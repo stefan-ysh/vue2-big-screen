@@ -3,7 +3,7 @@
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -14,7 +14,7 @@ export default {
     rotateDeg: Object,
     configProps: Object
   },
-  data () {
+  data() {
     return {
       uuid: '',
       chartOption: {},
@@ -24,41 +24,41 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler (newObj) {
+      handler(newObj) {
         this.loadChart(newObj)
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
-    width () {
+    width() {
       this.chart.resize()
     },
-    height () {
+    height() {
       this.chart.resize()
-    }
+    },
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
   },
-  mounted () {
-    this.chart = this.$echarts.init(document.getElementById(this.uuid), 'dark')
+  mounted() {
+    this.chart = this.$echarts.init(document.getElementById(this.uuid), 'dark');
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
-      getDataJson(this.configProps.cptDataForm).then(res => {
+    loadData() {
+      getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
         this.loadChart(this.configProps.attribute)
-      })
+      });
     },
-    loadChart (attribute) {
+    loadChart(attribute) {
       const that = this
       that.chartOption = {
         backgroundColor: '',
         tooltip: {
-          formatter: '{a} <br/>{b} : {c}%'
+          formatter: '{a} <br/>{b} : {c}%',
         },
         series: [
           {
@@ -84,7 +84,7 @@ export default {
               length: attribute.tickLength * 1.5,
               lineStyle: {
                 width: 2,
-                color: '#999'
+                color: '#999',
               }
             },
             axisLine: {
@@ -129,11 +129,9 @@ export default {
         ]
       }
       that.chart.setOption(that.chartOption)
-    }
+    },
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

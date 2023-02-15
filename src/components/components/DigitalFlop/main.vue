@@ -1,9 +1,12 @@
 <template>
-  <dv-digital-flop :config="flopConfig" :style="{ width: '100%', height: '100%', ...rotateDeg }" />
+  <dv-digital-flop
+    :config="flopConfig"
+    :style="{ width: '100%', height: '100%', ...rotateDeg }"
+  />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'DigitalFlop',
@@ -13,7 +16,7 @@ export default {
     rotateDeg: Object,
     configProps: Object
   },
-  data () {
+  data() {
     return {
       uuid: null,
       flopConfig: {}
@@ -21,25 +24,25 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler () {
+      handler() {
         this.loadData()
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
-    width () {
+    width() {
       this.loadData()
-    }
+    },
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
-      getDataJson(this.configProps.cptDataForm).then(res => {
+    loadData() {
+      getDataJson(this.configProps.cptDataForm).then((res) => {
         this.flopConfig = {
           number: res.value.split(',').map(Number),
           content: this.configProps.attribute.content,
@@ -48,12 +51,10 @@ export default {
           rowGap: this.configProps.attribute.rowGap,
           style: this.configProps.attribute.style
         }
-      })
+      });
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="custom-form"
-    :style="{ height: windowHeight - 130 + 'px' }"
-  >
+  <div class="custom-form" :style="{ height: windowHeight - 130 + 'px' }">
     <el-form
       class="big-screen-config-form"
       :model="designData"
@@ -30,7 +27,7 @@
                 :min="640"
                 :max="10240"
                 style="width: 100%"
-              /></el-col>
+            /></el-col>
             <el-col :span="2" style="text-align: center; color: #fff">
               x
             </el-col>
@@ -42,7 +39,7 @@
                 :min="320"
                 :max="10240"
                 style="width: 100%"
-              /></el-col>
+            /></el-col>
           </el-row>
         </div>
       </el-form-item>
@@ -51,7 +48,7 @@
       </el-form-item>
       <el-form-item label="背景图片" class="bg-img-config">
         <div v-if="designData.bgImg" class="bg-img-wrap">
-          <img class="bg-img-screenshot" :src="designData.bgImg">
+          <img class="bg-img-screenshot" :src="designData.bgImg" />
           <!-- <i
               class="edit-bg-img-btn el-icon-edit"
               title="更改背景图片"
@@ -70,7 +67,8 @@
             size="mini"
             plain
             @click="showGallery"
-          >选择图片</el-button>
+            >选择图片</el-button
+          >
         </div>
       </el-form-item>
       <el-form-item label="公开">
@@ -81,14 +79,13 @@
       </el-form-item>
     </el-form>
     <BGallery ref="gallery" imgType="bg" @confirmCheck="confirmCheck" />
-
   </div>
 </template>
 
 <script>
 // 图片集
-import BGallery from '@/components/BGallery'
-import BColorPicker from '@/components/BColorPicker.vue'
+import BGallery from '@/components/BGallery';
+import BColorPicker from '@/components/BColorPicker.vue';
 
 export default {
   name: 'BigscreenConfig',
@@ -97,29 +94,29 @@ export default {
     BColorPicker
   },
   computed: {
-    designData () {
+    designData() {
       return this.$store.state.bigScreen.bigScreenData
     },
-    windowHeight () {
+    windowHeight() {
       return this.$store.state.bigScreen.windowHeight
-    }
+    },
   },
   methods: {
-    confirmCheck (bgImg) {
+    confirmCheck(bgImg) {
       this.$store.dispatch('bigScreen/setBigScreenData', { bgImg })
     },
-    showGallery () {
+    showGallery() {
       this.$refs.gallery.opened()
     },
-    handleRemoveBgImg () {
+    handleRemoveBgImg() {
       this.$store.dispatch('bigScreen/setBigScreenData', { bgImg: '' })
-    }
+    },
     // handleChangePic() {}
   }
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 .custom-form {
   padding: 10px;
   overflow-y: auto;
@@ -131,29 +128,29 @@ export default {
       text-align: center;
     }
   }
-  .big-screen-config-form{
-    .bg-img-config{
-      .bg-img-wrap{
+  .big-screen-config-form {
+    .bg-img-config {
+      .bg-img-wrap {
         width: 100%;
         height: 100%;
-        position:relative;
-        .bg-img-screenshot{
+        position: relative;
+        .bg-img-screenshot {
           width: 100%;
           height: 100%;
         }
         .edit-bg-img-btn,
-        .del-bg-img-btn{
-          z-index:5;
+        .del-bg-img-btn {
+          z-index: 5;
           font-size: 15px;
-          cursor:pointer;
-          color:#fff;
-          position:absolute;
+          cursor: pointer;
+          color: #fff;
+          position: absolute;
           top: 5px;
         }
-        .edit-bg-img-btn{
+        .edit-bg-img-btn {
           right: 30px;
         }
-        .del-bg-img-btn{
+        .del-bg-img-btn {
           right: 5px;
         }
       }

@@ -3,10 +3,7 @@
   <div>
     <el-form labelWidth="100px" size="mini">
       <el-form-item label="显示序号">
-        <el-switch
-          v-model="attribute.showIndex"
-          size="mini"
-        />
+        <el-switch v-model="attribute.showIndex" size="mini" />
       </el-form-item>
       <el-form-item label="表头高度">
         <el-input-number
@@ -76,11 +73,9 @@
       </el-form-item>
 
       <div style="text-indent: 1em">
-        表格列设置：<el-button
-          size="mini"
-          theme="primary"
-          @click="addCol"
-        >新增列</el-button>
+        表格列设置：<el-button size="mini" theme="primary" @click="addCol"
+          >新增列</el-button
+        >
       </div>
       <el-table
         style="font-size: 12px; margin-top: 10px"
@@ -131,7 +126,7 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'ScrollTable2Setter',
   components: { BColorPicker },
@@ -141,7 +136,7 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
       columns: [
         { colKey: 'colKey', title: '字段标识' },
@@ -154,9 +149,9 @@ export default {
     }
   },
   methods: {
-    confirmRow () {
+    confirmRow() {
       if (!this.currentRow.colKey || !this.currentRow.title) {
-        this.$message.error('请输入字段标识或字段名称')
+        this.$message.error('请输入字段标识或字段名称');
         return
       }
       const id = new Date().getTime()
@@ -164,20 +159,20 @@ export default {
       this.attribute.columns.push(Object.assign(this.currentRow, { id: id }))
       this.modelShow = false
     },
-    addCol () {
+    addCol() {
       this.currentRow = { width: 0 }
       this.modelShow = true
     },
-    editRow (row) {
+    editRow(row) {
       this.currentRow = row
       this.currentIndex = this.attribute.columns.indexOf(row)
       this.modelShow = true
     },
-    delCol () {
+    delCol() {
       // eslint-disable-next-line vue/no-mutating-props
       this.attribute.columns.splice(this.currentIndex, 1)
       this.modelShow = false
-    }
+    },
   }
 }
 </script>

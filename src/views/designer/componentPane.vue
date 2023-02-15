@@ -3,16 +3,19 @@
   <div class="bar">
     <el-tabs v-model="activeTab" @tab-click="changeTab">
       <el-tab-pane label="组件" name="component" class="cpt-list">
-        <div slot="label" style="display:flex; align-items: center;">
-            <SvgIcon
-              style="width: 15px;margin-right: 5px"
-              icon-class="puzzle"
-            />
+        <div slot="label" style="display: flex; align-items: center">
+          <SvgIcon style="width: 15px; margin-right: 5px" icon-class="puzzle" />
           组件
         </div>
         <div class="search-cpt">
-          <el-input v-model="searchKeys" placeholder="搜索组件" size="mini" clearable />
-          <div v-show="searchCptResult.length > 0"> 搜索结果
+          <el-input
+            v-model="searchKeys"
+            placeholder="搜索组件"
+            size="mini"
+            clearable
+          />
+          <div v-show="searchCptResult.length > 0">
+            搜索结果
             <el-col
               v-for="(item, index) in searchCptResult"
               :key="item.name + index"
@@ -27,7 +30,7 @@
                 <div style="line-height: 40px">
                   <SvgIcon
                     v-if="item.icon"
-                    style="width: 20px;"
+                    style="width: 20px"
                     :icon-class="item.icon"
                   />
                   <i v-else style="font-size: 20px" class="el-icon-question" />
@@ -38,16 +41,18 @@
           </div>
         </div>
         <el-collapse v-model="activeCptGroupNames" @change="changeCollapse">
-          <el-collapse-item v-if="historyUsedCpts.length > 0" title="最近使用" name="最近使用">
+          <el-collapse-item
+            v-if="historyUsedCpts.length > 0"
+            title="最近使用"
+            name="最近使用"
+          >
             <template slot="title">
               <SvgIcon
-                style="width: 15px;margin-right: 10px;"
+                style="width: 15px; margin-right: 10px"
                 class="cpt-icon"
                 icon-class="history"
               />
-              <span>
-                最近使用
-              </span>
+              <span> 最近使用 </span>
             </template>
             <div class="history-used-cpts">
               <el-row>
@@ -64,26 +69,31 @@
                     @dragstart="dragStart"
                   >
                     <!-- 图标 -->
-                      <SvgIcon
-                        v-if="item.icon"
-                        class="cpt-icon"
-                        :icon-class="item.icon"
-                      />
+                    <SvgIcon
+                      v-if="item.icon"
+                      class="cpt-icon"
+                      :icon-class="item.icon"
+                    />
                     <!-- 未设置图标时的占位图标 -->
-                    <i v-else style="font-size: 10px" class="el-icon-question" />
+                    <i
+                      v-else
+                      style="font-size: 10px"
+                      class="el-icon-question"
+                    />
                   </div>
                 </el-col>
               </el-row>
             </div>
           </el-collapse-item>
-          <el-collapse-item v-for="group in componentList" :key="group.name" :title="group.name" :name="group.name">
+          <el-collapse-item
+            v-for="group in componentList"
+            :key="group.name"
+            :title="group.name"
+            :name="group.name"
+          >
             <el-row :gutter="2">
               <template v-for="(item, index) in group.children">
-                <el-col
-                  v-if="!item.hidden"
-                  :key="item.name + index"
-                  :span="8"
-                >
+                <el-col v-if="!item.hidden" :key="item.name + index" :span="8">
                   <div
                     draggable="true"
                     :config="JSON.stringify(item)"
@@ -110,11 +120,8 @@
         </el-collapse>
       </el-tab-pane>
       <el-tab-pane label="图层" name="layer">
-        <div slot="label" style="display:flex; align-items: center;">
-            <SvgIcon
-              style="width: 15px;margin-right: 5px"
-              icon-class="layer"
-            />
+        <div slot="label" style="display: flex; align-items: center">
+          <SvgIcon style="width: 15px; margin-right: 5px" icon-class="layer" />
 
           图层
         </div>
@@ -145,11 +152,19 @@
             }"
           >
             <el-col :span="3">
-              <i class="el-icon-view" :style="{'opacity': item.hidden?'0.2':'1'}" @click="changeCptVisible(item)" />
+              <i
+                class="el-icon-view"
+                :style="{ opacity: item.hidden ? '0.2' : '1' }"
+                @click="changeCptVisible(item)"
+              />
             </el-col>
             <!-- 图层图标 -->
-            <el-col :span="4" style="display:flex;">
-              <embed class="cpt-icon" :src="require('@/assets/icons/svg/' + item.icon + '.svg')" type="image/svg+xml">
+            <el-col :span="4" style="display: flex">
+              <embed
+                class="cpt-icon"
+                :src="require('@/assets/icons/svg/' + item.icon + '.svg')"
+                type="image/svg+xml"
+              />
             </el-col>
             <!-- 图层名称 -->
             <el-col
@@ -157,16 +172,14 @@
               class="layer-name"
               :span="12"
               @click.native="selectLayer($event, item, index)"
-            >{{ item.layerName }}</el-col>
+              >{{ item.layerName }}</el-col
+            >
             <!-- 图层操作 -->
             <el-col :span="5" class="layer-operation">
               <!-- 复制图层 -->
               <i class="el-icon-copy-document" @click="copyCpt(item)" />
               <!-- 删除图层 -->
-              <i
-                class="el-icon-delete"
-                @click="delCpt(item, index)"
-              />
+              <i class="el-icon-delete" @click="delCpt(item, index)" />
             </el-col>
           </el-row>
         </draggable>
@@ -176,15 +189,15 @@
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import componentList from '@/components/register/component-list'
-import draggable from 'vuedraggable'
+import componentList from '@/components/register/component-list';
+import draggable from 'vuedraggable';
 
 export default {
   name: 'ComponentPane',
   components: {
     draggable
   },
-  data () {
+  data() {
     return {
       searchCptResult: [],
       searchKeys: '',
@@ -200,32 +213,32 @@ export default {
   },
   computed: {
     // 历史使用组件记录
-    historyUsedCpts () {
+    historyUsedCpts() {
       return this.$store.state.bigScreen.historyUsedCpts
     },
     // 图层列表
-    layerList () {
+    layerList() {
       return this.$store.state.bigScreen.componentList
-    }
+    },
   },
   watch: {
     // todo 搜索组件功能及样式待优化
-    searchKeys (newVal, oldVal) {
+    searchKeys(newVal, oldVal) {
       if (newVal === '') {
         this.searchCptResult = []
       } else {
-        componentList.forEach(group => {
-          group.children.forEach(_c => {
+        componentList.forEach((group) => {
+          group.children.forEach((_c) => {
             if (_c.name.includes(newVal)) {
               this.searchCptResult.push(_c)
             }
           })
-        })
+        });
       }
     }
   },
   methods: {
-    changeCptVisible (cpt) {
+    changeCptVisible(cpt) {
       const { id, hidden } = cpt
       const params = {
         id,
@@ -234,29 +247,29 @@ export default {
       this.$store.dispatch('bigScreen/updateCptProp', params)
     },
     // 切换左侧tab：组件/图层
-    changeTab () {},
+    changeTab() {},
     // 折叠面板改变触发，即切换组件分组
-    changeCollapse () {},
-    isActiveLayer (index) {
+    changeCollapse() {},
+    isActiveLayer(index) {
       return this.$store.state.bigScreen.curComponentIndex === index
     },
-    dragStart (e) {
+    dragStart(e) {
       const copyDom = e.currentTarget.cloneNode(true)
       this.$emit('dragStart', copyDom)
     },
-    selectLayer (e, item, index) {
+    selectLayer(e, item, index) {
       this.$emit('showConfigPane', e, item, index)
     },
-    copyCpt (item) {
+    copyCpt(item) {
       this.$emit('copyCpt', item)
     },
-    delCpt (item, index) {
+    delCpt(item, index) {
       this.$emit('delCpt', item, index)
     },
     // 开始移动图层
-    startMoveLayer (event) {},
+    startMoveLayer(event) {},
     // 结束移动图层
-    endMoveLayer () {}
+    endMoveLayer() {}
   }
 }
 </script>
@@ -289,20 +302,20 @@ export default {
             &.is-top {
               // background: red;
             }
-            .el-tabs__item{
-              transition: all .3s linear;
+            .el-tabs__item {
+              transition: all 0.3s linear;
               padding: 5px 0 5px !important;
-              opacity: .5;
+              opacity: 0.5;
               &.is-active {
-                  color: #fff !important;
-                  // border-right: 2px solid #33B8EC;
-                  border-bottom: 2px solid #33B8EC;
-                  // border-left: 3px solid #000;
-                  // border-top: 3px solid #000;
-                  opacity: 1;
-                  padding:  0 5px !important;
-                }
+                color: #fff !important;
+                // border-right: 2px solid #33B8EC;
+                border-bottom: 2px solid #33b8ec;
+                // border-left: 3px solid #000;
+                // border-top: 3px solid #000;
+                opacity: 1;
+                padding: 0 5px !important;
               }
+            }
           }
         }
         &::after {
@@ -337,7 +350,7 @@ export default {
         }
       }
       .cpt-list {
-        .search-cpt{
+        .search-cpt {
           margin-top: 10px;
           .el-input {
             &__inner {
@@ -353,19 +366,19 @@ export default {
           height: 90px;
           text-align: center;
           overflow: scroll;
-          .history-cpt-item{
+          .history-cpt-item {
             width: 40px;
             height: 40px;
-            transition: all .3s;
+            transition: all 0.3s;
             display: flex;
             justify-content: center;
-            align-items:center;
+            align-items: center;
             cursor: pointer;
-            &:hover{
-                border-right: 1px solid #33B8EC;
-                border-bottom: 1px solid #33B8EC;
-                border-left: 3px solid #000;
-                border-top: 3px solid #000;
+            &:hover {
+              border-right: 1px solid #33b8ec;
+              border-bottom: 1px solid #33b8ec;
+              border-left: 3px solid #000;
+              border-top: 3px solid #000;
             }
           }
         }
@@ -428,7 +441,7 @@ export default {
   box-sizing: border-box;
   position: relative;
   box-shadow: none;
-  transition: all .2s ease-in;
+  transition: all 0.2s ease-in;
   .cpt-icon-wrap {
     line-height: 40px;
     .cpt-icon {

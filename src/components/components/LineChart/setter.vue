@@ -101,13 +101,13 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'LineChartSetter',
   components: {
     BColorPicker
   },
-  props: { attribute: { type: Object, default: () => {} } }
+  props: { attribute: { type: Object, default: () => {} }}
 }
 </script>
 

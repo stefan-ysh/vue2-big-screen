@@ -6,10 +6,10 @@ for (const key of files.keys()) {
   // modules[key.replace(/(\.\/|\.js)/g, '')] = files(key).default;
   cptList.push(files(key).default)
 }
-cptList.forEach(cpt => {
+cptList.forEach((cpt) => {
   const idx = cptData.findIndex((_c) => {
     return _c.name === cpt.group
-  })
+  });
   if (idx > -1) {
     cptData[idx].children.push(cpt)
   } else {

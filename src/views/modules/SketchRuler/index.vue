@@ -38,7 +38,7 @@ export default {
       default: 0
     }
   },
-  data () {
+  data() {
     return {
       showRuler: true,
       // scale: 2, // 658813476562495, //1,
@@ -65,7 +65,7 @@ export default {
   },
   watch: {
     // 重绘
-    scale () {
+    scale() {
       this.showRuler = false
       setTimeout(() => {
         this.showRuler = true

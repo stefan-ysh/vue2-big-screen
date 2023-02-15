@@ -39,7 +39,9 @@
               :width="Math.round(item.cptWidth)"
               :height="Math.round(item.cptHeight)"
               :configProps="item.configProps"
-              :rotateDeg="{transform:`rotateX(${item.rotateX}deg) rotateY(${item.rotateY}deg) rotateZ(${item.rotateZ}deg)`}"
+              :rotateDeg="{
+                transform: `rotateX(${item.rotateX}deg) rotateY(${item.rotateY}deg) rotateZ(${item.rotateZ}deg)`,
+              }"
               @changeCptHiddenStatus="changeCptHiddenStatus"
               @reload="loadData"
               @refreshCpt="refreshCpt"
@@ -52,10 +54,9 @@
 </template>
 
 <script>
-
 export default {
   name: 'PreviewIndex',
-  data () {
+  data() {
     return {
       designCache: {},
       windowWidth: 0,
@@ -64,17 +65,17 @@ export default {
       containerScale: 1
     }
   },
-  beforeMount () {
+  beforeMount() {
     window.removeEventListener('resize', this.loadSize)
   },
-  mounted () {
+  mounted() {
     this.loadData()
     window.addEventListener('resize', this.loadSize)
   },
   methods: {
     // 更改组件显隐
-    changeCptHiddenStatus (id) {
-      const res = this.designCache.components.find(_c => {
+    changeCptHiddenStatus(id) {
+      const res = this.designCache.components.find((_c) => {
         return _c.id === id
       })
       if (res) {
@@ -82,11 +83,11 @@ export default {
       }
     },
     // 刷新组件数据
-    refreshCpt (id) {
+    refreshCpt(id) {
       this.$refs[id][0].refreshCptData()
     },
     // 加载数据
-    loadData () {
+    loadData() {
       const id = this.$route.query.id
       // 设计师的预览，加载本地缓存数据
       if (this.$route.name === 'BigScreenDesign') {
@@ -106,13 +107,13 @@ export default {
       }
     },
     // 加载窗口
-    loadSize () {
+    loadSize() {
       this.windowWidth = document.documentElement.clientWidth
       this.windowHeight = document.documentElement.clientHeight
       this.containerScale =
         Math.round((this.windowWidth / this.designCache.scaleX) * 100) / 100
       this.conHeight = this.designCache.scaleY
-    }
+    },
   }
 }
 </script>

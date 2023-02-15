@@ -20,7 +20,7 @@ export default {
       waveNum: 3, // 波浪数量
       waveHeight: 40, // 波浪高度
       waveOpacity: 0.4, // 波浪透明度
-      formatter: '{value}%' // 信息格式化
+      formatter: '{value}%', // 信息格式化
     }
   }
 }

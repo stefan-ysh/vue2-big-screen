@@ -1,10 +1,9 @@
-
 <template>
   <div :id="uuid" :style="{ width: '100%', height: '100%', ...rotateDeg }" />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'RadarChart',
@@ -14,7 +13,7 @@ export default {
     rotateDeg: Object,
     configProps: { type: Object, default: () => {} }
   },
-  data () {
+  data() {
     return {
       uuid: '',
       chartOption: {},
@@ -24,36 +23,36 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler (newObj) {
+      handler(newObj) {
         this.loadChart(newObj)
       },
       deep: true // 深度监听
     },
-    width () {
+    width() {
       this.chart.resize()
     },
-    height () {
+    height() {
       this.chart.resize()
-    }
+    },
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
   },
-  mounted () {
+  mounted() {
     this.chart = this.$echarts.init(document.getElementById(this.uuid))
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
         this.loadChart(this.configProps.attribute)
-      })
+      });
     },
-    loadChart (attribute) {
+    loadChart(attribute) {
       const that = this
       that.chartOption = {
         title: {
@@ -72,7 +71,7 @@ export default {
           }
         },
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
         },
         legend: {
           data: attribute.legend
@@ -82,10 +81,7 @@ export default {
           indicator: JSON.parse(attribute.indicator),
           splitNumber: attribute.splitNumber,
           nameGap: attribute.nameGap,
-          radius: [
-            attribute.radiusInside + '%',
-            attribute.radiusOutside + '%'
-          ]
+          radius: [attribute.radiusInside + '%', attribute.radiusOutside + '%']
         },
         series: [
           {
@@ -96,7 +92,7 @@ export default {
         ]
       }
       that.chart.setOption(that.chartOption)
-    }
+    },
   }
 }
 </script>

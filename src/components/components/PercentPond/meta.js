@@ -23,7 +23,7 @@ export default {
       //   '#c135ff'
       // ]
       color1: '#01c4f9',
-      color2: '#c135ff'
+      color2: '#c135ff',
     }
   }
 }

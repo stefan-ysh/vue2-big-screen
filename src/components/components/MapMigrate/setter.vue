@@ -8,7 +8,14 @@
       <BColorPicker :data="attribute" field="titleColor" show-alpha />
     </el-form-item>
     <el-form-item label="主标题大小">
-      <el-input-number v-model="attribute.titleFontSize" size="mini" style="width: 100%" controls-position="right" :min="4" :max="100" />
+      <el-input-number
+        v-model="attribute.titleFontSize"
+        size="mini"
+        style="width: 100%"
+        controls-position="right"
+        :min="4"
+        :max="100"
+      />
     </el-form-item>
     <el-form-item label="副标题">
       <el-input v-model="attribute.subtext" />
@@ -43,7 +50,14 @@
       <BColorPicker :data="attribute" field="seriesColor" show-alpha />
     </el-form-item>
     <el-form-item label="路线宽度">
-      <el-input-number v-model="attribute.lineWidth" size="mini" style="width: 100%" controls-position="right" :min="0" :max="100" />
+      <el-input-number
+        v-model="attribute.lineWidth"
+        size="mini"
+        style="width: 100%"
+        controls-position="right"
+        :min="0"
+        :max="100"
+      />
     </el-form-item>
     <el-form-item label="路径曲度">
       <el-slider v-model="attribute.curveness" :step="0.1" :min="0" :max="1" />
@@ -91,11 +105,11 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'MapMigrateSetter',
   components: { BColorPicker },
-  props: { attribute: { type: Object, default: () => {} } }
+  props: { attribute: { type: Object, default: () => {} }}
 }
 </script>
 

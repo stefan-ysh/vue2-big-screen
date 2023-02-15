@@ -1,5 +1,9 @@
 <template>
-  <dv-active-ring-chart :key="refreshFlagKey" :config="config" :style="{ width: '100%', height: '100%', ...rotateDeg }" />
+  <dv-active-ring-chart
+    :key="refreshFlagKey"
+    :config="config"
+    :style="{ width: '100%', height: '100%', ...rotateDeg }"
+  />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
@@ -12,7 +16,7 @@ export default {
     configProps: Object,
     rotateDeg: Object
   },
-  data () {
+  data() {
     return {
       uuid: null,
       config: {},
@@ -21,29 +25,29 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler () {
+      handler() {
         this.loadData()
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
-    width () {
+    width() {
       this.refreshFlagKey = require('uuid').v1()
     },
-    height () {
+    height() {
       this.refreshFlagKey = require('uuid').v1()
     }
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
       this.refreshFlagKey = require('uuid').v1()
     },
-    loadData () {
-      getDataJson(this.configProps.cptDataForm).then(res => {
+    loadData() {
+      getDataJson(this.configProps.cptDataForm).then((res) => {
         this.config = JSON.parse(JSON.stringify(this.configProps.attribute))
         this.config.data = res
       })
@@ -52,6 +56,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

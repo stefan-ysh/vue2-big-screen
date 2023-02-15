@@ -33,10 +33,11 @@ export default {
       barWidth: 18,
       barType: 'bar',
       xFontRotate: 0,
-      barPath: 'path://M0,10 L10,10 C5.5,10 5.5,5 5,0 C4.5,5 4.5,10 0,10 z'
+      barPath: 'path://M0,10 L10,10 C5.5,10 5.5,5 5,0 C4.5,5 4.5,10 0,10 z',
     },
     cptDataForm: {
-      dataText: '{"xData":"Mon,Tue,Wed,Thu,Fri,Sat,Sun","yData":"120,200,150,80,70,110,130"}',
+      dataText:
+        '{"xData":"Mon,Tue,Wed,Thu,Fri,Sat,Sun","yData":"120,200,150,80,70,110,130"}',
       dataSource: 1,
       pollTime: 0
     }

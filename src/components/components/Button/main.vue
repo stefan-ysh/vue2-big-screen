@@ -1,13 +1,13 @@
 <template>
   <div style="height: 100%">
     <button
-      style="width: 100%; height: 100%; border: none;cursor: pointer;"
+      style="width: 100%; height: 100%; border: none; cursor: pointer"
       :style="{
         background: configProps.attribute.bgColor,
         color: configProps.attribute.textColor,
         'font-size': configProps.attribute.fontSize + 'px',
         borderRadius: configProps.attribute.radius + 'px',
-        ...rotateDeg
+        ...rotateDeg,
       }"
       @click="handleClickEvent"
     >
@@ -16,31 +16,34 @@
   </div>
 </template>
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'BButton',
-  props: { rotateDeg: { type: Object, default: () => {} }, configProps: { type: Object, default: () => {} } },
-  data () {
+  props: {
+    rotateDeg: { type: Object, default: () => {} },
+    configProps: { type: Object, default: () => {} }
+  },
+  data() {
     return {
       cptData: {},
       uuid: null
     }
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
-      })
+      });
     },
-    handleClickEvent () {
+    handleClickEvent() {
       // 开启了点击事件
       if (this.configProps.attribute.event) {
         // 点击跳转
@@ -48,19 +51,19 @@ export default {
           this.handleClickUrl()
         } else {
           // 组件交互
-          this.configProps.attribute.eventList.forEach(_e => {
+          this.configProps.attribute.eventList.forEach((_e) => {
             switch (_e.eMode) {
               case 'hidden':
                 // 控制组件显隐
                 this.$emit('changeCptHiddenStatus', _e.cpt)
-                break
+                break;
               case 'refreshCpt':
                 // 刷新组件数据
                 this.$emit('refreshCpt', _e.cpt)
-                break
+                break;
               case 'refreshCanvas':
                 // 刷新页面数据
-                this.$emit('reload')
+                this.$emit('reload');
                 break
 
               default:
@@ -70,11 +73,11 @@ export default {
         }
       }
     },
-    handleClickUrl () {
+    handleClickUrl() {
       if (this.configProps.attribute.url.startsWith('view')) {
         // 跳转到其他大屏
         // this.$router.push(xxx)
-        this.$emit('reload')
+        this.$emit('reload');
       } else {
         // 跳到其他外部链接
         window.open(this.configProps.attribute.url)

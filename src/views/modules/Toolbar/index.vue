@@ -3,7 +3,7 @@
     <el-row class="operation-area">
       <!-- 左侧 -->
       <el-col :span="4" class="operation-area-left">
-        <span class="title">这块儿可以是标题或者其他啥玩意儿</span>
+        <el-button type="text" @click="goBack">返回</el-button>
       </el-col>
       <!-- 中间画布设置栏 -->
       <el-col :span="14" class="operation-area-center">
@@ -39,49 +39,49 @@
           <div slot="content">网格背景</div>
           <i class="btn el-icon-s-grid" @click="changeCanvasBgStyle('grid')" />
         </el-tooltip>
-        <el-checkbox v-model="isShowCoord" class="operation-handler coord-bar">坐标</el-checkbox>
-        <el-checkbox v-model="isShowRule" class="operation-handler rule-bar">标尺</el-checkbox>
+        <el-checkbox v-model="isShowCoord"
+class="operation-handler coord-bar"
+          >坐标</el-checkbox
+        >
+        <!-- <el-checkbox v-model="isShowRuler" class="operation-handler rule-bar">标尺</el-checkbox> -->
         <el-slider
           v-model="containerScale"
           class="operation-handler scale-bar"
-          :min="0.3"
+          :min="0.02"
           :max="2"
           :step="0.01"
         />
-        <el-tooltip
-          class="operation-handler icon-btn"
-          placement="bottom"
-        >
+        <el-tooltip class="operation-handler icon-btn" placement="bottom">
           <div slot="content">恢复比例</div>
-          <i class="btn el-icon-aim" @click="$store.dispatch('bigScreen/initContainerSize')" />
+          <i
+            class="btn el-icon-aim"
+            @click="$store.dispatch('bigScreen/initContainerSize')"
+          />
         </el-tooltip>
         <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">上对齐</div>
-          <SvgIcon
+          <BSvgIcon
             :style="{
               opacity: isMultiple ? 1 : 0.5,
               transition: 'all .4s',
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : ''
+              background: isMultiple ? '#2681ff' : '',
             }"
             class="align-top"
             icon-class="align-top"
             @click.stop="handleAlign('top')"
           />
         </el-tooltip>
-        <el-tooltip
-          class="align-btn"
-          placement="bottom"
-        >
+        <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">水平居中</div>
-          <SvgIcon
+          <BSvgIcon
             :style="{
               opacity: isMultiple ? 1 : 0.5,
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               transition: 'all .4s',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : ''
+              background: isMultiple ? '#2681ff' : '',
             }"
             class="align-horizontal-center"
             icon-class="align-horizontal-center"
@@ -90,13 +90,13 @@
         </el-tooltip>
         <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">下对齐</div>
-          <SvgIcon
+          <BSvgIcon
             :style="{
               transition: 'all .4s',
               opacity: isMultiple ? 1 : 0.5,
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : ''
+              background: isMultiple ? '#2681ff' : '',
             }"
             class="align-bottom"
             icon-class="align-bottom"
@@ -105,13 +105,13 @@
         </el-tooltip>
         <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">左对齐</div>
-          <SvgIcon
+          <BSvgIcon
             :style="{
               transition: 'all .4s',
               opacity: isMultiple ? 1 : 0.5,
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : ''
+              background: isMultiple ? '#2681ff' : '',
             }"
             class="align-left"
             icon-class="align-left"
@@ -120,13 +120,13 @@
         </el-tooltip>
         <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">垂直居中对齐</div>
-          <SvgIcon
+          <BSvgIcon
             :style="{
               transition: 'all .4s',
               opacity: isMultiple ? 1 : 0.5,
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : ''
+              background: isMultiple ? '#2681ff' : '',
             }"
             class="align-vertical-center"
             icon-class="align-vertical-center"
@@ -135,13 +135,13 @@
         </el-tooltip>
         <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">右对齐</div>
-          <SvgIcon
+          <BSvgIcon
             :style="{
               transition: 'all .4s',
               opacity: isMultiple ? 1 : 0.5,
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : ''
+              background: isMultiple ? '#2681ff' : '',
             }"
             class="align-right"
             icon-class="align-right"
@@ -150,18 +150,27 @@
         </el-tooltip>
       </el-col>
       <!-- 右侧操作按钮 -->
-      <el-col class="operation-area-right" :span="6" @click.self.native="outBlur">
+      <el-col
+        class="operation-area-right"
+        :span="6"
+        @click.self.native="outBlur"
+      >
         <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">清空画布</div>
-          <SvgIcon icon-class="delete" @click="clearDesign" />
+          <BSvgIcon icon-class="delete" @click="clearDesign" />
         </el-tooltip>
         <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">导入</div>
-          <SvgIcon icon-class="import" @click="importDesign" />
+          <BSvgIcon icon-class="import" @click="importDesign" />
         </el-tooltip>
         <!-- line-height 为了调整el-dropdown 和 tooltip 按钮水平对齐 想到了更好的可以来替换 T_T -->
-        <el-dropdown title="导出" trigger="click" style="line-height: 0;" @command="handleExport">
-          <SvgIcon class="export-btn" icon-class="export" />
+        <el-dropdown
+          title="导出"
+          trigger="click"
+          style="line-height: 0"
+          @command="handleExport"
+        >
+          <BSvgIcon class="export-btn" icon-class="export" />
           <el-dropdown-menu slot="dropdown" class="big-screen-dropdown">
             <el-dropdown-item command="img">图片文件</el-dropdown-item>
             <el-dropdown-item command="json">json文件</el-dropdown-item>
@@ -169,11 +178,11 @@
         </el-dropdown>
         <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">预览</div>
-          <SvgIcon icon-class="eye-open" @click="preview" />
+          <BSvgIcon icon-class="eye-open" @click="preview" />
         </el-tooltip>
         <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">保存</div>
-          <SvgIcon icon-class="save" @click="saveDesignData" />
+          <BSvgIcon icon-class="save" @click="saveDesignData" />
         </el-tooltip>
       </el-col>
     </el-row>
@@ -184,33 +193,21 @@
       type="file"
       accept=".json"
       @change="fileLoad"
-    >
-    <!-- 预览抽屉 -->
-    <el-drawer
-      :with-header="false"
-      size="100%"
-      close-on-press-escape
-      :visible="isPreview"
-      direction="ttb"
-      :before-close="() => (isPreview = false)"
-      append-to-body
-      destroy-on-close
-    >
-      <BigScreenPreview />
-    </el-drawer>
+    />
   </div>
-
 </template>
 
 <script>
-import { clearCptInterval, fileDownload, base64toFile } from '@/utils/big-screen'
-import BigScreenPreview from '../../preview'
+import { clearCptInterval, fileDownload } from '@/utils/big-screen'
+// import BigScreenPreview from '@/views/app/big-screen/preview'
 import html2canvas from 'html2canvas'
+
+// import * as BigscreenApi from '@/api/app/big-screen';
+import { Base64 } from 'js-base64'
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Toolbar',
   components: {
-    BigScreenPreview
+    // BigScreenPreview
   },
   props: {
     multipleCpts: {
@@ -222,59 +219,67 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
-      isPreview: false
+      appId: '',
+      bigscreenId: ''
     }
   },
   computed: {
-    isMultiple () {
+    isMultiple() {
       return Object.keys(this.multipleCpts).length >= 2
     },
-    cacheComponents () {
+    cacheComponents() {
       return this.$store.state.bigScreen.componentList
     },
     containerScale: {
-      get () {
+      get() {
         return this.$store.state.bigScreen.containerScale
       },
-      set (val) {
+      set(val) {
         this.$store.dispatch('bigScreen/changeScale', val)
       }
     },
     // 画布背景风格
-    canvasBgStyle () {
+    canvasBgStyle() {
       return this.$store.state.bigScreen.canvasBgStyle
     },
-    cptPaneWidth () {
+    cptPaneWidth() {
       return this.$store.state.bigScreen.componentPaneWidth
     },
-    configPaneWidth () {
+    configPaneWidth() {
       return this.$store.state.bigScreen.configPaneWidth
     },
-    designData () {
+    designData() {
       return this.$store.state.bigScreen.bigScreenData
     },
     isShowCoord: {
-      get () {
+      get() {
         return this.$store.state.bigScreen.isShowCoord
       },
-      set (val) {
+      set(val) {
         this.$store.dispatch('bigScreen/setCoordShowStatus', val)
       }
     },
-    isShowRule: {
-      get () {
-        return this.$store.state.bigScreen.isShowRule
+    isShowRuler: {
+      get() {
+        return this.$store.state.bigScreen.isShowRuler
       },
-      set (val) {
+      set(val) {
         this.$store.dispatch('bigScreen/setRuleShowStatus', val)
       }
     }
   },
+  created() {
+    this.appId = this.$route.params.appId
+    this.bigscreenId = this.$route.params.pageId
+  },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     // TODO 改为状态管理
-    handleAlign (type) {
+    handleAlign(type) {
       if (!Object.keys(this.multipleCpts).length) {
         return
       }
@@ -370,11 +375,11 @@ export default {
         this.multipleCptPositions[key].cptY = this.multipleCpts[key].cptY
       })
     },
-    changeCanvasBgStyle (style) {
+    changeCanvasBgStyle(style) {
       this.$store.dispatch('bigScreen/changeCanvasBgStyle', style)
     },
     // 导出
-    handleExport (command) {
+    handleExport(command) {
       if (command === 'img') {
         // 导出图片
         html2canvas(this.$store.state.bigScreen.webContainer, {
@@ -385,28 +390,30 @@ export default {
         })
       } else if (command === 'json') {
         // 导出json
-        this.$store.dispatch('bigScreen/setBigScreenData', { components: this.cacheComponents })
+        this.$store.dispatch('bigScreen/setBigScreenData', {
+          components: this.cacheComponents
+        })
         const data = JSON.stringify(this.designData)
         const uri =
           'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(data) // encodeURIComponent解决中文乱码
         fileDownload(uri, this.designData.title + '.json')
       }
     },
-    outBlur () {
+    outBlur() {
       // 取消聚焦组件
       this.$store.dispatch('bigScreen/setCurComponentIndex', -1)
       this.$store.dispatch('bigScreen/setCurComponent', {})
       this.$emit('clearMultipleCpts')
     },
     // 隐藏设置面板
-    hiddenPane (type) {
+    hiddenPane(type) {
       this.$store.dispatch('bigScreen/changePaneDisplayStatus', type)
     },
 
-    importDesign () {
+    importDesign() {
       this.$refs.refFile.dispatchEvent(new MouseEvent('click'))
     },
-    fileLoad () {
+    fileLoad() {
       const that = this
       // 选择导入的文件
       const importedFile = this.$refs.refFile.files[0]
@@ -420,67 +427,116 @@ export default {
       // 读取文件内容
       reader.readAsText(importedFile)
       // 文件加载
-      reader.onload = function () {
+      reader.onload = function() {
         // todo 文件合法性校验待完善
         const fileJson = JSON.parse(reader.result)
         fileJson.id = that.designData.id
         that.$store.dispatch('bigScreen/initBigScreenData', fileJson)
-        that.$store.dispatch('bigScreen/initComponentList', fileJson.components)
+        that.$store.dispatch(
+          'bigScreen/initComponentList',
+          fileJson.components
+        )
         // 清空现有大屏组件列表
         // that.$store.dispatch('bigScreen/setBigScreenData', { components: [] })
         that.$message.success(`文件 ${fileName} 导入成功!`)
       }
       // 读取错误
-      reader.onerror = function () {
+      reader.onerror = function() {
         that.$message.success(`文件 ${fileName} 读取失败，请检查后重试`)
       }
       this.$refs.refFile.value = ''
     },
     // 保存数据
-    saveDesignData () {
+    saveDesignData() {
+      // this.designData.components.map((c) => {
+      //   // ? 兼容旧版本大屏数据没有动画参数的
+      //   if (!c.configProps.animation) {
+      //     c.configProps.animation = {
+      //       name: '',
+      //       delay: 'animate__delay-0s',
+      //       speed: 'animate__slow',
+      //       repeat: 'animate__repeat-1'
+      //     }
+      //   }
+      // })
       this.$modal.loading('保存中，请稍后...')
-      // 保存
-      this.$store.dispatch('bigScreen/setComponentList', { components: this.cacheComponents })
-      localStorage.setItem('designCache', JSON.stringify(this.designData))
-      this.$message.success('已保存')
-      const that = this
+      // 组合保存页面数据
+      // const bc = {
+      //   id: this.bigscreenId,
+      //   appId: this.appId,
+      //   publish: 1,
+      //   formName: this.designData.title,
+      //   screenConf: Base64.encode(JSON.stringify(this.designData))
+      // }
+      // 保存大屏数据
+      // BigscreenApi.saveBigscreen(bc)
+      //   .then((res) => {
+      //     this.$modal.closeLoading()
+      //     if (res.code === 200) {
+      //       this.$message.success('保存成功！');
+      //     } else {
+      //       this.$message.info(res.msg)
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     this.$modal.closeLoading()
+      //     console.log(err)
+      //   });
+      // const that = this
       // 生成缩略图
-      html2canvas(that.$store.state.bigScreen.webContainer, {
-        backgroundColor: '#49586e'
-      }).then((canvas) => {
-        const canvasData = canvas.toDataURL('image/jpeg')
-        const file = base64toFile(canvasData, that.designData.title + '.png')
-        const fileFormData = new FormData()
-        fileFormData.append('file', file)
-        // todo 上传缩略图
-        // uploadThumbnail(that.designData.id + '.png', fileFormData).then(
-        //   (res) => {
-        //   // 上传预览图
-        //     that.$store.dispatch('bigScreen/setBigScreenData', { designImgPath: res.data })
-        //     that.$store.dispatch('bigScreen/setBigScreenData', { components: JSON.stringify(this.cacheComponents) })
-        //     // todo 接入后端保存api 保存 designData
-        //   }
-        // )
-        this.$modal.closeLoading()
-      })
+      // html2canvas(that.$store.state.bigScreen.webContainer, {
+      //   backgroundColor: '#49586e'
+      // }).then((canvas) => {
+      //   const canvasData = canvas.toDataURL('image/jpeg')
+      //   const file = base64toFile(canvasData, that.designData.title + '.png')
+      //   const fileFormData = new FormData()
+      //   fileFormData.append('file', file)
+      //   // todo 上传缩略图
+      //   // uploadThumbnail(that.designData.id + '.png', fileFormData).then(
+      //   //   (res) => {
+      //   //   // 上传预览图
+      //   //     that.$store.dispatch('bigScreen/setBigScreenData', { designImgPath: res.data })
+      //   //     that.$store.dispatch('bigScreen/setBigScreenData', { components: JSON.stringify(this.cacheComponents) })
+      //   //     // todo 接入后端保存api 保存 designData
+      //   //   }
+      //   // )
+      //   this.$modal.closeLoading()
+      // })
     },
     // 预览画布
-    preview () {
+    preview() {
       if (!this.cacheComponents.length) {
         this.$message.closeAll()
-        return this.$message.info('暂无组件可预览，请先设计看板')
+        return this.$modal.msg('暂无组件可预览，请先设计看板')
       }
-      if (!this.cacheComponents.some(c => { return !c.hidden })) {
+      if (
+        !this.cacheComponents.some((c) => {
+          return !c.hidden
+        })
+      ) {
         this.$message.closeAll()
-        return this.$message.info('画布中暂无可见组件，请调整后重试')
+        return this.$modal.msg('画布中暂无可见组件，请调整后重试')
       }
-      // 预览按钮
-      this.$store.dispatch('bigScreen/setBigScreenData', { components: this.cacheComponents })
-      localStorage.setItem('designCache', JSON.stringify(this.designData))
-      this.isPreview = true
+      // 预览页面数据存储到本地，减少不必要的网络请求，通过标识 mode 是否等于 preview 判断是否为预览模式
+      localStorage.setItem(
+        'designCache',
+        Base64.encode(JSON.stringify(this.designData))
+      )
+      // 生成预览链接
+      const routeUrl = this.$router.resolve({
+        name: 'BigScreenPreview',
+        params: {
+          pageId: this.bigscreenId
+        },
+        query: {
+          mode: 'preview'
+        }
+      })
+      // 打开预览窗口
+      window.open(routeUrl.href, '_blank')
     },
     // 清空画布
-    clearDesign () {
+    clearDesign() {
       this.$confirm('此操作将会清空画布，是否继续？', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -490,7 +546,9 @@ export default {
         .then(() => {
           // 可考虑优化为一个方法
           this.$store.dispatch('bigScreen/clearCanvas')
-          this.$store.dispatch('bigScreen/setBigScreenData', { components: [] })
+          this.$store.dispatch('bigScreen/setBigScreenData', {
+            components: []
+          })
           this.$store.dispatch('bigScreen/setCurComponent', {})
           localStorage.removeItem('designCache')
           clearCptInterval(null, true)
@@ -517,8 +575,7 @@ export default {
     background: #1d1e1f;
     padding: 0 10px;
     &-left {
-      .title{
-
+      .title {
       }
     }
     &-center {
@@ -538,36 +595,36 @@ export default {
         }
       }
       .icon-btn {
-        width:24px;
-        height:24px;
-        line-height:24px;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
         border-radius: 5px;
-        text-align:center;
+        text-align: center;
         background: #303640;
-        font-size:15px;
-        margin-right:5px;
+        font-size: 15px;
+        margin-right: 5px;
         &.pane-active {
-          background:#2681ff;
+          background: #2681ff;
         }
       }
       .operation-handler {
         cursor: pointer;
         margin: 0 5px;
       }
-      .align-btn{
+      .align-btn {
         margin: 0 5px;
         width: 24px;
         height: 24px;
         padding: 3px;
         border-radius: 5px;
       }
-      .scale-bar{
+      .scale-bar {
         min-width: 80px;
       }
     }
     &-right {
       height: 100%;
-      display:flex;
+      display: flex;
       align-items: center;
       justify-content: flex-end;
       .btn {
@@ -577,7 +634,7 @@ export default {
         line-height: 45px;
         color: #909399;
         cursor: pointer;
-        transition: all .5s;
+        transition: all 0.5s;
         &:hover {
           font-weight: 999;
           background: #414b5d;
@@ -589,14 +646,14 @@ export default {
         height: 30px;
         cursor: pointer;
         margin-left: 5px;
-        transition: all .2s;
-        border-left: 1px solid #33B8EC;
-        border-top: 1px solid #33B8EC;
+        transition: all 0.2s;
+        border-left: 1px solid #33b8ec;
+        border-top: 1px solid #33b8ec;
         border-right: 3px solid #000;
         border-bottom: 3px solid #000;
         &:active {
-          border-right: 1px solid #33B8EC;
-          border-bottom: 1px solid #33B8EC;
+          border-right: 1px solid #33b8ec;
+          border-bottom: 1px solid #33b8ec;
           border-left: 3px solid #000;
           border-top: 3px solid #000;
         }
@@ -606,15 +663,15 @@ export default {
         padding: 0 5px;
         // height: 100vh;
         margin-left: 5px;
-        transition: all .2s;
+        transition: all 0.2s;
         cursor: pointer;
-          border-left: 1px solid #33B8EC;
-          border-top: 1px solid #33B8EC;
-          border-right: 3px solid #000;
-          border-bottom: 3px solid #000;
+        border-left: 1px solid #33b8ec;
+        border-top: 1px solid #33b8ec;
+        border-right: 3px solid #000;
+        border-bottom: 3px solid #000;
         &:active {
-          border-right: 1px solid #33B8EC;
-          border-bottom: 1px solid #33B8EC;
+          border-right: 1px solid #33b8ec;
+          border-bottom: 1px solid #33b8ec;
           border-left: 3px solid #000;
           border-top: 3px solid #000;
         }
@@ -645,5 +702,4 @@ export default {
     }
   }
 }
-
 </style>

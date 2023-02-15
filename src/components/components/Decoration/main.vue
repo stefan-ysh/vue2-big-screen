@@ -2,9 +2,15 @@
   <component
     :is="configProps.attribute.decorationType"
     :key="refreshFlagKey"
-    :style="{ width: width + 'px', height: height + 'px', color: configProps.attribute.textColor, ...rotateDeg}"
+    :style="{
+      width: width + 'px',
+      height: height + 'px',
+      color: configProps.attribute.textColor,
+      ...rotateDeg,
+    }"
     :color="[configProps.attribute.color1, configProps.attribute.color2]"
-  >{{ configProps.attribute.text }}</component>
+    >{{ configProps.attribute.text }}</component
+  >
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
@@ -17,25 +23,23 @@ export default {
     rotateDeg: Object,
     configProps: Object
   },
-  data () {
+  data() {
     return {
       refreshFlagKey: require('uuid').v1()
     }
   },
   watch: {
     configProps: {
-      handler () {
-        this.refreshFlagKey = require('uuid').v1()// 强制刷新视图
+      handler() {
+        this.refreshFlagKey = require('uuid').v1() // 强制刷新视图
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
-    width () {
+    width() {
       this.refreshFlagKey = require('uuid').v1()
-    }
+    },
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

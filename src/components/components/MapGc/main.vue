@@ -1,10 +1,9 @@
-
 <template>
   <div :id="uuid" :style="{ width: '100%', height: '100%', ...rotateDeg }" />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'MapGc',
@@ -14,7 +13,7 @@ export default {
     rotateDeg: Object,
     configProps: { type: Object, default: () => {} }
   },
-  data () {
+  data() {
     return {
       uuid: '',
       chartOption: {},
@@ -24,36 +23,36 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler (newObj) {
+      handler(newObj) {
         this.loadChart(newObj)
       },
       deep: true // 深度监听
     },
-    width () {
+    width() {
       this.chart.resize()
     },
-    height () {
+    height() {
       this.chart.resize()
-    }
+    },
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
   },
-  mounted () {
+  mounted() {
     this.chart = this.$echarts.init(document.getElementById(this.uuid))
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
         this.loadChart(this.configProps.attribute)
-      })
+      });
     },
-    loadChart (attribute) {
+    loadChart(attribute) {
       const that = this
       that.chartOption = {
         title: {
@@ -71,10 +70,10 @@ export default {
           }
         },
         tooltip: {
-          formatter: function (e) {
+          formatter: function(e) {
             // e, t, n
             return e.seriesName + '<br />' + e.name + '：' + e.value
-          }
+          },
         },
         visualMap: {
           min: 0,
@@ -84,7 +83,7 @@ export default {
           showLabel: !0,
           text: ['高', '低'],
           textStyle: {
-            color: '#ddd'
+            color: '#ddd',
           },
           pieces: [
             {
@@ -129,7 +128,7 @@ export default {
             color: attribute.geoLabelColor
           },
           itemStyle: {
-            borderColor: '#777' // 边界线颜色
+            borderColor: '#777', // 边界线颜色
           }
         },
         series: [
@@ -142,7 +141,7 @@ export default {
         ]
       }
       that.chart.setOption(that.chartOption)
-    }
+    },
   }
 }
 </script>

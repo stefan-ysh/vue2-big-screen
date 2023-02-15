@@ -4,11 +4,8 @@
 
 <script>
 export default {
-  name: 'IndexPage'
-
+  name: 'IndexPage',
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

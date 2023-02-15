@@ -16,7 +16,7 @@ export default {
       padding: 10,
       borderColor: '#22628D',
       bgColor: 'rgba(5,30,85,0.68)',
-      color: '#7ca1d3'
+      color: '#7ca1d3',
     }
   }
 }

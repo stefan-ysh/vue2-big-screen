@@ -19,7 +19,7 @@
         <el-row
           v-if="
             currentCpt.configProps.interaction.interactable &&
-              currentCpt.configProps.interaction.clickAble
+            currentCpt.configProps.interaction.clickAble
           "
         >
           <el-col :span="8"> 跳转链接 </el-col>
@@ -30,7 +30,7 @@
         <el-row
           v-if="
             currentCpt.configProps.interaction.interactable &&
-              currentCpt.configProps.interaction.clickAble
+            currentCpt.configProps.interaction.clickAble
           "
         >
           <el-col :span="8"> 携带参数 </el-col>
@@ -47,12 +47,12 @@
 export default {
   name: 'InteractionConfig',
   computed: {
-    currentCpt () {
+    currentCpt() {
       return this.$store.state.bigScreen.curComponent
     },
-    windowHeight () {
+    windowHeight() {
       return this.$store.state.bigScreen.windowHeight
-    }
+    },
   }
 }
 </script>

@@ -32,7 +32,7 @@ export default {
       smooth: false,
       areaColor1: 'rgba(80,141,255,0.39)',
       areaColor2: 'rgba(56,155,255,0.25)',
-      areaColor3: 'rgba(38,197,254,0.00)'
+      areaColor3: 'rgba(38,197,254,0.00)',
     }
   }
 }

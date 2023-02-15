@@ -13,7 +13,10 @@
       :height="height + 'px'"
       :trigger="configProps.attribute.trigger"
     >
-      <el-carousel-item v-for="item in configProps.attribute.imgUrls" :key="item">
+      <el-carousel-item
+        v-for="item in configProps.attribute.imgUrls"
+        :key="item"
+      >
         <el-image
           style="width: 100%; height: 100%"
           :src="item"

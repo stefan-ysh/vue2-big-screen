@@ -21,7 +21,7 @@ export default {
       textAlign: 'center',
       fontStyle: 'normal',
       textDecoration: 'none',
-      bgColor: 'rgba(255, 255, 255, 0)'
+      bgColor: 'rgba(255, 255, 255, 0)',
     }
   }
 }

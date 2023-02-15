@@ -1,6 +1,6 @@
 // import request from '@/utils/request'
 
-import { Message } from 'element-ui'
+import { Message } from 'element-ui';
 // 根据接口获取数据
 // function getDataByRequest(data) {
 //   return request({
@@ -13,18 +13,18 @@ import { Message } from 'element-ui'
  * @param downloadUrl   文件
  * @param fileName      文件名
  */
-const fileDownload = function (downloadUrl, fileName) {
-  const aLink = document.createElement('a')
-  aLink.style.display = 'none'
+const fileDownload = function(downloadUrl, fileName) {
+  const aLink = document.createElement('a');
+  aLink.style.display = 'none';
   aLink.href = downloadUrl
   aLink.download = fileName
   document.body.appendChild(aLink)
   aLink.click()
   document.body.removeChild(aLink)
-}
+};
 
-const base64toFile = function (base64, fileName) {
-  const arr = base64.split(',')
+const base64toFile = function(base64, fileName) {
+  const arr = base64.split(',');
   const mime = arr[0].match(/:(.*?);/)[1]
   const bstr = atob(arr[1])
   let n = bstr.length
@@ -33,11 +33,11 @@ const base64toFile = function (base64, fileName) {
     u8arr[n] = bstr.charCodeAt(n)
   }
   return new File([u8arr], fileName, { type: mime })
-}
+};
 
-async function getDataJson (cptDataForm) {
+async function getDataJson(cptDataForm) {
   // 防止 JSON 解析报错
-  let resStr = '{}'
+  let resStr = '{}';
   let iptStr = cptDataForm.dataText
   // 静态数据
   if (cptDataForm.dataSource === 1) {
@@ -52,7 +52,7 @@ async function getDataJson (cptDataForm) {
       // Message.closeAll()
       // Message.info('请求接口功能暂未完成')
     } else {
-      Message.error('接口地址不能为空')
+      Message.error('接口地址不能为空');
     }
   } else if (cptDataForm.dataSource === 3) {
     // sql 语句
@@ -60,9 +60,9 @@ async function getDataJson (cptDataForm) {
     if (iptStr) {
       // todo resStr = sql 语句执行返回的数据
       Message.closeAll()
-      Message.info('sql 查询功能暂未完成')
+      Message.info('sql 查询功能暂未完成');
     } else {
-      Message.error('SQL不能为空')
+      Message.error('SQL不能为空');
     }
   }
   // 处理数据函数
@@ -78,29 +78,29 @@ async function getDataJson (cptDataForm) {
 
 const cptTimer = {}
 
-function pollingRefresh (uuid, cptDataForm, loadData) {
+function pollingRefresh(uuid, cptDataForm, loadData) {
   if (uuid) {
     // 清除旧的定时器
     clearInterval(cptTimer[uuid])
   }
   if (!cptDataForm) {
-    Message.warning('cptDataForm ==> null')
+    Message.warning('cptDataForm ==> null');
     return
   }
   if (!loadData) {
-    Message.warning('子组件未实现数据解析方法')
+    Message.warning('子组件未实现数据解析方法');
     return
   }
   loadData()
   // 开启轮询
   if (cptDataForm.pollTime && cptDataForm.pollTime !== 0) {
-    cptTimer[uuid] = setInterval(function () {
+    cptTimer[uuid] = setInterval(function() {
       loadData()
     }, cptDataForm.pollTime * 1000)
   }
 }
 
-function clearCptInterval (uuid, clearAll) {
+function clearCptInterval(uuid, clearAll) {
   if (uuid) {
     // 清除旧的定时器
     clearInterval(cptTimer[uuid])
@@ -112,4 +112,10 @@ function clearCptInterval (uuid, clearAll) {
   }
 }
 
-export { fileDownload, base64toFile, getDataJson, pollingRefresh, clearCptInterval }
+export {
+  fileDownload,
+  base64toFile,
+  getDataJson,
+  pollingRefresh,
+  clearCptInterval
+}

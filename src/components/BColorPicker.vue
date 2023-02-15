@@ -16,11 +16,11 @@ export default {
     },
     field: {
       type: String,
-      default: 'color'
+      default: 'color',
     },
     colorFormat: {
       type: String,
-      default: 'hex'
+      default: 'hex',
     }
   }
 }
@@ -36,8 +36,7 @@ export default {
       border-top-left-radius: 4px !important;
       border-bottom-left-radius: 4px !important;
       border: none;
-      border-radius: 0 ;
-
+      border-radius: 0;
     }
   }
   /deep/ .el-color-picker {

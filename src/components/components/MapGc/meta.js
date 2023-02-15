@@ -33,7 +33,7 @@ export default {
       piecesLabel4: '疑似',
       piecesColor4: '#ffd768',
       piecesLabel5: '无',
-      piecesColor5: '#ffffff'
+      piecesColor5: '#ffffff',
     }
   }
 }

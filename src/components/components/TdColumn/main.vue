@@ -3,7 +3,7 @@
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'TdColumnChart',
@@ -13,7 +13,7 @@ export default {
     rotateDeg: Object,
     configProps: Object
   },
-  data () {
+  data() {
     return {
       uuid: null,
       chartOption: {},
@@ -23,37 +23,37 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler (newObj) {
+      handler(newObj) {
         this.loadChart(newObj)
       },
       deep: true // 深度监听
     },
-    width () {
+    width() {
       this.chart.resize()
     },
-    height () {
+    height() {
       console.log('----', 11)
       this.chart.resize()
-    }
+    },
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
   },
-  mounted () {
+  mounted() {
     this.chart = this.$echarts.init(document.getElementById(this.uuid))
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
         this.loadChart(this.configProps.attribute)
-      })
+      });
     },
-    loadChart (attribute) {
+    loadChart(attribute) {
       const that = this
       let columnColor = attribute.barColor
       if (attribute.gradualColor) {
@@ -153,7 +153,7 @@ export default {
             symbolRotate: 0,
             itemStyle: {
               borderWidth: 0,
-              color: '#10e6ff'
+              color: '#10e6ff',
             },
             data: this.cptData.yData3.split(',')
           },
@@ -166,14 +166,14 @@ export default {
             symbolSize: [attribute.barWidth, 10],
             itemStyle: {
               borderWidth: 0,
-              color: '#ffcf90'
+              color: '#ffcf90',
             },
             data: this.cptData.yData4.split(',')
           }
         ]
       }
       that.chart.setOption(that.chartOption)
-    }
+    },
   }
 }
 </script>

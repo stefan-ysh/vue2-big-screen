@@ -49,7 +49,7 @@
 </template>
 <!-- eslint-disable vue/no-mutating-props -->
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 
 export default {
   name: 'WaterLevelSetter',
@@ -60,7 +60,7 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
       // tempColor1: '#00BAFF',
       // tempColor2: '#3DE7C9'

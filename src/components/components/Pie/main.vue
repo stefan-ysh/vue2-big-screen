@@ -1,10 +1,9 @@
-
 <template>
   <div :id="uuid" :style="{ width: '100%', height: '100%', ...rotateDeg }" />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -15,7 +14,7 @@ export default {
     rotateDeg: Object,
     configProps: { type: Object, default: () => {} }
   },
-  data () {
+  data() {
     return {
       uuid: '',
       chartOption: {},
@@ -25,36 +24,36 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler (newObj) {
+      handler(newObj) {
         this.loadChart(newObj)
       },
       deep: true // 深度监听
     },
-    width () {
+    width() {
       this.chart.resize()
     },
-    height () {
+    height() {
       this.chart.resize()
-    }
+    },
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
   },
-  mounted () {
+  mounted() {
     this.chart = this.$echarts.init(document.getElementById(this.uuid))
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         this.cptData = res
         this.loadChart(this.configProps.attribute)
-      })
+      });
     },
-    loadChart (attribute) {
+    loadChart(attribute) {
       const that = this
       that.chartOption = {
         color: attribute.pieColor,
@@ -71,7 +70,7 @@ export default {
           subtextStyle: { fontSize: 12, color: attribute.subtextColor }
         },
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
         },
         legend: {
           show: attribute.legendShow,
@@ -91,7 +90,7 @@ export default {
               attribute.roseType === 'false' ? false : attribute.roseType,
             radius: [
               attribute.radiusInside + '%',
-              attribute.radiusOutside + '%'
+              attribute.radiusOutside + '%',
             ],
             label: {
               position: attribute.labelPosition,
@@ -106,14 +105,14 @@ export default {
               itemStyle: {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
-                shadowColor: 'rgba(255, 0, 0, 0.5)'
+                shadowColor: 'rgba(255, 0, 0, 0.5)',
               }
             }
           }
         ]
       }
       that.chart.setOption(that.chartOption)
-    }
+    },
   }
 }
 </script>

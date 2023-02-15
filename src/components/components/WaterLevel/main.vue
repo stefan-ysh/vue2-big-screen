@@ -7,7 +7,7 @@
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 export default {
   name: 'WaterLevel',
   title: '',
@@ -24,7 +24,7 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
       config: {},
       uuid: null,
@@ -33,35 +33,35 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler () {
+      handler() {
         this.loadData()
       },
       deep: true // 深度监听
     },
-    width () {
+    width() {
       this.refreshFlagKey = require('uuid').v1()
     },
-    height () {
+    height() {
       this.refreshFlagKey = require('uuid').v1()
-    }
+    },
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
     this.refreshFlagKey = require('uuid').v1()
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
       this.refreshFlagKey = require('uuid').v1()
     },
-    loadData () {
+    loadData() {
       getDataJson(this.configProps.cptDataForm).then((res) => {
         const tempVal = JSON.parse(JSON.stringify(this.configProps.attribute))
         tempVal.colors = [tempVal.topColor, tempVal.bottomColor]
         this.config = tempVal
         this.config.data = res
-      })
+      });
     }
   }
 }

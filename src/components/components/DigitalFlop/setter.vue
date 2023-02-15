@@ -5,7 +5,13 @@
       <el-input v-model="attribute.content" />
     </el-form-item>
     <el-form-item label="小数位数">
-      <el-input-number v-model="attribute.toFixedNum" controls-position="right" style="width:100%" :min="0" :max="10" />
+      <el-input-number
+        v-model="attribute.toFixedNum"
+        controls-position="right"
+        style="width: 100%"
+        :min="0"
+        :max="10"
+      />
     </el-form-item>
     <el-form-item label="对齐方式">
       <el-select v-model="attribute.textAlign">
@@ -27,7 +33,7 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'DigitalFlopSetter',
   components: { BColorPicker },
@@ -37,9 +43,9 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {}
-  }
+  },
 }
 </script>
 

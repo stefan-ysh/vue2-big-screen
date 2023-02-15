@@ -70,19 +70,19 @@
 </template>
 <script>
 const isString = (str) =>
-  Object.prototype.toString.call(str) === '[object String]'
+  Object.prototype.toString.call(str) === '[object String]';
 // 获取隐藏元素的宽高
 const getHiddenEl = (el) => {
   let hiddenWidth = 0
   let hiddenHeight = 0
   if (el.style.display === 'none') {
     const baseTransform = el.style.transform
-    el.style.transform = 'translateY(-1000000px)'
-    el.style.display = 'block'
+    el.style.transform = 'translateY(-1000000px)';
+    el.style.display = 'block';
     hiddenWidth = el.clientWidth
     hiddenHeight = el.clientHeight
     el.style.transform = baseTransform
-    el.style.display = 'none'
+    el.style.display = 'none';
   } else {
     hiddenWidth = el.clientWidth
     hiddenHeight = el.clientHeight
@@ -91,7 +91,7 @@ const getHiddenEl = (el) => {
     hiddenWidth,
     hiddenHeight
   }
-}
+};
 export default {
   name: 'RightMenu',
   props: {
@@ -113,11 +113,11 @@ export default {
     },
     backgroundColor: {
       type: String,
-      default: ''
+      default: '',
     },
     activeColor: {
       type: String,
-      default: ''
+      default: '',
     },
     isTop: {
       // 是否是最顶层的那个组件，顶层组件需要特殊处理
@@ -153,7 +153,7 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
       activeIndex: null,
       sonPosX: 0, // 相对于父节点的x坐标
@@ -167,35 +167,35 @@ export default {
     }
   },
   computed: {
-    compstyle () {
+    compstyle() {
       if (this.needReverse && !this.isTop) {
         return `background-color: ${this.backgroundColor};top: ${this.posY}px;right: 5px;`
       }
       return `background-color: ${this.backgroundColor};top: ${this.posY}px;left: ${this.posX}px;`
-    }
+    },
   },
   watch: {
-    showFlag () {
+    showFlag() {
       // 每次切换显示隐藏之后清空子项的active项
       this.activeIndex = null
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.addEvent()
     let hasIcon = false
     for (let i = 0; i < this.menu.length; i++) {
       if (this.menu[i].icon) {
         hasIcon = true
-        break
+        break;
       }
     }
     this.hasIcon = hasIcon
   },
   methods: {
-    handleContextmenu (event) {
+    handleContextmenu(event) {
       event.preventDefault()
     },
-    handleMouseover (event, item, index) {
+    handleMouseover(event, item, index) {
       event.stopPropagation()
       this.activeIndex = item.key
       // 如果有子项，就获取子项的位置信息
@@ -225,7 +225,7 @@ export default {
         this.sonPosY = index * 32 + 5 // 如果换行这个就需要特殊处理
       }
     },
-    handleClick (item, event) {
+    handleClick(item, event) {
       if (event) {
         event.stopPropagation()
       }
@@ -239,7 +239,7 @@ export default {
         }
       }
     },
-    findInCtxMenu (el, tarNode) {
+    findInCtxMenu(el, tarNode) {
       // 判断一个元素是否是在ctx菜单里面, tarNode表示目标，为LI或者UL
       let flag = false
       let tempEl = el // 最近一个父级节点
@@ -260,22 +260,22 @@ export default {
         el: tempEl
       }
     },
-    mouseWheelEvent (event) {
+    mouseWheelEvent(event) {
       this.destoryCom(event)
     },
-    mouseClickEvent (event) {
+    mouseClickEvent(event) {
       const { flag } = this.findInCtxMenu(event.target)
       if (!flag) {
         this.destoryCom(event)
       }
     },
-    mouseMoveEvent (event) {
+    mouseMoveEvent(event) {
       const { flag } = this.findInCtxMenu(event.target)
       if (!flag) {
         this.activeIndex = null
       }
     },
-    addEvent () {
+    addEvent() {
       // 只绑定一次点击事件
       if (!this.eventListening && this.isTop) {
         document.addEventListener('click', this.mouseClickEvent)
@@ -287,20 +287,20 @@ export default {
         this.eventListening = true
       }
     },
-    removeEvent () {
+    removeEvent() {
       document.removeEventListener('click', this.mouseClickEvent)
       document.removeEventListener('mousedown', this.mouseClickEvent)
       document.removeEventListener('mousewheel', this.mouseWheelEvent)
       document.addEventListener('mouseover', this.mouseMoveEvent)
       this.eventListening = false
     },
-    destoryCom (event, noEmit) {
+    destoryCom(event, noEmit) {
       if (!noEmit) {
         this.topEmitCancel(event)
       }
       this.removeEvent()
       this.isDestoryed = true
-    }
+    },
   }
 }
 </script>

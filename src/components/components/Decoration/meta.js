@@ -9,7 +9,7 @@ export default {
       color1: '#409eff',
       color2: '#00CED1',
       text: '是不是很炫酷',
-      textColor: '#ff0'
+      textColor: '#ff0',
     }
   }
 }

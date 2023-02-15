@@ -13,10 +13,15 @@
       :fit="configProps.attribute.fit"
     /> -->
     <el-image
-      :class="{'rotate-item': configProps.attribute.rotatable }"
+      :class="{ 'rotate-item': configProps.attribute.rotatable }"
       style=""
-      :style="{ 'animation-duration': configProps.attribute.rotateDuration + 's', ...rotateDeg }"
-      :preview-src-list="configProps.attribute.preview ? [configProps.attribute.url] : []"
+      :style="{
+        'animation-duration': configProps.attribute.rotateDuration + 's',
+        ...rotateDeg,
+      }"
+      :preview-src-list="
+        configProps.attribute.preview ? [configProps.attribute.url] : []
+      "
       :src="
         configProps.attribute.url
           ? configProps.attribute.url
@@ -28,16 +33,18 @@
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-
 export default {
   name: 'BImage',
-  props: { configProps: { type: Object, default: () => {} }, rotateDeg: { type: Object, default: () => {} } },
-  data () {
+  props: {
+    configProps: { type: Object, default: () => {} },
+    rotateDeg: { type: Object, default: () => {} }
+  },
+  data() {
     return {
       // todo 文件上传url
-      uploadUrl: 'example/upload'
+      uploadUrl: 'example/upload',
     }
-  }
+  },
 }
 </script>
 
@@ -47,7 +54,7 @@ export default {
   height: 100%;
 }
 .rotate-item {
-  animation:rot 2s linear infinite;
+  animation: rot 2s linear infinite;
 }
 @keyframes rot {
   0% {

@@ -1,9 +1,13 @@
 <template>
-  <dv-percent-pond :key="refreshFlagKey" :config="pondConfig" :style="{ width: '100%', height: '100%', ...rotateDeg}" />
+  <dv-percent-pond
+    :key="refreshFlagKey"
+    :config="pondConfig"
+    :style="{ width: '100%', height: '100%', ...rotateDeg }"
+  />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+import { getDataJson, pollingRefresh } from '@/utils/big-screen';
 
 export default {
   name: 'PercentPond',
@@ -13,7 +17,7 @@ export default {
     rotateDeg: Object,
     configProps: Object
   },
-  data () {
+  data() {
     return {
       uuid: null,
       pondConfig: {},
@@ -22,41 +26,41 @@ export default {
   },
   watch: {
     'configProps.attribute': {
-      handler () {
+      handler() {
         this.loadData()
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
-    width () {
+    width() {
       this.refreshFlagKey = require('uuid').v1()
     },
-    height () {
+    height() {
       this.refreshFlagKey = require('uuid').v1()
-    }
+    },
   },
-  created () {
+  created() {
     this.uuid = require('uuid').v1()
     this.refreshFlagKey = require('uuid').v1()
     this.refreshCptData()
   },
   methods: {
-    refreshCptData () {
+    refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
-    loadData () {
-      getDataJson(this.configProps.cptDataForm).then(res => {
-        const tempConfig = JSON.parse(JSON.stringify(this.configProps.attribute))
+    loadData() {
+      getDataJson(this.configProps.cptDataForm).then((res) => {
+        const tempConfig = JSON.parse(
+          JSON.stringify(this.configProps.attribute)
+        )
         tempConfig.value = res.value
         tempConfig.lineDash = [tempConfig.lineWidth, tempConfig.lineSpace]
         tempConfig.colors = [tempConfig.color1, tempConfig.color2]
         this.pondConfig = tempConfig
         this.refreshFlagKey = require('uuid').v1() // 强制刷新视图 报错为dataV组件内部bug
-      })
+      });
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

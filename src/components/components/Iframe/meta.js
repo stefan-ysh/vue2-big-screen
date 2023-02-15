@@ -5,7 +5,7 @@ export default {
   componentName: 'BIframe',
   props: {
     attribute: {
-      url: 'https://www.gov.cn/'
+      url: 'https://www.gov.cn/',
     }
   }
 }

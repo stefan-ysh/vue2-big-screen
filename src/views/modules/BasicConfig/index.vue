@@ -45,7 +45,7 @@
               :max="2000"
               size="mini"
               style="width: 100%"
-            /></el-col>
+          /></el-col>
           <el-col :span="2" style="text-align: center; color: #fff"> x </el-col>
           <el-col :span="11">
             <el-input-number
@@ -55,7 +55,7 @@
               :max="1500"
               size="mini"
               style="width: 100%"
-            /></el-col>
+          /></el-col>
         </el-row>
       </el-form-item>
       <el-form-item label="坐标" style="color: #fff">
@@ -159,18 +159,16 @@
 <script>
 export default {
   name: 'CptBaseConfig',
-  data () {
-    return {
-
-    }
+  data() {
+    return {}
   },
   computed: {
-    windowHeight () {
+    windowHeight() {
       return this.$store.state.bigScreen.windowHeight
     },
-    currentCpt () {
+    currentCpt() {
       return this.$store.state.bigScreen.curComponent
-    }
+    },
     // currentCpt: {
     //   get() {
     //     return this.$store.state.bigScreen.curComponent

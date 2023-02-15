@@ -77,28 +77,30 @@
         <el-switch v-model="attribute.barBgShow" />
       </el-form-item>
       <el-form-item label="柱体宽度">
-        <el-input-number v-model="attribute.barWidth" style="width:100%" controls-position="right" :min="1" :max="100" />
+        <el-input-number
+          v-model="attribute.barWidth"
+          style="width: 100%"
+          controls-position="right"
+          :min="1"
+          :max="100"
+        />
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue'
+import BColorPicker from '@/components/BColorPicker.vue';
 export default {
   name: 'TdColumnChartSetter',
   components: { BColorPicker },
   props: {
     attribute: { type: Object, default: () => {} }
   },
-  data () {
-    return {
-
-    }
-  }
+  data() {
+    return {}
+  },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

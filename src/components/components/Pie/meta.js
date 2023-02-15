@@ -32,7 +32,7 @@ export default {
         '#ee6666',
         '#73c0de',
         '#5470c6',
-        '#ff8c71'
+        '#ff8c71',
       ]
     },
     cptDataForm: {
