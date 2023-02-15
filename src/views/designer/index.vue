@@ -138,7 +138,7 @@ export default {
   directives: {
     resize(el, binding, vNode) {
       // 组件拉伸，移动位置
-      el.onmousedown = function (e) {
+      el.onmousedown = function(e) {
         const that = vNode.context
         that.bgOpacity = 0.8
         const scaleClientX = e.clientX / that.containerScale
@@ -151,7 +151,7 @@ export default {
         const disY = scaleClientY - el.parentNode.offsetTop
         let cptWidth, cptHeight, cptX, cptY
 
-        document.onmousemove = function (me) {
+        document.onmousemove = function(me) {
           const meScaleClientX = me.clientX / that.containerScale
           const meScaleClientY = me.clientY / that.containerScale
           if (binding.value === 'move') {
@@ -215,7 +215,7 @@ export default {
             if (cptHeight) that.currentCpt.cptHeight = Math.round(cptHeight)
           }
         }
-        document.onmouseup = function () {
+        document.onmouseup = function() {
           that.bgOpacity = 1
           document.onmousemove = document.onmouseup = null
           // 解决多选移动未松开ctrl键第二次以后拖动定位还原
