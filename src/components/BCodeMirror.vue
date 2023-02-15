@@ -141,11 +141,7 @@ export default {
   },
   methods: {
     editorInit: function(editor) {
-      console.log(
-        '%c [ editor ]-149',
-        'font-size:13px; background:pink; color:#bf2c9f;',
-        editor
-      )
+      console.log('%c [ editor ]-149', 'font-size:13px; background:pink; color:#bf2c9f;', editor)
       // console.log('debug log --> ', editor)
       // // 窗口自适应
       // // editor.resize();

@@ -19,9 +19,14 @@ export default {
       textLineHeight: 30,
       textFamily: '微软雅黑',
       textAlign: 'center',
+      textShadow: false,
+      offsetX: 0,
+      offsetY: 0,
+      blurRadius: 0,
+      textShadowColor: '#000',
       fontStyle: 'normal',
       textDecoration: 'none',
-      bgColor: 'rgba(255, 255, 255, 0)',
+      bgColor: 'rgba(255, 255, 255, 0)'
     }
   }
 }

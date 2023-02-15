@@ -2,13 +2,13 @@
 <template>
   <div>
     <el-form label-width="100px" size="mini">
-      <el-form-item label="主标题">
+      <el-form-item label="主标题显示">
+        <el-switch v-model="attribute.titleVisible" />
+      </el-form-item>
+      <el-form-item v-if="attribute.titleVisible" label="主标题">
         <el-input v-model="attribute.chartTitle" />
       </el-form-item>
-      <el-form-item label="副标题">
-        <el-input v-model="attribute.subtext" />
-      </el-form-item>
-      <el-form-item label="主标题大小">
+      <el-form-item v-if="attribute.titleVisible" label="主标题大小">
         <el-input-number
           v-model="attribute.titleFontSize"
           controls-position="right"
@@ -17,15 +17,14 @@
           :max="50"
         />
       </el-form-item>
-      <el-form-item label="主标题颜色">
+      <el-form-item v-if="attribute.titleVisible" label="主标题颜色">
         <BColorPicker :data="attribute" field="titleTextColor" />
       </el-form-item>
+      <el-form-item label="副标题">
+        <el-input v-model="attribute.subtext" />
+      </el-form-item>
       <el-form-item label="副标题大小">
-        <el-input-number
-          v-model="attribute.subTitleFontSize"
-          controls-position="right"
-          style="width: 100%"
-        />
+        <el-input-number v-model="attribute.subTitleFontSize" controls-position="right" style="width: 100%" />
       </el-form-item>
       <el-form-item label="副标题颜色">
         <BColorPicker :data="attribute" field="subTitleColor" />
@@ -37,33 +36,37 @@
         <el-slider v-model="attribute.titleY" :max="500" />
       </el-form-item>
       <el-form-item label="雷达图类型">
-        <el-select v-model="attribute.shape">
+        <el-select v-model="attribute.shape" popper-class="big-screen-select">
           <el-option label="圆形" value="circle" />
           <el-option label="菱形" value="polygon" />
         </el-select>
       </el-form-item>
       <el-form-item label="指示器段数">
-        <el-input-number
-          v-model="attribute.splitNumber"
-          controls-position="right"
-          style="width: 100%"
-        />
+        <el-input-number v-model="attribute.splitNumber" controls-position="right" style="width: 100%" />
       </el-form-item>
       <el-form-item label="指示器内容">
         <el-input v-model="attribute.indicator" type="textarea" />
       </el-form-item>
+      <el-form-item label="指示器文字大小">
+        <el-input-number v-model="attribute.axisNameFontSize" style="width: 100%" controls-position="right" />
+      </el-form-item>
       <el-form-item label="名称轴距">
-        <el-input-number
-          v-model="attribute.nameGap"
-          controls-position="right"
-          style="width: 100%"
-        />
+        <el-input-number v-model="attribute.nameGap" controls-position="right" style="width: 100%" />
       </el-form-item>
       <el-form-item label="内圈半径">
         <el-slider v-model="attribute.radiusInside" :max="100" />
       </el-form-item>
       <el-form-item label="外圈半径">
         <el-slider v-model="attribute.radiusOutside" :max="100" />
+      </el-form-item>
+      <el-form-item label="雷达颜色">
+        <BColorPicker :data="attribute" field="areaColor" />
+      </el-form-item>
+      <el-form-item label="雷达透明度">
+        <el-slider v-model="attribute.areaOpacity" :step="0.1" :min="0" :max="1" />
+      </el-form-item>
+      <el-form-item label="图例显示">
+        <el-switch v-model="attribute.legendVisible" />
       </el-form-item>
       <!-- <el-form-item label="标题位置(X)">
         <el-input v-model="attribute.titleX" />
@@ -102,13 +105,13 @@
           <el-input v-model="attribute.legendY" />
         </el-form-item>
         <el-form-item label="雷达图类型">
-          <el-select v-model="attribute.shape">
+          <el-select popper-class="big-screen-select" v-model="attribute.shape">
             <el-option label="圆形" value="circle" />
             <el-option label="菱形" value="polygon" />
           </el-select>
         </el-form-item>
         <el-form-item label="图例布局方式">
-          <el-select v-model="attribute.orient">
+          <el-select popper-class="big-screen-select" v-model="attribute.orient">
             <el-option label="纵向" value="vertical" />
             <el-option label="横向" value="horizontal" />
           </el-select>
@@ -125,7 +128,7 @@
         </el-form-item>
       </div>
       <el-form-item label="南丁格尔图">
-        <el-select v-model="attribute.roseType">
+        <el-select popper-class="big-screen-select" v-model="attribute.roseType">
           <el-option label="不展示" value="false" />
           <el-option label="圆心角" value="radius" />
           <el-option label="扇区" value="area" />
@@ -160,7 +163,7 @@
         </div>
       </el-form-item>
       <el-form-item label="label位置">
-        <el-select v-model="attribute.labelPosition">
+        <el-select popper-class="big-screen-select" v-model="attribute.labelPosition">
           <el-option label="内部" value="inside" />
           <el-option label="外侧" value="outside" />
           <el-option label="中心" value="center" />
@@ -181,7 +184,7 @@
 </template>
 <!-- eslint-disable vue/no-mutating-props -->
 <script>
-import BColorPicker from '@/components/BColorPicker.vue';
+import BColorPicker from '@/components/BColorPicker.vue'
 export default {
   name: 'RadarChartSetter',
   components: { BColorPicker },
@@ -193,7 +196,7 @@ export default {
   },
   data() {
     return {
-      tempColor: '',
+      tempColor: ''
     }
   },
   methods: {
@@ -202,7 +205,7 @@ export default {
     },
     delColor(index) {
       this.attribute.pieColor.splice(index, 1)
-    },
+    }
   }
 }
 </script>

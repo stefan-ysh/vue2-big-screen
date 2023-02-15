@@ -16,11 +16,11 @@ export default {
     },
     field: {
       type: String,
-      default: 'color',
+      default: 'color'
     },
     colorFormat: {
       type: String,
-      default: 'hex',
+      default: 'hex'
     }
   }
 }

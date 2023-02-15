@@ -71,7 +71,7 @@ const actions = {
     } else {
       state.configPaneWidth = state.configPaneWidth === 0 ? 300 : 0
     }
-    dispatch('initContainerSize');
+    dispatch('initContainerSize')
   },
 
   // 画布容器，目前 用于截图
@@ -88,10 +88,8 @@ const actions = {
   initContainerSize({ state, dispatch }) {
     state.windowWidth = document.documentElement.clientWidth
     state.windowHeight = document.documentElement.clientHeight
-    const tempWidth =
-      state.windowWidth - state.componentPaneWidth - state.configPaneWidth
-    state.containerScale =
-      Math.round((tempWidth / state.bigScreenData.scaleX) * 100) / 100
+    const tempWidth = state.windowWidth - state.componentPaneWidth - state.configPaneWidth
+    state.containerScale = Math.round((tempWidth / state.bigScreenData.scaleX) * 100) / 100
   },
 
   // /** 画布组件操作 */
@@ -113,7 +111,7 @@ const actions = {
   },
   // 清空画布
   clearCanvas({ commit }) {
-    commit('CLEAR_CANVAS');
+    commit('CLEAR_CANVAS')
   },
   // 设置当前选中的组件
   setCurComponent({ commit }, cpt) {
@@ -125,7 +123,7 @@ const actions = {
   // 如：要更改 id 为 1 的组件的可见度，则需要传值为 this.$store.dispatch('bigScreen/updateCptProp', { id: 1, data: { hidden: true } })
   updateCptProp({ commit }, params) {
     commit('UPDATE_CPT_PROP', params)
-  },
+  }
 }
 const mutations = {
   INIT_BIG_SCREEN_DATA(state, data) {
@@ -138,13 +136,13 @@ const mutations = {
     state.componentList = cpts
   },
   INIT_FREQUENTLY_USED_COMPONENTS(state) {
-    const cpts = localStorage.getItem('frequentlyUsedCpts');
+    const cpts = localStorage.getItem('frequentlyUsedCpts')
     state.historyUsedCpts = JSON.parse(cpts) || []
   },
   ADD_HISTORY_USED_CPT(state, cpt) {
-    const idx = state.historyUsedCpts.findIndex((_f) => {
+    const idx = state.historyUsedCpts.findIndex(_f => {
       return _f.name === cpt.name
-    });
+    })
     if (idx > -1) {
       state.historyUsedCpts[idx].num += 1
     } else {
@@ -154,7 +152,7 @@ const mutations = {
     }
     state.historyUsedCpts.sort(function(a, b) {
       return b.num - a.num
-    });
+    })
     const cpts = JSON.stringify(state.historyUsedCpts)
     localStorage.setItem('frequentlyUsedCpts', cpts)
   },
@@ -184,9 +182,9 @@ const mutations = {
     if (id === state.curComponent.id) {
       state.curComponent = Object.assign(state.curComponent, data)
     } else {
-      let targetComponent = state.componentList.find((_c) => {
+      let targetComponent = state.componentList.find(_c => {
         return _c.id === id
-      });
+      })
       const tempVal = Object.assign(targetComponent, data)
       targetComponent = tempVal
     }
@@ -199,7 +197,7 @@ const getters = {
       return `url('${require('@/assets/images/port.png')}') repeat`
     } else {
       // 竖线  竖线背景 横线 横线背景
-      return 'linear-gradient(-90deg, #545d63 1px, transparent 0px) 0px 0px / 20px 20px, linear-gradient(0deg, #545d63 1px, #2b2e33 0px) 0px 0px / 20px 20px';
+      return 'linear-gradient(-90deg, #545d63 1px, transparent 0px) 0px 0px / 20px 20px, linear-gradient(0deg, #545d63 1px, #2b2e33 0px) 0px 0px / 20px 20px'
     }
   }
 }

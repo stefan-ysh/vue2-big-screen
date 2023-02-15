@@ -1,6 +1,6 @@
 export default {
-  group: '图表',
-  name: '仪表盘',
+  group: '仪表盘',
+  name: '基础仪表盘',
   icon: 'gauge',
   componentName: 'Dashboard',
   props: {

@@ -141,11 +141,11 @@
 </template>
 
 <script>
-import ComponentPane from '@/views/designer/componentPane';
-import ConfigPane from '@/views/designer/configPane';
-import { clearCptInterval } from '@/utils/big-screen';
-import Toolbar from '../modules/Toolbar';
-import SketchRuler from '../modules/SketchRuler';
+import ComponentPane from '@/views/designer/componentPane'
+import ConfigPane from '@/views/designer/configPane'
+import { clearCptInterval } from '@/utils'
+import Toolbar from '../modules/Toolbar'
+import SketchRuler from '../modules/SketchRuler'
 
 export default {
   name: 'BigScreenDesigner',
@@ -189,7 +189,7 @@ export default {
 
               that.multipleCpts[key].cptX = newX
               that.multipleCpts[key].cptY = newY
-            });
+            })
           } else {
             switch (binding.value) {
               case 'lt':
@@ -199,39 +199,39 @@ export default {
                 cptY = meScaleClientY - disY
                 that.currentCpt.cptX = Math.round(cptX)
                 that.currentCpt.cptY = Math.round(cptY)
-                break;
+                break
               case 't':
                 cptHeight = ltY - meScaleClientY
                 cptY = meScaleClientY - disY
                 that.currentCpt.cptY = Math.round(cptY)
-                break;
+                break
               case 'rt':
                 cptWidth = meScaleClientX - rbX
                 cptHeight = ltY - meScaleClientY
                 cptY = meScaleClientY - disY
                 that.currentCpt.cptY = Math.round(cptY)
-                break;
+                break
               case 'r':
                 cptWidth = meScaleClientX - rbX
-                break;
+                break
               case 'rb':
                 cptWidth = meScaleClientX - rbX
                 cptHeight = meScaleClientY - rbY
-                break;
+                break
               case 'b':
                 cptHeight = meScaleClientY - rbY
-                break;
+                break
               case 'lb':
                 cptWidth = ltX - meScaleClientX
                 cptHeight = meScaleClientY - rbY
                 cptX = meScaleClientX - disX
                 that.currentCpt.cptX = Math.round(cptX)
-                break;
+                break
               case 'l':
                 cptWidth = ltX - meScaleClientX
                 cptX = meScaleClientX - disX
                 that.currentCpt.cptX = Math.round(cptX)
-                break;
+                break
             }
             cptWidth = cptWidth < 40 ? 40 : cptWidth // 限制最小缩放
             cptHeight = cptHeight < 20 ? 20 : cptHeight
@@ -246,9 +246,9 @@ export default {
           that.multipleCptPositions = JSON.parse(
             JSON.stringify(that.multipleCpts)
           )
-        };
+        }
         return false
-      };
+      }
     }
   },
   provide() {
@@ -265,42 +265,42 @@ export default {
         {
           direction: 'lt',
           style:
-            'top: 0; left: 0; cursor: nwse-resize; transform: translate(-50%, -50%);',
+            'top: 0; left: 0; cursor: nwse-resize; transform: translate(-50%, -50%);'
         },
         {
           direction: 't',
           style:
-            'top: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, -50%);',
+            'top: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, -50%);'
         },
         {
           direction: 'rt',
           style:
-            'top: 0; right: 0; cursor: nesw-resize; transform: translate(50%, -50%);',
+            'top: 0; right: 0; cursor: nesw-resize; transform: translate(50%, -50%);'
         },
         {
           direction: 'l',
           style:
-            'top: 50%; left: 0; cursor: ew-resize; transform: translate(-50%, -50%);',
+            'top: 50%; left: 0; cursor: ew-resize; transform: translate(-50%, -50%);'
         },
         {
           direction: 'lb',
           style:
-            'bottom: 0; left: 0; cursor: nesw-resize; transform: translate(-50%, 50%);',
+            'bottom: 0; left: 0; cursor: nesw-resize; transform: translate(-50%, 50%);'
         },
         {
           direction: 'b',
           style:
-            'bottom: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, 50%);',
+            'bottom: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, 50%);'
         },
         {
           direction: 'rb',
           style:
-            'bottom: 0; right: 0; cursor: nwse-resize; transform: translate(50%, 50%);',
+            'bottom: 0; right: 0; cursor: nwse-resize; transform: translate(50%, 50%);'
         },
         {
           direction: 'r',
           style:
-            'top: 50%; right: 0; cursor:ew-resize; transform: translate(50%, -50%);',
+            'top: 50%; right: 0; cursor:ew-resize; transform: translate(50%, -50%);'
         }
       ]),
       copyDom: '',
@@ -311,7 +311,7 @@ export default {
   },
   computed: {
     canvasBackground() {
-      return this.$store.getters['bigScreen/canvasBackground'];
+      return this.$store.getters['bigScreen/canvasBackground']
     },
     containerScale() {
       return this.$store.state.bigScreen.containerScale
@@ -337,7 +337,7 @@ export default {
       },
       set(val) {
         this.$store.dispatch('bigScreen/setCoordShowStatus', val)
-      },
+      }
     },
     isShowRule: {
       get() {
@@ -345,7 +345,7 @@ export default {
       },
       set(val) {
         this.$store.dispatch('bigScreen/setRuleShowStatus', val)
-      },
+      }
     },
     currentCptIndex() {
       return this.$store.state.bigScreen.curComponentIndex
@@ -356,10 +356,10 @@ export default {
     },
     cacheComponents() {
       return this.$store.state.bigScreen.componentList
-    },
+    }
   },
   created() {
-    this.$store.commit('bigScreen/INIT_FREQUENTLY_USED_COMPONENTS');
+    this.$store.commit('bigScreen/INIT_FREQUENTLY_USED_COMPONENTS')
     this.loadData()
   },
   mounted() {
@@ -378,23 +378,23 @@ export default {
         {
           label: '上移一层',
           icon: 'el-icon-arrow-up',
-          key: 'layerUp',
+          key: 'layerUp'
         },
         {
           label: '下移一层',
           icon: 'el-icon-arrow-down',
-          key: 'layerDown',
+          key: 'layerDown'
         },
         {
           label: '置顶图层',
           icon: 'el-icon-top',
-          key: 'layerTop',
+          key: 'layerTop'
           // callback: this.copyCpt
         },
         {
           label: '置底图层',
           icon: 'el-icon-bottom',
-          key: 'layerBottom',
+          key: 'layerBottom'
           // callback: this.copyCpt
         },
         {
@@ -414,17 +414,17 @@ export default {
         menu,
         event,
         backgroundColor: '#27343e',
-        activeColor: '#23434f',
+        activeColor: '#23434f'
       }
       this.$rightCtx(rightMenuOptions)
         .then((res) => {
           switch (res.key) {
             case 'layerUp':
               this.currentCpt.cptZ++
-              break;
+              break
             case 'layerDown':
               this.currentCpt.cptZ--
-              break;
+              break
             case 'layerTop':
               // todo
               break
@@ -433,10 +433,10 @@ export default {
               break
             case 'copyLayer':
               res.callback(this.currentCpt)
-              break;
+              break
             case 'delLayer':
               this.delCpt(this.currentCpt, event.target.dataset.index)
-              break;
+              break
 
             default:
               break
@@ -444,7 +444,7 @@ export default {
         })
         .catch((err) => {
           console.log('右键操作取消/失败', err)
-        });
+        })
     },
 
     handleKeyDown(e) {
@@ -458,16 +458,16 @@ export default {
           // 方向键移动当前组件
           case 'ArrowDown':
             this.currentCpt.cptY += 1
-            break;
+            break
           case 'ArrowUp':
             this.currentCpt.cptY -= 1
-            break;
+            break
           case 'ArrowLeft':
             this.currentCpt.cptX -= 1
-            break;
+            break
           case 'ArrowRight':
             this.currentCpt.cptX += 1
-            break;
+            break
           // 删除键(delete) 和 退回键(back space) 触发删除组件
           // 避免有输入框聚焦时影响输入，此处判断是否存在聚焦中的输入框
           case 'Delete':
@@ -494,28 +494,28 @@ export default {
       }
     },
     initContainerSize() {
-      this.$store.dispatch('bigScreen/initContainerSize');
+      this.$store.dispatch('bigScreen/initContainerSize')
     },
 
     // 加载数据
     loadData() {
-      this.$message.warning('加载中');
+      this.$message.warning('加载中')
       // todo 缓存模拟 有无id 来判断是新建还是编辑
-      const cacheStr = localStorage.getItem('designCache');
+      const cacheStr = localStorage.getItem('designCache')
       // 模拟有id，读取数据进行编辑
       if (cacheStr) {
         const data = JSON.parse(cacheStr)
         const cptList = data.components
         this.$store.dispatch('bigScreen/initBigScreenData', data)
         this.$store.dispatch('bigScreen/initComponentList', cptList)
-        this.$message.info('加载完毕');
+        this.$message.info('加载完毕')
       } else {
         // 模拟无 id，初始化数据进行新建
         localStorage.setItem(
           'designCache',
           JSON.stringify(this.$store.state.bigScreen.bigScreenData)
         )
-        this.$message.info('初始化画布已完成');
+        this.$message.info('初始化画布已完成')
       }
       this.initContainerSize()
     },
@@ -539,7 +539,7 @@ export default {
     refreshCptData(refName) {
       // const refName = this.currentCpt.componentName + this.currentCptIndex
       if (!this.$refs[refName][0].refreshCptData) {
-        this.$message.warning('当前图层还未实现 refreshCptData 方法');
+        this.$message.warning('当前图层还未实现 refreshCptData 方法')
       } else {
         // 刷新子组件数据，ref 引用为组件名加 index
         this.$refs[refName][0].refreshCptData()
@@ -557,7 +557,7 @@ export default {
       this.$confirm('删除' + cpt.cptTitle + '组件?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
+        type: 'warning'
       })
         .then(() => {
           // 记录一个bug，v-for key值重复导致页面渲染数据错乱。在丢下组件时实用uuid作为key解决。
@@ -596,19 +596,19 @@ export default {
       if (config.props.cptDataForm) {
         // 将静态数据、api、sql用三个字段存储，配置项未填写apiUrl字段和sql字段在此处赋默认值
         if (!config.props.cptDataForm.apiUrl) {
-          config.props.cptDataForm.apiUrl = '/design/test';
+          config.props.cptDataForm.apiUrl = '/design/test'
         }
         if (!config.props.cptDataForm.sql) {
-          config.props.cptDataForm.sql = 'SELECT username FROM sys_user';
+          config.props.cptDataForm.sql = 'SELECT username FROM sys_user'
         }
         // 初始化数据/图表处理函数
         if (!config.props.cptDataForm.convertData) {
           config.props.cptDataForm.convertData =
-            '(data) => {\n  // data 为图表需要的显示数据，如果数据源为接口请求，则 data 为接口返回数据\n  return data;\n};';
+            '(data) => {\n  // data 为图表需要的显示数据，如果数据源为接口请求，则 data 为接口返回数据\n  return data; \n};'
         }
         if (!config.props.cptDataForm.convertChart) {
           config.props.cptDataForm.convertChart =
-            '(option) => {\n  // option 为图表需要的样式数据，更多详情可查看 https://echarts.apache.org/zh/option.html\n  return option;\n};';
+            '(option) => {\n  // option 为图表需要的样式数据，更多详情可查看 https://echarts.apache.org/zh/option.html\n  return option;\n};'
         }
       }
       const cpt = {
@@ -663,7 +663,7 @@ export default {
     // 清空多选组件
     clearMultipleCpts() {
       this.multipleCpts = {}
-    },
+    }
   }
 }
 </script>

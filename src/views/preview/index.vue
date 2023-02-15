@@ -5,9 +5,7 @@
       width: windowWidth + 'px',
       height: conHeight + 'px',
       backgroundColor: designCache.bgColor,
-      backgroundImage: designCache.bgImg
-        ? 'url(' + designCache.bgImg + ')'
-        : 'none',
+      backgroundImage: designCache.bgImg ? 'url(' + designCache.bgImg + ')' : 'none'
     }"
   >
     <div
@@ -15,7 +13,7 @@
       :style="{
         width: windowWidth + 'px',
         height: conHeight + 'px',
-        transform: 'scale(' + containerScale + ')',
+        transform: 'scale(' + containerScale + ')'
       }"
     >
       <transition-group appear name="bounce">
@@ -30,7 +28,7 @@
               top: Math.round(item.cptY) + 'px',
               left: Math.round(item.cptX) + 'px',
               zIndex: item.cptZ,
-              transform: `rotate(${item.cptRotate}deg)`,
+              transform: `rotate(${item.cptRotate}deg)`
             }"
           >
             <component
@@ -40,7 +38,7 @@
               :height="Math.round(item.cptHeight)"
               :configProps="item.configProps"
               :rotateDeg="{
-                transform: `rotateX(${item.rotateX}deg) rotateY(${item.rotateY}deg) rotateZ(${item.rotateZ}deg)`,
+                transform: `rotateX(${item.rotateX}deg) rotateY(${item.rotateY}deg) rotateZ(${item.rotateZ}deg)`
               }"
               @changeCptHiddenStatus="changeCptHiddenStatus"
               @reload="loadData"
@@ -75,7 +73,7 @@ export default {
   methods: {
     // 更改组件显隐
     changeCptHiddenStatus(id) {
-      const res = this.designCache.components.find((_c) => {
+      const res = this.designCache.components.find(_c => {
         return _c.id === id
       })
       if (res) {
@@ -110,10 +108,9 @@ export default {
     loadSize() {
       this.windowWidth = document.documentElement.clientWidth
       this.windowHeight = document.documentElement.clientHeight
-      this.containerScale =
-        Math.round((this.windowWidth / this.designCache.scaleX) * 100) / 100
+      this.containerScale = Math.round((this.windowWidth / this.designCache.scaleX) * 100) / 100
       this.conHeight = this.designCache.scaleY
-    },
+    }
   }
 }
 </script>

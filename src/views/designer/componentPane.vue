@@ -8,31 +8,13 @@
           组件
         </div>
         <div class="search-cpt">
-          <el-input
-            v-model="searchKeys"
-            placeholder="搜索组件"
-            size="mini"
-            clearable
-          />
+          <el-input v-model="searchKeys" placeholder="搜索组件" size="mini" clearable />
           <div v-show="searchCptResult.length > 0">
             搜索结果
-            <el-col
-              v-for="(item, index) in searchCptResult"
-              :key="item.name + index"
-              :span="12"
-            >
-              <div
-                draggable="true"
-                :config="JSON.stringify(item)"
-                class="cpt-item"
-                @dragstart="dragStart"
-              >
+            <el-col v-for="(item, index) in searchCptResult" :key="item.name + index" :span="12">
+              <div draggable="true" :config="JSON.stringify(item)" class="cpt-item" @dragstart="dragStart">
                 <div style="line-height: 40px">
-                  <SvgIcon
-                    v-if="item.icon"
-                    style="width: 20px"
-                    :icon-class="item.icon"
-                  />
+                  <SvgIcon v-if="item.icon" style="width: 20px" :icon-class="item.icon" />
                   <i v-else style="font-size: 20px" class="el-icon-question" />
                 </div>
                 <div style="font-size: 13px">{{ item.name }}</div>
@@ -41,26 +23,14 @@
           </div>
         </div>
         <el-collapse v-model="activeCptGroupNames" @change="changeCollapse">
-          <el-collapse-item
-            v-if="historyUsedCpts.length > 0"
-            title="最近使用"
-            name="最近使用"
-          >
+          <el-collapse-item v-if="historyUsedCpts.length > 0" title="最近使用" name="最近使用">
             <template slot="title">
-              <SvgIcon
-                style="width: 15px; margin-right: 10px"
-                class="cpt-icon"
-                icon-class="history"
-              />
+              <SvgIcon style="width: 15px; margin-right: 10px" class="cpt-icon" icon-class="history" />
               <span> 最近使用 </span>
             </template>
             <div class="history-used-cpts">
               <el-row>
-                <el-col
-                  v-for="(item, index) in historyUsedCpts"
-                  :key="item.name + index"
-                  :span="6"
-                >
+                <el-col v-for="(item, index) in historyUsedCpts" :key="item.name + index" :span="6">
                   <div
                     draggable="true"
                     :config="JSON.stringify(item)"
@@ -69,28 +39,15 @@
                     @dragstart="dragStart"
                   >
                     <!-- 图标 -->
-                    <SvgIcon
-                      v-if="item.icon"
-                      class="cpt-icon"
-                      :icon-class="item.icon"
-                    />
+                    <SvgIcon v-if="item.icon" class="cpt-icon" :icon-class="item.icon" />
                     <!-- 未设置图标时的占位图标 -->
-                    <i
-                      v-else
-                      style="font-size: 10px"
-                      class="el-icon-question"
-                    />
+                    <i v-else style="font-size: 10px" class="el-icon-question" />
                   </div>
                 </el-col>
               </el-row>
             </div>
           </el-collapse-item>
-          <el-collapse-item
-            v-for="group in componentList"
-            :key="group.name"
-            :title="group.name"
-            :name="group.name"
-          >
+          <el-collapse-item v-for="group in componentList" :key="group.name" :title="group.name" :name="group.name">
             <el-row :gutter="2">
               <template v-for="(item, index) in group.children">
                 <el-col v-if="!item.hidden" :key="item.name + index" :span="8">
@@ -103,11 +60,7 @@
                   >
                     <div class="cpt-icon-wrap">
                       <!-- 组件图标 -->
-                      <SvgIcon
-                        v-if="item.icon"
-                        class="cpt-icon"
-                        :icon-class="item.icon"
-                      />
+                      <SvgIcon v-if="item.icon" class="cpt-icon" :icon-class="item.icon" />
                       <!-- 未设置图标时的占位图标 -->
                       <i v-else class="cpt-icon-placeholder el-icon-question" />
                     </div>
@@ -125,10 +78,7 @@
 
           图层
         </div>
-        <div
-          v-show="layerList.length === 0"
-          style="text-align: center; line-height: 50px"
-        >
+        <div v-show="layerList.length === 0" style="text-align: center; line-height: 50px">
           <!-- todo 不存在图层则直接不可切换 tab -->
           暂无图层，请切换至组件面板进行设计
         </div>
@@ -148,23 +98,15 @@
             :gutter="1"
             :style="{
               background: isActiveLayer(index) ? '#2f3f62' : '#1c1f24',
-              border: isActiveLayer(index) ? '1px solid #409eff' : '',
+              border: isActiveLayer(index) ? '1px solid #409eff' : ''
             }"
           >
             <el-col :span="3">
-              <i
-                class="el-icon-view"
-                :style="{ opacity: item.hidden ? '0.2' : '1' }"
-                @click="changeCptVisible(item)"
-              />
+              <i class="el-icon-view" :style="{ opacity: item.hidden ? '0.2' : '1' }" @click="changeCptVisible(item)" />
             </el-col>
             <!-- 图层图标 -->
             <el-col :span="4" style="display: flex">
-              <embed
-                class="cpt-icon"
-                :src="require('@/assets/icons/svg/' + item.icon + '.svg')"
-                type="image/svg+xml"
-              />
+              <embed class="cpt-icon" :src="require('@/assets/icons/svg/' + item.icon + '.svg')" type="image/svg+xml" />
             </el-col>
             <!-- 图层名称 -->
             <el-col
@@ -189,8 +131,8 @@
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import componentList from '@/components/register/component-list';
-import draggable from 'vuedraggable';
+import componentList from '@/components/register/component-list'
+import draggable from 'vuedraggable'
 
 export default {
   name: 'ComponentPane',
@@ -219,7 +161,7 @@ export default {
     // 图层列表
     layerList() {
       return this.$store.state.bigScreen.componentList
-    },
+    }
   },
   watch: {
     // todo 搜索组件功能及样式待优化
@@ -227,13 +169,13 @@ export default {
       if (newVal === '') {
         this.searchCptResult = []
       } else {
-        componentList.forEach((group) => {
-          group.children.forEach((_c) => {
+        componentList.forEach(group => {
+          group.children.forEach(_c => {
             if (_c.name.includes(newVal)) {
               this.searchCptResult.push(_c)
             }
           })
-        });
+        })
       }
     }
   },

@@ -9,26 +9,16 @@
 // id：上下文模块的id
 
 // 查找背景图片素材
-const requireImgModule = require.context(
-  '@/assets/images',
-  false,
-  /\.(jpg|svg|png)$/
-)
+const requireImgModule = require.context('@/assets/images', false, /\.(jpg|svg|png)$/)
 
 // 查找图片素材
-const requireBgImgModule = require.context(
-  '@/assets/bgImg',
-  false,
-  /\.(jpg|svg|png)$/
-)
+const requireBgImgModule = require.context('@/assets/bgImg', false, /\.(jpg|svg|png)$/)
 
 // 图片数组
 const ImgList = []
 // 图片素材
 for (let i = 0; i < requireImgModule.keys().length; i++) {
-  const src = requireImgModule
-    .keys()
-    [i].substr(2, requireImgModule.keys()[i].length)
+  const src = requireImgModule.keys()[i].substr(2, requireImgModule.keys()[i].length)
   ImgList.push({
     title: i + 1,
     id: `img${i}`,
@@ -38,9 +28,7 @@ for (let i = 0; i < requireImgModule.keys().length; i++) {
 }
 // 背景图片
 for (let i = 0; i < requireBgImgModule.keys().length; i++) {
-  const src = requireBgImgModule
-    .keys()
-    [i].substr(2, requireBgImgModule.keys()[i].length)
+  const src = requireBgImgModule.keys()[i].substr(2, requireBgImgModule.keys()[i].length)
   ImgList.push({
     title: i + 1,
     id: `bg${i}`,

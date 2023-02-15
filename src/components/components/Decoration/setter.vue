@@ -2,13 +2,8 @@
 <template>
   <el-form label-width="100px" size="mini">
     <el-form-item label="样式">
-      <el-select v-model="attribute.decorationType" placeholder="请选择">
-        <el-option
-          v-for="item in decorationTypes"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+      <el-select v-model="attribute.decorationType" placeholder="请选择" popper-class="big-screen-select">
+        <el-option v-for="item in decorationTypes" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </el-form-item>
     <el-form-item label="颜色1">
@@ -37,11 +32,11 @@
 </template>
 
 <script>
-import BColorPicker from '@/components/BColorPicker.vue';
+import BColorPicker from '@/components/BColorPicker.vue'
 export default {
   name: 'DecorationSetter',
   components: { BColorPicker },
-  props: { attribute: { type: Object, default: () => {} }},
+  props: { attribute: { type: Object, default: () => {} } },
   data() {
     return {
       decorationTypes: Object.freeze([
@@ -56,10 +51,11 @@ export default {
         { label: '样式9', value: 'dv-decoration-9' },
         { label: '样式10', value: 'dv-decoration-10' },
         { label: '样式11', value: 'dv-decoration-11' },
-        { label: '样式12', value: 'dv-decoration-12' }
+        { label: '样式12', value: 'dv-decoration-12' },
+        { label: '样式13', value: 'dv-decoration-13' }
       ])
     }
-  },
+  }
 }
 </script>
 

@@ -1,0 +1,90 @@
+@font-face{
+    font-family:优设标题黑;
+    src:url('./fonts/优设标题黑.ttf')
+}
+@font-face{
+    font-family:SourceHanSans-Medium;
+    src:url('./fonts/SourceHanSans-Medium.ttf')
+}
+.big-screen-confirm-dialog {
+    background: #1b1e25;
+    border-color: #1b1e25;
+    .el-message-box__header {
+        .el-message-box__title {
+            color: #fff;
+        }
+    }
+    .el-message-box__content {
+        color: #fff;
+    }
+    .el-message-box__btns {
+        button {
+            background-color: transparent;
+            color: #859094;
+            border-color: #409eff;
+            border-radius: 0;
+            padding: 8px 15px;
+            &:hover {
+                color: #409eff;
+                border-color: #c6e2ff;
+                background-color: #ecf5ff;
+            }
+        }
+    }
+}
+
+.big-screen-select {
+    background: #1d2830;
+    // border-color: black;
+    border: none;
+    .hover{
+        background: rgba(0,192,222,.1);
+        color: #409eff;
+    }
+    .popper__arrow {
+        // border-bottom-color: black !important;
+        border: none !important;
+        &::after {
+            border-bottom-color: #1d2830 !important;
+        }
+    }
+}
+
+.big-screen-dropdown{
+    background: #1d2830;
+    border: none;
+    border-radius: 0;
+    .el-dropdown-menu__item {
+        color: #a6a6c5;
+        &:hover{
+            background: rgba(0,192,222,.1);
+            color: #409eff;
+        }
+    }
+
+    .popper__arrow {
+        // border-bottom-color: black !important;
+        border: none !important;
+        &::after {
+            border-bottom-color: #1d2830 !important;
+        }
+    }
+}
+.big-screen-radio-group{
+    .el-radio-button {
+      &.is-active {
+        // border: 1px solid #5a9cf8;
+        border: none;
+        // margin: -1px;
+      }
+      .el-radio-button__inner {
+        background: #39393a;
+        border: 1px solid #282e3a;
+        box-shadow: none;
+        border-radius: 0;
+        .is-focus{
+          color: #fff;
+        }
+      }
+    }
+  }

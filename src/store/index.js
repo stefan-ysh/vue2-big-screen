@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import getters from './getters';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import getters from './getters'
 
-import bigScreen from './modules/big-screen';
+import bigScreen from './modules/big-screen'
 
 Vue.use(Vuex)
 

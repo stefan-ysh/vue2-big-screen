@@ -84,8 +84,8 @@
 
 <script>
 // 图片集
-import BGallery from '@/components/BGallery';
-import BColorPicker from '@/components/BColorPicker.vue';
+import BGallery from '@/components/BGallery'
+import BColorPicker from '@/components/BColorPicker.vue'
 
 export default {
   name: 'BigscreenConfig',
@@ -99,7 +99,7 @@ export default {
     },
     windowHeight() {
       return this.$store.state.bigScreen.windowHeight
-    },
+    }
   },
   methods: {
     confirmCheck(bgImg) {
@@ -110,7 +110,7 @@ export default {
     },
     handleRemoveBgImg() {
       this.$store.dispatch('bigScreen/setBigScreenData', { bgImg: '' })
-    },
+    }
     // handleChangePic() {}
   }
 }

@@ -39,24 +39,12 @@
           <div slot="content">网格背景</div>
           <i class="btn el-icon-s-grid" @click="changeCanvasBgStyle('grid')" />
         </el-tooltip>
-        <el-checkbox v-model="isShowCoord"
-class="operation-handler coord-bar"
-          >坐标</el-checkbox
-        >
+        <el-checkbox v-model="isShowCoord" class="operation-handler coord-bar">坐标</el-checkbox>
         <!-- <el-checkbox v-model="isShowRuler" class="operation-handler rule-bar">标尺</el-checkbox> -->
-        <el-slider
-          v-model="containerScale"
-          class="operation-handler scale-bar"
-          :min="0.02"
-          :max="2"
-          :step="0.01"
-        />
+        <el-slider v-model="containerScale" class="operation-handler scale-bar" :min="0.02" :max="2" :step="0.01" />
         <el-tooltip class="operation-handler icon-btn" placement="bottom">
           <div slot="content">恢复比例</div>
-          <i
-            class="btn el-icon-aim"
-            @click="$store.dispatch('bigScreen/initContainerSize')"
-          />
+          <i class="btn el-icon-aim" @click="$store.dispatch('bigScreen/initContainerSize')" />
         </el-tooltip>
         <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">上对齐</div>
@@ -66,7 +54,7 @@ class="operation-handler coord-bar"
               transition: 'all .4s',
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : '',
+              background: isMultiple ? '#2681ff' : ''
             }"
             class="align-top"
             icon-class="align-top"
@@ -81,7 +69,7 @@ class="operation-handler coord-bar"
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               transition: 'all .4s',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : '',
+              background: isMultiple ? '#2681ff' : ''
             }"
             class="align-horizontal-center"
             icon-class="align-horizontal-center"
@@ -96,7 +84,7 @@ class="operation-handler coord-bar"
               opacity: isMultiple ? 1 : 0.5,
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : '',
+              background: isMultiple ? '#2681ff' : ''
             }"
             class="align-bottom"
             icon-class="align-bottom"
@@ -111,7 +99,7 @@ class="operation-handler coord-bar"
               opacity: isMultiple ? 1 : 0.5,
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : '',
+              background: isMultiple ? '#2681ff' : ''
             }"
             class="align-left"
             icon-class="align-left"
@@ -126,7 +114,7 @@ class="operation-handler coord-bar"
               opacity: isMultiple ? 1 : 0.5,
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : '',
+              background: isMultiple ? '#2681ff' : ''
             }"
             class="align-vertical-center"
             icon-class="align-vertical-center"
@@ -141,7 +129,7 @@ class="operation-handler coord-bar"
               opacity: isMultiple ? 1 : 0.5,
               cursor: isMultiple ? 'pointer' : 'not-allowed',
               'font-size': '18px',
-              background: isMultiple ? '#2681ff' : '',
+              background: isMultiple ? '#2681ff' : ''
             }"
             class="align-right"
             icon-class="align-right"
@@ -150,11 +138,7 @@ class="operation-handler coord-bar"
         </el-tooltip>
       </el-col>
       <!-- 右侧操作按钮 -->
-      <el-col
-        class="operation-area-right"
-        :span="6"
-        @click.self.native="outBlur"
-      >
+      <el-col class="operation-area-right" :span="6" @click.self.native="outBlur">
         <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">清空画布</div>
           <BSvgIcon icon-class="delete" @click="clearDesign" />
@@ -164,12 +148,7 @@ class="operation-handler coord-bar"
           <BSvgIcon icon-class="import" @click="importDesign" />
         </el-tooltip>
         <!-- line-height 为了调整el-dropdown 和 tooltip 按钮水平对齐 想到了更好的可以来替换 T_T -->
-        <el-dropdown
-          title="导出"
-          trigger="click"
-          style="line-height: 0"
-          @command="handleExport"
-        >
+        <el-dropdown title="导出" trigger="click" style="line-height: 0" @command="handleExport">
           <BSvgIcon class="export-btn" icon-class="export" />
           <el-dropdown-menu slot="dropdown" class="big-screen-dropdown">
             <el-dropdown-item command="img">图片文件</el-dropdown-item>
@@ -186,19 +165,12 @@ class="operation-handler coord-bar"
         </el-tooltip>
       </el-col>
     </el-row>
-    <input
-      v-show="false"
-      id="files"
-      ref="refFile"
-      type="file"
-      accept=".json"
-      @change="fileLoad"
-    />
+    <input v-show="false" id="files" ref="refFile" type="file" accept=".json" @change="fileLoad" />
   </div>
 </template>
 
 <script>
-import { clearCptInterval, fileDownload } from '@/utils/big-screen'
+import { clearCptInterval, fileDownload } from '@/utils'
 // import BigScreenPreview from '@/views/app/big-screen/preview'
 import html2canvas from 'html2canvas'
 
@@ -293,7 +265,7 @@ export default {
           }
         }
         val = Math.min(...posArr)
-        Object.values(this.multipleCpts).forEach((_c) => {
+        Object.values(this.multipleCpts).forEach(_c => {
           _c.cptY = val
         })
       } else if (type === 'horizontal-center') {
@@ -320,9 +292,9 @@ export default {
             posArr.push({ max: el.cptHeight + el.cptY })
           }
         }
-        const arr = posArr.map((v) => v.max)
+        const arr = posArr.map(v => v.max)
         const max = Math.max(...arr)
-        Object.values(this.multipleCpts).forEach((_c) => {
+        Object.values(this.multipleCpts).forEach(_c => {
           _c.cptY = max - _c.cptHeight
         })
       } else if (type === 'left') {
@@ -334,7 +306,7 @@ export default {
           }
         }
         val = Math.min(...posArr)
-        Object.values(this.multipleCpts).forEach((_c) => {
+        Object.values(this.multipleCpts).forEach(_c => {
           _c.cptX = val
         })
       } else if (type === 'vertical-center') {
@@ -361,14 +333,14 @@ export default {
             posArr.push({ height: el.cptWidth, max: el.cptWidth + el.cptX })
           }
         }
-        const arr = posArr.map((v) => v.max)
+        const arr = posArr.map(v => v.max)
         const max = Math.max(...arr)
-        Object.values(this.multipleCpts).forEach((_c) => {
+        Object.values(this.multipleCpts).forEach(_c => {
           _c.cptX = max - _c.cptWidth
         })
       }
       // 更新存储多选组件的位置的息
-      Object.keys(this.multipleCptPositions).forEach((key) => {
+      Object.keys(this.multipleCptPositions).forEach(key => {
         // eslint-disable-next-line vue/no-mutating-props
         this.multipleCptPositions[key].cptX = this.multipleCpts[key].cptX
         // eslint-disable-next-line vue/no-mutating-props
@@ -384,7 +356,7 @@ export default {
         // 导出图片
         html2canvas(this.$store.state.bigScreen.webContainer, {
           backgroundColor: '#49586e'
-        }).then((canvas) => {
+        }).then(canvas => {
           const canvasData = canvas.toDataURL('image/jpeg')
           fileDownload(canvasData, this.designData.title + '.png')
         })
@@ -394,8 +366,7 @@ export default {
           components: this.cacheComponents
         })
         const data = JSON.stringify(this.designData)
-        const uri =
-          'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(data) // encodeURIComponent解决中文乱码
+        const uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(data) // encodeURIComponent解决中文乱码
         fileDownload(uri, this.designData.title + '.json')
       }
     },
@@ -432,10 +403,7 @@ export default {
         const fileJson = JSON.parse(reader.result)
         fileJson.id = that.designData.id
         that.$store.dispatch('bigScreen/initBigScreenData', fileJson)
-        that.$store.dispatch(
-          'bigScreen/initComponentList',
-          fileJson.components
-        )
+        that.$store.dispatch('bigScreen/initComponentList', fileJson.components)
         // 清空现有大屏组件列表
         // that.$store.dispatch('bigScreen/setBigScreenData', { components: [] })
         that.$message.success(`文件 ${fileName} 导入成功!`)
@@ -510,7 +478,7 @@ export default {
         return this.$modal.msg('暂无组件可预览，请先设计看板')
       }
       if (
-        !this.cacheComponents.some((c) => {
+        !this.cacheComponents.some(c => {
           return !c.hidden
         })
       ) {
@@ -518,10 +486,7 @@ export default {
         return this.$modal.msg('画布中暂无可见组件，请调整后重试')
       }
       // 预览页面数据存储到本地，减少不必要的网络请求，通过标识 mode 是否等于 preview 判断是否为预览模式
-      localStorage.setItem(
-        'designCache',
-        Base64.encode(JSON.stringify(this.designData))
-      )
+      localStorage.setItem('designCache', Base64.encode(JSON.stringify(this.designData)))
       // 生成预览链接
       const routeUrl = this.$router.resolve({
         name: 'BigScreenPreview',

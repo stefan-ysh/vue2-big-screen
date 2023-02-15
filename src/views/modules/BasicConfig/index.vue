@@ -4,11 +4,7 @@
       <el-form-item label="图层名称" class="mt5">
         <el-row>
           <el-col :span="24">
-            <el-input
-              v-model="currentCpt.layerName"
-              style="width: 100%"
-              size="mini"
-            />
+            <el-input v-model="currentCpt.layerName" style="width: 100%" size="mini" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -26,12 +22,7 @@
         </span>
         <el-row>
           <el-col :span="24">
-            <el-switch
-              v-model="currentCpt.hidden"
-              :active-value="true"
-              :inactive-value="false"
-              size="mini"
-            />
+            <el-switch v-model="currentCpt.hidden" :active-value="true" :inactive-value="false" size="mini" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -124,31 +115,19 @@
         <el-row class="mb5">
           <el-col :span="4">x</el-col>
           <el-col :span="20">
-            <el-slider
-              v-model="currentCpt.rotateX"
-              size="mini"
-              style="width: 100%"
-            />
+            <el-slider v-model="currentCpt.rotateX" size="mini" style="width: 100%" />
           </el-col>
         </el-row>
         <el-row class="mb5">
           <el-col :span="4">y</el-col>
           <el-col :span="20">
-            <el-slider
-              v-model="currentCpt.rotateY"
-              size="mini"
-              style="width: 100%"
-            />
+            <el-slider v-model="currentCpt.rotateY" size="mini" style="width: 100%" />
           </el-col>
         </el-row>
         <el-row class="mb5">
           <el-col :span="4">z</el-col>
           <el-col :span="20">
-            <el-slider
-              v-model="currentCpt.rotateZ"
-              size="mini"
-              style="width: 100%"
-            />
+            <el-slider v-model="currentCpt.rotateZ" size="mini" style="width: 100%" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -168,7 +147,7 @@ export default {
     },
     currentCpt() {
       return this.$store.state.bigScreen.curComponent
-    },
+    }
     // currentCpt: {
     //   get() {
     //     return this.$store.state.bigScreen.curComponent

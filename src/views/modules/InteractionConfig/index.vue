@@ -52,7 +52,7 @@ export default {
     },
     windowHeight() {
       return this.$store.state.bigScreen.windowHeight
-    },
+    }
   }
 }
 </script>

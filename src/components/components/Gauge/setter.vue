@@ -18,34 +18,16 @@
       <BColorPicker :data="attribute" field="titleColor" />
     </el-form-item>
     <el-form-item label="最小值">
-      <el-input-number
-        v-model="attribute.min"
-        controls-position="right"
-        style="width: 100%"
-      />
+      <el-input-number v-model="attribute.min" controls-position="right" style="width: 100%" />
     </el-form-item>
     <el-form-item label="最大值">
-      <el-input-number
-        v-model="attribute.max"
-        controls-position="right"
-        style="width: 100%"
-      />
+      <el-input-number v-model="attribute.max" controls-position="right" style="width: 100%" />
     </el-form-item>
     <el-form-item label="起始角度">
-      <el-slider
-        v-model="attribute.startAngle"
-        :min="-360"
-        :max="360"
-        :step="1"
-      />
+      <el-slider v-model="attribute.startAngle" :min="-360" :max="360" :step="1" />
     </el-form-item>
     <el-form-item label="结束角度">
-      <el-slider
-        v-model="attribute.endAngle"
-        :min="-360"
-        :max="360"
-        :step="1"
-      />
+      <el-slider v-model="attribute.endAngle" :min="-360" :max="360" :step="1" />
     </el-form-item>
     <el-form-item label="表盘宽度">
       <el-input-number
@@ -146,7 +128,7 @@
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import BColorPicker from '@/components/BColorPicker.vue';
+import BColorPicker from '@/components/BColorPicker.vue'
 export default {
   name: 'DashboardSetter',
   components: { BColorPicker },

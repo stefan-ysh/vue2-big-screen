@@ -1,17 +1,20 @@
+
 <template>
-  <div :id="uuid" :style="{ width: '100%', height: '100%', ...rotateDeg }" />
+  <div :id="uuid" :style="{ width: '100%', height: '100%' }" />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
-import { getDataJson, pollingRefresh } from '@/utils/big-screen';
+import { getDataJson, pollingRefresh } from '@/utils'
 
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Pie',
   props: {
+    cptId: {
+      type: String,
+      default: ''
+    },
     width: Number,
     height: Number,
-    rotateDeg: Object,
     configProps: { type: Object, default: () => {} }
   },
   data() {
@@ -34,7 +37,7 @@ export default {
     },
     height() {
       this.chart.resize()
-    },
+    }
   },
   created() {
     this.uuid = require('uuid').v1()
@@ -48,10 +51,10 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
         this.cptData = res
         this.loadChart(this.configProps.attribute)
-      });
+      })
     },
     loadChart(attribute) {
       const that = this
@@ -70,7 +73,7 @@ export default {
           subtextStyle: { fontSize: 12, color: attribute.subtextColor }
         },
         tooltip: {
-          trigger: 'item',
+          trigger: 'item'
         },
         legend: {
           show: attribute.legendShow,
@@ -90,7 +93,7 @@ export default {
               attribute.roseType === 'false' ? false : attribute.roseType,
             radius: [
               attribute.radiusInside + '%',
-              attribute.radiusOutside + '%',
+              attribute.radiusOutside + '%'
             ],
             label: {
               position: attribute.labelPosition,
@@ -99,20 +102,25 @@ export default {
             },
             itemStyle: {
               borderRadius: attribute.borderRadius
+              // todo 背景图
+              // color: {
+              //   image: new Image().src = '',
+              //   repeat: 'repeat'
+              // }
             },
             data: this.cptData,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
-                shadowColor: 'rgba(255, 0, 0, 0.5)',
+                shadowColor: 'rgba(255, 0, 0, 0.5)'
               }
             }
           }
         ]
       }
       that.chart.setOption(that.chartOption)
-    },
+    }
   }
 }
 </script>

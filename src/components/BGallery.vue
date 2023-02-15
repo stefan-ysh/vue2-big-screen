@@ -1,71 +1,37 @@
 <template>
-  <el-dialog
-    title="图库"
-    :visible="galleryVisvible"
-    width="75%"
-    close-on-click-modal
-    @close="closeDialog"
-  >
+  <el-dialog title="图库" :visible="galleryVisvible" width="75%" close-on-click-modal @close="closeDialog">
     <el-row :gutter="6" class="gallery-row">
-      <el-col
-        v-for="img in imgList"
-        :key="img.id"
-        :span="4"
-        class="gallery-col"
-        @click.native="checkImg(img)"
-      >
-        <div
-          class="img-item-wrap"
-          :class="isCurrentImg(img) ? 'selected-img' : ''"
-        >
-          <el-image
-            style=""
-            :src="img.src"
-            fit="contain"
-            @dblclick="dbclickImg(img)"
-          />
+      <el-col v-for="img in imgList" :key="img.id" :span="4" class="gallery-col" @click.native="checkImg(img)">
+        <div class="img-item-wrap" :class="isCurrentImg(img) ? 'selected-img' : ''">
+          <el-image style="" :src="img.src" fit="contain" @dblclick="dbclickImg(img)" />
           <!-- <el-image
                   style="width: 100%; height: 100%"
                   :src="imgUploadUrl + img.src"
                   fit="fill"
                 /> -->
         </div>
-        <div
-          class="img-title"
-          :class="isCurrentImg(img) ? 'selected-title' : ''"
-        >
+        <div class="img-title" :class="isCurrentImg(img) ? 'selected-title' : ''">
           {{ img.title }}
         </div>
       </el-col>
     </el-row>
 
     <span slot="footer" class="dialog-footer">
-      <el-button
-        class="cancel-btn"
-        size="small"
-        @click="galleryVisvible = false"
-        >取 消</el-button
-      >
-      <el-button
-        class="confirm-btn"
-        type="primary"
-        size="small"
-        @click="confirmCheck"
-        >确 定</el-button
-      >
+      <el-button class="cancel-btn" size="small" @click="galleryVisvible = false">取 消</el-button>
+      <el-button class="confirm-btn" type="primary" size="small" @click="confirmCheck">确 定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
-import ImgList from '@/components/register/img-list';
+import ImgList from '@/components/register/img-list'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Gallery',
   props: {
     imgType: {
       type: String,
-      default: 'img',
+      default: 'img'
     }
   },
   data() {
@@ -85,9 +51,9 @@ export default {
       return this.checkedItem.id === item.id
     },
     opened() {
-      this.imgList = ImgList.filter((img) => {
+      this.imgList = ImgList.filter(img => {
         return img.type === this.imgType
-      });
+      })
       this.checkedItem = {}
       this.loadData()
       this.galleryVisvible = true
@@ -99,7 +65,7 @@ export default {
     // 点击确认选择
     confirmCheck() {
       if (!this.checkedItem || !this.checkedItem.id) {
-        this.$message.info('请选择图片');
+        this.$message.info('请选择图片')
       } else {
         this.$emit('confirmCheck', this.checkedItem.src)
         this.closeDialog()
@@ -113,7 +79,7 @@ export default {
     dbclickImg(item) {
       this.checkedItem = item
       this.confirmCheck()
-    },
+    }
   }
 }
 </script>
@@ -151,7 +117,7 @@ export default {
         position: absolute;
         top: 50%;
         left: 50%;
-        content: "";
+        content: '';
         width: 20px;
         height: 40px;
         border-color: green;
