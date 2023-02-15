@@ -31,11 +31,11 @@
         @click.self="outBlur"
       >
         <!-- todo 参数优化 -->
-        <SketchRuler
+        <!-- <SketchRuler
           :scale="containerScale"
           :width=" windowWidth - cptPaneWidth - configPaneWidth + -27"
           :height="windowHeight - 73"
-        />
+        /> -->
         <div
           ref="webContainer"
           class="web-container"
@@ -497,11 +497,12 @@ export default {
         const cptList = data.components
         this.$store.dispatch('bigScreen/initBigScreenData', data)
         this.$store.dispatch('bigScreen/initComponentList', cptList)
+        this.$message.info('加载完毕')
       } else {
         // 模拟无 id，初始化数据进行新建
         localStorage.setItem('designCache', JSON.stringify(this.$store.state.bigScreen.bigScreenData))
+        this.$message.info('初始化画布已完成')
       }
-      this.$message.info('加载完毕')
       this.initContainerSize()
     },
 
