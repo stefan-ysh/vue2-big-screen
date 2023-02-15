@@ -7,14 +7,11 @@
       @clearMultipleCpts="clearMultipleCpts"
     />
     <!-- 底部设计区 -->
-    <div
-      class="design-area"
-      :style="{
-        height: windowHeight - 45 + 'px',
-        background: canvasBackground
-      }"
-      @click.self="outBlur"
-    >
+    <div class="design-area" :style="designAreaStyle" @click.self="outBlur">
+      <!-- 控制左右两边面板显隐 -->
+      <!-- todo jsx 重构 -->
+      <LeftPaneControlBar />
+      <RightPaneControlBar />
       <!--左侧组件列表栏-->
       <div class="left-pane" :style="{ width: cptPaneWidth + 'px' }">
         <component-pane
@@ -28,14 +25,12 @@
       <!-- 中间组件显示区 -->
       <div
         class="canvas-area"
-        :style="{
-          width: windowWidth - cptPaneWidth - configPaneWidth + 'px',
-          opacity: bgOpacity
-        }"
+        :style="{ width: windowWidth - cptPaneWidth - configPaneWidth + 'px', opacity: bgOpacity }"
         @click.self="outBlur"
       >
         <!-- todo 参数优化 -->
         <!-- <SketchRuler
+          v-show="isShowRuler"
           :scale="containerScale"
           :width=" windowWidth - cptPaneWidth - configPaneWidth + -27"
           :height="windowHeight - 73"
@@ -44,15 +39,16 @@
           ref="webContainer"
           class="web-container"
           :style="{
-            width: designData.scaleX + 'px',
-            height: designData.scaleY + 'px',
+            width: designData.screenWidth + 'px',
+            height: designData.screenHeight + 'px',
             backgroundColor: designData.bgColor,
             backgroundImage: designData.bgImg ? 'url(' + designData.bgImg + ')' : 'none',
             transform: 'scale(' + containerScale + ')',
-            margin: isShowRule ? '0 10px' : ''
+            transition: 'transform .5s',
+            margin: '20px 0 0 20px'
           }"
-          @dragover="allowDrop"
-          @drop="drop"
+          @dragover="dropOver"
+          @drop="handleDrop"
           @click.self="outBlur"
         >
           <template v-if="cacheComponents.length > 0">
@@ -62,14 +58,7 @@
               :key="item.id"
               :ref="'div' + item.componentName + index"
               class="cpt-div"
-              :style="{
-                width: Math.round(item.cptWidth) + 'px',
-                height: Math.round(item.cptHeight) + 'px',
-                top: Math.round(item.cptY) + 'px',
-                left: Math.round(item.cptX) + 'px',
-                zIndex: currentCptIndex === index ? 1800 : item.cptZ,
-                opacity: item.hidden ? '0.3' : '1'
-              }"
+              :style="commonCptStyle(item, index)"
               tabindex="0"
               @mousedown="showConfigPane($event, item, index)"
               @contextmenu.prevent="handleContextMenu"
@@ -80,7 +69,7 @@
               <div v-show="currentCptIndex === index" class="x-auxiliary-line" />
               <!--左侧辅助线-->
               <div v-show="currentCptIndex === index" class="y-auxiliary-line" />
-              <!-- 新增iframe组件，防止焦点聚焦在iframe内部，添加此蒙版 -->
+              <!-- 防止组件交互的时候造成不必要的事件触发以及性能问题，设计状态时此处使用模板覆盖 -->
               <!-- todo 探索其他解决方案 -->
               <div
                 v-resize="'move'"
@@ -91,13 +80,13 @@
               <div class="cpt-wrap">
                 <component
                   :is="item.componentName"
-                  :ref="item.componentName + index"
+                  :ref="item.id"
+                  :class="convertAnimation(item.configProps.animation)"
+                  :cptId="item.id"
                   :width="Math.round(item.cptWidth)"
                   :height="Math.round(item.cptHeight)"
                   :configProps="item.configProps"
-                  :rotateDeg="{
-                    transform: `rotateX(${item.rotateX}deg) rotateY(${item.rotateY}deg) rotateZ(${item.rotateZ}deg)`
-                  }"
+                  :style="commonCptStyle(item, index, 'rotate')"
                 />
               </div>
               <!-- 缩放把手 -->
@@ -113,7 +102,7 @@
           </template>
           <!-- 无组件提示信息 -->
           <div v-else class="no-cpt-placeholder">
-            <SvgIcon class="no-cpt-tip-img" icon-class="building" />
+            <BSvgIcon class="no-cpt-tip-img" icon-class="building" />
             <span class="no-cpt-tips"> 暂无组件，请从左侧组件面板拖入进行设计 </span>
           </div>
         </div>
@@ -127,18 +116,23 @@
 </template>
 
 <script>
-import ComponentPane from '@/views/modules/Pane/component-pane'
-import ConfigPane from '@/views/modules/Pane/config-pane'
+import ComponentPane from '../modules/Pane/component-pane'
+import ConfigPane from '../modules/Pane/config-pane'
 import { clearCptInterval } from '@/utils'
 import Toolbar from '../modules/Toolbar'
+import RightPaneControlBar from '../modules/PaneControlBar/right-bar'
+import LeftPaneControlBar from '../modules/PaneControlBar/left-bar'
 import SketchRuler from '../modules/SketchRuler'
-
+import * as BigscreenApi from '@/api'
+import { Base64 } from 'js-base64'
 export default {
   name: 'BigScreenDesigner',
   components: {
-    SketchRuler,
     ConfigPane,
     ComponentPane,
+    LeftPaneControlBar,
+    RightPaneControlBar,
+    SketchRuler,
     Toolbar
   },
   directives: {
@@ -238,6 +232,7 @@ export default {
   },
   data() {
     return {
+      bigscreenId: '',
       // 背景透明度
       bgOpacity: 1,
       // 缩放按钮
@@ -248,7 +243,8 @@ export default {
         },
         {
           direction: 't',
-          style: 'top: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, -50%);'
+          style:
+            'top: 0; border-radius: 5px !important;  left: 50%; cursor: ns-resize; transform: translate(-50%, -50%);'
         },
         {
           direction: 'rt',
@@ -256,7 +252,8 @@ export default {
         },
         {
           direction: 'l',
-          style: 'top: 50%; left: 0; cursor: ew-resize; transform: translate(-50%, -50%);'
+          style:
+            'top: 50%; left: 0; border-radius: 5px !important; cursor: ew-resize; transform: translate(-50%, -50%);'
         },
         {
           direction: 'lb',
@@ -264,7 +261,8 @@ export default {
         },
         {
           direction: 'b',
-          style: 'bottom: 0; left: 50%; cursor: ns-resize; transform: translate(-50%, 50%);'
+          style:
+            'bottom: 0; border-radius: 5px !important; left: 50%; cursor: ns-resize; transform: translate(-50%, 50%);'
         },
         {
           direction: 'rb',
@@ -272,18 +270,22 @@ export default {
         },
         {
           direction: 'r',
-          style: 'top: 50%; right: 0; cursor:ew-resize; transform: translate(50%, -50%);'
+          style:
+            'top: 50%; border-radius: 5px !important;  right: 0; cursor:ew-resize; transform: translate(50%, -50%);'
         }
       ]),
-      copyDom: '',
+      curDragCpt: '',
       multipleCpts: {},
       // 记录组件原来位置
       multipleCptPositions: {}
     }
   },
   computed: {
-    canvasBackground() {
-      return this.$store.getters['bigScreen/canvasBackground']
+    cptRefs() {
+      return this.$store.state.bigScreen.cptRefs
+    },
+    designAreaStyle() {
+      return this.$store.getters['bigScreen/designAreaStyle']
     },
     containerScale() {
       return this.$store.state.bigScreen.containerScale
@@ -311,9 +313,9 @@ export default {
         this.$store.dispatch('bigScreen/setCoordShowStatus', val)
       }
     },
-    isShowRule: {
+    isShowRuler: {
       get() {
-        return this.$store.state.bigScreen.isShowRule
+        return this.$store.state.bigScreen.isShowRuler
       },
       set(val) {
         this.$store.dispatch('bigScreen/setRuleShowStatus', val)
@@ -340,10 +342,32 @@ export default {
     this.$store.dispatch('bigScreen/setContainer', this.$refs.webContainer)
   },
   beforeDestroy() {
+    this.$store.commit('bigScreen/CLEAR_BIG_SCREEN_CPT_REF')
     window.removeEventListener('keydown', this.handleKeyDown)
     window.removeEventListener('resize', this.initContainerSize)
   },
   methods: {
+    convertAnimation(animation) {
+      if (animation) {
+        const { name, speed, repeat, delay } = animation
+        return `animate__animated animate__${name} ${speed} ${repeat} ${delay}`
+      }
+    },
+    commonCptStyle(item, index, type) {
+      if (type === 'rotate') {
+        return {
+          transform: `rotateX(${item.rotateX}deg) rotateY(${item.rotateY}deg) rotateZ(${item.rotateZ}deg)`,
+          opacity: item.opacity ? item.opacity : item.hidden ? '0.3' : '1'
+        }
+      }
+      return {
+        width: Math.round(item.cptWidth) + 'px',
+        height: Math.round(item.cptHeight) + 'px',
+        top: Math.round(item.cptY) + 'px',
+        left: Math.round(item.cptX) + 'px',
+        zIndex: this.currentCptIndex === index ? 1800 : item.cptZ
+      }
+    },
     // 点击右键菜单时触发
     handleContextMenu(event) {
       const menu = [
@@ -415,92 +439,156 @@ export default {
           }
         })
         .catch(err => {
+          // this.$modal.msg('操作失败，请重试')
           console.log('右键操作取消/失败', err)
         })
     },
 
     handleKeyDown(e) {
-      if (this.currentCptIndex !== -1) {
-        const key = e.key
-        if (['ArrowDown', 'Arrow', 'ArrowLeft', 'ArrowRight'].includes(key)) {
-          e.preventDefault()
-        }
-        let idx = 0
-        switch (key) {
-          // 方向键移动当前组件
-          case 'ArrowDown':
-            this.currentCpt.cptY += 1
-            break
-          case 'ArrowUp':
-            this.currentCpt.cptY -= 1
-            break
-          case 'ArrowLeft':
-            this.currentCpt.cptX -= 1
-            break
-          case 'ArrowRight':
-            this.currentCpt.cptX += 1
-            break
-          // 删除键(delete) 和 退回键(back space) 触发删除组件
-          // 避免有输入框聚焦时影响输入，此处判断是否存在聚焦中的输入框
-          case 'Delete':
-            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.nodeName)) {
-              idx = this.cacheComponents.findIndex(c => c.id === this.currentCpt.id)
-              this.delCpt(this.currentCpt, idx)
-            }
-            break
-          case 'Backspace':
-            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.nodeName)) {
-              idx = this.cacheComponents.findIndex(c => c.id === this.currentCpt.id)
-              this.delCpt(this.currentCpt, idx)
-            }
-            break
-        }
+      // 没有组件选中时，则无需做任何处理
+      if (this.currentCptIndex === -1) {
+        return
+      }
+      // 是否需在其他输入元素聚焦
+      const isIptElFocus = ['INPUT', 'TEXTAREA'].includes(document.activeElement.nodeName)
+      // 存在输入框聚焦时，不触发方向键移动事件，持续优化
+      if (isIptElFocus) {
+        return false
+      }
+      // 键盘事件的 code
+      const keyCode = e.which || e.keyCode
+      // ctrl 键是否按下
+      const isCtrlDown = e.ctrlKey ? e.ctrlKey : keyCode === 17
+      // ctrl + c
+      if (keyCode === 67 && isCtrlDown) {
+        this.copyCpt(this.currentCpt)
+      }
+      const key = e.key
+      if (['ArrowDown', 'Arrow', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+        e.preventDefault()
+      }
+      let speed = 1
+      if (e.shiftKey) {
+        speed = 5
+      }
+      let idx = 0
+      switch (key) {
+        // 方向键移动当前组件
+        case 'ArrowDown':
+          this.currentCpt.cptY += speed
+          break
+        case 'ArrowUp':
+          this.currentCpt.cptY -= speed
+          break
+        case 'ArrowLeft':
+          this.currentCpt.cptX -= speed
+          break
+        case 'ArrowRight':
+          this.currentCpt.cptX += speed
+          break
+        // 删除键(delete) 和 退回键(back space) 触发删除组件
+        // 避免有输入框聚焦时影响输入，此处判断是否存在聚焦中的输入框
+        case 'Delete':
+          if (!isIptElFocus) {
+            idx = this.cacheComponents.findIndex(c => c.id === this.currentCpt.id)
+            this.delCpt(this.currentCpt, idx)
+          }
+          break
+        case 'Backspace':
+          if (!isIptElFocus) {
+            idx = this.cacheComponents.findIndex(c => c.id === this.currentCpt.id)
+            this.delCpt(this.currentCpt, idx)
+          }
+          break
       }
     },
     initContainerSize() {
       this.$store.dispatch('bigScreen/initContainerSize')
     },
-
+    // 转义符号转换
+    transCoding(str) {
+      return str.replace(/(&lt;|&gt;)/g, a => {
+        return {
+          '&lt;': '<',
+          '&gt;': '>'
+        }[a]
+      })
+    },
     // 加载数据
-    loadData() {
-      this.$message.warning('加载中')
-      // todo 缓存模拟 有无id 来判断是新建还是编辑
-      const cacheStr = localStorage.getItem('designCache')
-      // 模拟有id，读取数据进行编辑
-      if (cacheStr) {
-        const data = JSON.parse(cacheStr)
-        const cptList = data.components
-        this.$store.dispatch('bigScreen/initBigScreenData', data)
-        this.$store.dispatch('bigScreen/initComponentList', cptList)
-        this.$message.info('加载完毕')
+    async loadData() {
+      let cacheStr = ''
+      this.$modal.loading('加载中')
+      // 获取大屏 id
+      this.bigscreenId = this.$route.params.pageId
+      // 获取大屏数据
+      const res = await BigscreenApi.getBigscreenDetail(this.bigscreenId)
+      this.$modal.closeLoading()
+      if (res.code === 200) {
+        // 结果需要通过 base64 解码
+        cacheStr = Base64.decode(res.data.screenConf)
       } else {
-        // 模拟无 id，初始化数据进行新建
-        localStorage.setItem('designCache', JSON.stringify(this.$store.state.bigScreen.bigScreenData))
-        this.$message.info('初始化画布已完成')
+        this.$message.info(res.msg)
       }
+      // ? 转换箭头函数符号,测试没问题可以弃用
+      cacheStr = this.transCoding(cacheStr)
+      // 解析 json 字符串
+      const data = JSON.parse(cacheStr)
+      const cptList = data.components
+      this.$store.dispatch('bigScreen/initViewBigScreenData', data)
+      this.$store.dispatch('bigScreen/initBigScreenData', data)
+      this.$store.dispatch('bigScreen/initComponentList', cptList)
+      // 全局注册组件引用
+      this.$nextTick(() => {
+        this.designData.components.forEach(c => {
+          const id = c.id
+          const ref = this.$refs[id][0]
+          this.$store.commit('bigScreen/ADD_BIG_SCREEN_CPT_REF', { id, ref })
+        })
+      })
+      this.designData.components.forEach(cpt => {
+        if (cpt.configProps.cptDataForm) {
+          // if (!cpt.configProps.cptDataForm.reqParams) {
+          //   console.warn(cpt.layerName + '未设置参数')
+          //   return
+          // }
+          const id = cpt.id
+          const params = JSON.parse(cpt.configProps.cptDataForm.reqParams || '{}')
+          this.$store.dispatch('bigScreen/changeReqParams', { id, params })
+        }
+      })
+      this.$modal.closeLoading()
       this.initContainerSize()
     },
 
     // 复制组件
     copyCpt(item) {
-      const copyItem = JSON.parse(JSON.stringify(item))
-      copyItem.cptX = item.cptX + 30 // 复制的组件向右下偏移
-      copyItem.cptY = item.cptY + 30
-      copyItem.cptZ = this.cacheComponents.length + 1
-      copyItem.id = require('uuid').v1()
-      this.$store.dispatch('bigScreen/addCpt', copyItem)
+      const copyCpt = JSON.parse(JSON.stringify(item))
+      copyCpt.id = require('uuid').v1()
+      // 复制出的组件坐标需有所偏移，与源组件有所区分，以便能清楚感知
+      copyCpt.cptX = item.cptX + 30
+      copyCpt.cptY = item.cptY + 30
+      copyCpt.cptZ = this.cacheComponents.length + 1
+      this.$store.dispatch('bigScreen/addCpt', copyCpt)
+      this.$nextTick(() => {
+        this.$store.commit('bigScreen/ADD_BIG_SCREEN_CPT_REF', { id: copyCpt.id, ref: this.$refs[copyCpt.id][0] })
+      })
       // todo 根据类型提示
       // 聚焦到复制的组件
       this.$store.dispatch('bigScreen/setCurComponentIndex', this.cacheComponents.length - 1)
-      this.$message.success(`${item.cptTitle} 组件复制成功！`)
+      this.$store.dispatch('bigScreen/setCurComponent', copyCpt)
+      // 将复制的组件添加到已选组件列表
+      this.clearMultipleCpts()
+      this.setMultipleCpt({}, copyCpt)
+      this.$message.closeAll()
+      this.$modal.msgSuccess(`${item.cptTitle} 组件复制成功！`)
     },
     refreshCptData(refName) {
-      // const refName = this.currentCpt.componentName + this.currentCptIndex
-      if (!this.$refs[refName][0].refreshCptData) {
-        this.$message.warning('当前图层还未实现 refreshCptData 方法')
+      const cptRef = this.cptRefs.get(refName)
+      if (!cptRef.refreshCptData) {
+        this.$message.info('当前图层还未实现 refreshCptData 方法')
       } else {
         // 刷新子组件数据，ref 引用为组件名加 index
-        this.$refs[refName][0].refreshCptData()
+        cptRef.refreshCptData()
       }
     },
     outBlur() {
@@ -515,7 +603,8 @@ export default {
       this.$confirm('删除' + cpt.cptTitle + '组件?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
+        customClass: 'big-screen-confirm-dialog'
       })
         .then(() => {
           // 记录一个bug，v-for key值重复导致页面渲染数据错乱。在丢下组件时实用uuid作为key解决。
@@ -537,63 +626,79 @@ export default {
         // 聚焦 用于多选移动
         this.$refs['div' + item.componentName + index][0].focus()
       }
-      this.$refs.configPane.showCptConfig(item)
+      this.$refs['configPane'].showCptConfig(item)
     },
-    dragStart(copyDom) {
-      // 从组件栏拿起组件
-      this.copyDom = copyDom
-      copyDom.draggable = false
+    dragStart(curDragCpt) {
+      // 拖拽开始,及从左侧组件列表拖起组件时
+      this.curDragCpt = curDragCpt
+      curDragCpt.draggable = false
     },
-    allowDrop(e) {
+    dropOver(e) {
       e.preventDefault()
     },
-    drop(e) {
-      // 从组件栏丢下组件
-      const config = JSON.parse(this.copyDom.getAttribute('config'))
+    handleDrop(e) {
+      const config = JSON.parse(this.curDragCpt.dataset.config)
       this.$store.commit('bigScreen/ADD_HISTORY_USED_CPT', config)
       if (config.props.cptDataForm) {
         // 将静态数据、api、sql用三个字段存储，配置项未填写apiUrl字段和sql字段在此处赋默认值
         if (!config.props.cptDataForm.apiUrl) {
-          config.props.cptDataForm.apiUrl = '/design/test'
+          config.props.cptDataForm.apiUrl = '/sc/test'
         }
         if (!config.props.cptDataForm.sql) {
-          config.props.cptDataForm.sql = 'SELECT username FROM sys_user'
+          config.props.cptDataForm.sql = '-- 请在此输入用来查询数据的 sql 语句\n'
         }
         // 初始化数据/图表处理函数
         if (!config.props.cptDataForm.convertData) {
           config.props.cptDataForm.convertData =
-            '(data) => {\n  // data 为图表需要的显示数据，如果数据源为接口请求，则 data 为接口返回数据\n  return data; \n};'
+            '(data) => {\n  // data 为图表需要的显示数据，如果数据源为接口请求，则 data 为接口返回数据\n  return data;\n};'
         }
         if (!config.props.cptDataForm.convertChart) {
           config.props.cptDataForm.convertChart =
             '(option) => {\n  // option 为图表需要的样式数据，更多详情可查看 https://echarts.apache.org/zh/option.html\n  return option;\n};'
         }
       }
+      // meta 没设置默认宽高则在此处设置
+      // 宽
+      const w = config.width || 400
+      // 高
+      const h = config.height || 300
+      // 生成 id
+      const id = require('uuid').v1()
+      const animation = {
+        name: '',
+        delay: 'animate__delay-0s',
+        speed: 'animate__slow',
+        repeat: 'animate__repeat-1'
+      }
       const cpt = {
+        id,
         cptTitle: config.name,
         layerName: config.name,
         icon: config.icon,
         hidden: false,
+        opacity: config.opacity || 1,
         componentName: config.componentName,
         setterName: config.setterName ? config.setterName : config.componentName + '-setter',
-        configProps: config.props,
-        cptX: Math.round(e.offsetX),
-        cptY: Math.round(e.offsetY),
+        configProps: { ...config.props, ...{ animation } },
+        // 将鼠标 drop 处设置为组件中心
+        cptX: Math.round(e.offsetX) - w / 2,
+        cptY: Math.round(e.offsetY) - h / 2,
         cptZ: this.cacheComponents.length + 1,
+        cptWidth: w,
+        cptHeight: h,
         rotateX: 0,
         rotateY: 0,
-        rotateZ: 0,
-        // meta 没设置默认宽高则在此处设置默认值
-        cptWidth: config.width ? config.width : 400,
-        cptHeight: config.height ? config.height : 300,
-        id: require('uuid').v1()
+        rotateZ: 0
       }
       this.$store.dispatch('bigScreen/addCpt', cpt)
+      this.$nextTick(() => {
+        this.$store.commit('bigScreen/ADD_BIG_SCREEN_CPT_REF', { id, ref: this.$refs[id][0] })
+      })
       // 多选清空
       this.clearMultipleCpts()
       // 丢下组件后刷新组件属性栏,并选中 push 进的最新一个组件
       this.showConfigPane({}, cpt, this.cacheComponents.length - 1)
-      this.$refs.configPane.showCptConfig()
+      this.$refs['configPane'].showCptConfig()
     },
     // 设置多选组件
     setMultipleCpt(e, cpt) {
@@ -628,7 +733,6 @@ export default {
 .bigscreen-designer {
   // 设计区
   .design-area {
-    display: flex;
     // 左侧组件列表/图层
     .left-pane {
       height: 100%;
@@ -644,6 +748,8 @@ export default {
         // margin: 0 10px;
         background-size: 100% 100%;
         transform-origin: 0 0;
+        // 修复窗口大小变化导致的底部白条问题，暂时注释动画效果
+        // transition: all .4s;
         .cpt-div {
           position: absolute;
           outline: none;
@@ -708,13 +814,50 @@ export default {
           user-select: none;
           opacity: 0.5;
           .no-cpt-tip-img {
-            width: 30%;
+            font-size: 500px;
           }
           .no-cpt-tips {
             color: #fff;
             // background: #2d333f;
           }
         }
+      }
+      // 滚动条样式
+      // ::-webkit-scrollbar-track-piece 内层轨道，滚动条中间部分（除去）
+      // ::-webkit-resizer 两个滚动条的交汇处上用于通过拖动调整元素大小的小控件
+
+      // 滚动条整体部分
+      // &::-webkit-scrollbar{
+      //     width:8px;
+      //     height:8px;
+      //     background-color: #61b6eb00;
+      // }
+
+      // 滚动条的轨道（里面装有Thumb）
+      // &::-webkit-scrollbar-track{
+      //     background: #21314700;
+      //     border-radius:2px;
+      // }
+
+      // 滚动条里面的小方块，能向上向下移动（或往左往右移动，取决于是垂直滚动条还是水平滚动条）
+      &::-webkit-scrollbar-thumb {
+        background: #61b6eb15;
+        border-radius: 2px;
+      }
+
+      // 滚动条的轨道的两端按钮，允许通过点击微调小方块的位置
+      &::-webkit-scrollbar-button {
+        display: none;
+      }
+
+      //
+      // &::-webkit-scrollbar-thumb:hover{
+      //     background: #61b6eb27;
+      // }
+
+      // 边角，即两个滚动条的交汇处
+      &::-webkit-scrollbar-corner {
+        background: #ffffff00;
       }
     }
     // 右侧属性设置面板
@@ -781,6 +924,7 @@ export default {
             border-radius: 0 !important;
           }
           .el-slider__button-wrapper {
+            width: 10px;
             height: 32px;
             // 滑块
             .el-slider__button {

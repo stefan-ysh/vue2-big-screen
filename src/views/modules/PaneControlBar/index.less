@@ -1,0 +1,52 @@
+// 显示/隐藏左右面板的开关
+.hidden-pane-bar {
+  z-index: 2000;
+  position: absolute;
+  width: 20px;
+  top: 50%;
+  left: 0px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(-50%);
+  &-top,
+  &-bottom {
+    width: 5px;
+    height: 50px;
+    background: rgba(64, 64, 67, 1);
+    border-radius: 10px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: -3px;
+  }
+  &-top {
+    transform: rotate(0);
+  }
+  &-bottom {
+    transform: rotate(0);
+  }
+  &:hover {
+    .hidden-pane-bar-top-left,
+    .hidden-pane-bar-top-left-active,
+    .hidden-pane-bar-bottom-left,
+    .hidden-pane-bar-bottom-left-active,
+    .hidden-pane-bar-top-right,
+    .hidden-pane-bar-top-right-active,
+    .hidden-pane-bar-bottom-right,
+    .hidden-pane-bar-bottom-right-active {
+      background: rgb(155, 155, 165);
+    }
+    .hidden-pane-bar-top-left-active,
+    .hidden-pane-bar-bottom-left,
+    .hidden-pane-bar-top-right,
+    .hidden-pane-bar-bottom-right-active {
+      transform: rotate(10deg);
+    }
+    .hidden-pane-bar-bottom-left-active,
+    .hidden-pane-bar-top-left,
+    .hidden-pane-bar-top-right-active,
+    .hidden-pane-bar-bottom-right {
+      transform: rotate(-10deg);
+    }
+  }
+}

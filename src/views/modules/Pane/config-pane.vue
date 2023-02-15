@@ -29,7 +29,7 @@
       </el-tab-pane>
       <el-tab-pane label="动画" name="animation">
         <span slot="label"><i class="el-icon-star-off" /> 动画</span>
-        <!-- <AnimationConfig  v-if="currentCpt && currentCpt.configProps" /> -->
+        <AnimationConfig v-if="currentCpt && currentCpt.configProps" />
       </el-tab-pane>
       <el-tab-pane v-if="currentCpt.configProps && currentCpt.configProps.interaction" label="交互" name="interaction">
         <span slot="label"><i class="el-icon-connection" /> 交互</span>
@@ -51,12 +51,12 @@ import BaseConfig from '../BasicConfig'
 import BigScreenConfig from '../BigscreenConfig'
 import CptDataConfig from '../CptDataConfig'
 import InteractionConfig from '../InteractionConfig'
-// import AnimationConfig from '../AnimationConfig'
+import AnimationConfig from '../AnimationConfig'
 
 export default {
   name: 'ConfigPane',
   components: {
-    // AnimationConfig,
+    AnimationConfig,
     BaseConfig,
     BigScreenConfig,
     InteractionConfig,
