@@ -398,7 +398,7 @@ export default {
       // 读取文件内容
       reader.readAsText(importedFile)
       // 文件加载
-      reader.onload = function() {
+      reader.onload = function () {
         // todo 文件合法性校验待完善
         const fileJson = JSON.parse(reader.result)
         fileJson.id = that.designData.id
@@ -409,13 +409,15 @@ export default {
         that.$message.success(`文件 ${fileName} 导入成功!`)
       }
       // 读取错误
-      reader.onerror = function() {
+      reader.onerror = function () {
         that.$message.success(`文件 ${fileName} 读取失败，请检查后重试`)
       }
       this.$refs.refFile.value = ''
     },
     // 保存数据
     saveDesignData() {
+      const cacheData = Base64.encode(JSON.stringify(this.designData))
+      localStorage.setItem('viewData', cacheData)
       // this.designData.components.map((c) => {
       //   // ? 兼容旧版本大屏数据没有动画参数的
       //   if (!c.configProps.animation) {
@@ -427,15 +429,7 @@ export default {
       //     }
       //   }
       // })
-      this.$modal.loading('保存中，请稍后...')
-      // 组合保存页面数据
-      // const bc = {
-      //   id: this.bigscreenId,
-      //   appId: this.appId,
-      //   publish: 1,
-      //   formName: this.designData.title,
-      //   screenConf: Base64.encode(JSON.stringify(this.designData))
-      // }
+      // this.$modal.loading('保存中，请稍后...')
       // 保存大屏数据
       // BigscreenApi.saveBigscreen(bc)
       //   .then((res) => {

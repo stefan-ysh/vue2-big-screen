@@ -123,7 +123,7 @@ import Toolbar from '../modules/Toolbar'
 import RightPaneControlBar from '../modules/PaneControlBar/right-bar'
 import LeftPaneControlBar from '../modules/PaneControlBar/left-bar'
 import SketchRuler from '../modules/SketchRuler'
-import * as BigscreenApi from '@/api'
+// import * as BigscreenApi from '@/api'
 import { Base64 } from 'js-base64'
 export default {
   name: 'BigScreenDesigner',
@@ -505,37 +505,33 @@ export default {
     initContainerSize() {
       this.$store.dispatch('bigScreen/initContainerSize')
     },
-    // 转义符号转换
-    transCoding(str) {
-      return str.replace(/(&lt;|&gt;)/g, a => {
-        return {
-          '&lt;': '<',
-          '&gt;': '>'
-        }[a]
-      })
-    },
+
     // 加载数据
     async loadData() {
-      let cacheStr = ''
       this.$modal.loading('加载中')
-      // 获取大屏 id
-      this.bigscreenId = this.$route.params.pageId
-      // 获取大屏数据
-      const res = await BigscreenApi.getBigscreenDetail(this.bigscreenId)
-      this.$modal.closeLoading()
-      if (res.code === 200) {
-        // 结果需要通过 base64 解码
-        cacheStr = Base64.decode(res.data.screenConf)
-      } else {
-        this.$message.info(res.msg)
+      let bigscreenData = ''
+      const initData = {
+        id: '',
+        title: '测试大屏',
+        screenWidth: 1920,
+        screenHeight: 1080,
+        bgColor: '#040f22',
+        description: '',
+        bgImg: '',
+        isPublic: true,
+        password: '',
+        components: []
       }
-      // ? 转换箭头函数符号,测试没问题可以弃用
-      cacheStr = this.transCoding(cacheStr)
-      // 解析 json 字符串
-      const data = JSON.parse(cacheStr)
-      const cptList = data.components
-      this.$store.dispatch('bigScreen/initViewBigScreenData', data)
-      this.$store.dispatch('bigScreen/initBigScreenData', data)
+      const cacheData = localStorage.getItem('viewData')
+      if (cacheData) {
+        bigscreenData = JSON.parse(Base64.decode(cacheData))
+      } else {
+        bigscreenData = initData
+      }
+
+      const cptList = bigscreenData.components
+      this.$store.dispatch('bigScreen/initViewBigScreenData', bigscreenData)
+      this.$store.dispatch('bigScreen/initBigScreenData', bigscreenData)
       this.$store.dispatch('bigScreen/initComponentList', cptList)
       // 全局注册组件引用
       this.$nextTick(() => {
