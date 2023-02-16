@@ -11,7 +11,6 @@ import '@/assets/style/reset.css'
 import './utils/RegisterMap'
 import rightContext from './utils/rightMenu'
 import '@/assets/icon'
-import './assets/icons'
 // 注册大屏设计器相关组件
 import bigScreenCpt from '@/components/register/index.js'
 import * as echarts from 'echarts'

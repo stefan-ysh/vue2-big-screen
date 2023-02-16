@@ -1,4 +1,5 @@
 // import '../assets/style/animation.scss'
+import '@/assets/style/element-ui-reset.less'
 export default {
   install(Vue, options) {
     // 1.读取lib文件夹下的文件

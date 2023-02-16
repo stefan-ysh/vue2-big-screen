@@ -6,4 +6,5 @@ import BSvgIcon from '@/components/BSvgIcon'
 Vue.component('BSvgIcon', BSvgIcon)
 const req = require.context('./svg', false, /\.svg$/)
 const requireAll = requireContext => requireContext.keys().map(requireContext)
+console.log(requireAll)
 requireAll(req)
