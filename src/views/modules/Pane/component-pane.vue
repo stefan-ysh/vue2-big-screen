@@ -507,7 +507,7 @@ export default {
     }
   }
   .cpt-title {
-    font-size: 0.5rem;
+    font-size: 10px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
