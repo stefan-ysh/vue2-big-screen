@@ -183,10 +183,11 @@ const designMutations = {
     // 图层滚动至图层容器中心可视区
     const el = document.querySelector('#layer' + cpt.id)
     setTimeout(() => {
-      el.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      })
+      el &&
+        el.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        })
     }, 0)
     state.curComponent = cpt
   },
@@ -212,26 +213,21 @@ const designGetters = {
     if (state.canvasBgStyle === 'lattice') {
       return {
         'background-color': '#18181c',
-        'height': state.windowHeight - 45 + 'px',
-        'display': 'flex',
+        height: state.windowHeight - 45 + 'px',
+        display: 'flex',
         'background-image': `linear-gradient(#18181c 14px,transparent 0),linear-gradient(90deg,transparent 14px,#86909c 0)`,
         'background-size': `15px 15px`
       }
     } else {
       // 竖线  竖线背景 横线 横线背景
       return {
-        'height': state.windowHeight - 45 + 'px',
-        'display': 'flex',
-        'background': 'linear-gradient(-90deg, #545d63 1px, transparent 0px) 0px 0px / 20px 20px, linear-gradient(0deg, #545d63 1px, #18181c 0px) 0px 0px / 20px 20px'
+        height: state.windowHeight - 45 + 'px',
+        display: 'flex',
+        background:
+          'linear-gradient(-90deg, #545d63 1px, transparent 0px) 0px 0px / 20px 20px, linear-gradient(0deg, #545d63 1px, #18181c 0px) 0px 0px / 20px 20px'
       }
     }
   }
 }
 
-export {
-  designState,
-  designActions,
-  designMutations,
-  designGetters
-}
-
+export { designState, designActions, designMutations, designGetters }
