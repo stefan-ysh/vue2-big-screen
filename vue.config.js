@@ -52,14 +52,11 @@ module.exports = {
   },
   chainWebpack(config) {
     // 大屏图标
+    config.module.rule('svg').exclude.add(resolve('src/assets/icon')).end()
     config.module
-      .rule('svg')
-      .exclude.add(resolve('src/assets/icons'))
-      .end()
-    config.module
-      .rule('icons')
+      .rule('icon')
       .test(/\.svg$/)
-      .include.add(resolve('src/assets/icons'))
+      .include.add(resolve('src/assets/icon'))
       .end()
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
