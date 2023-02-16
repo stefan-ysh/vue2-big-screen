@@ -398,7 +398,7 @@ export default {
       // 读取文件内容
       reader.readAsText(importedFile)
       // 文件加载
-      reader.onload = function () {
+      reader.onload = function() {
         // todo 文件合法性校验待完善
         const fileJson = JSON.parse(reader.result)
         fileJson.id = that.designData.id
@@ -409,7 +409,7 @@ export default {
         that.$message.success(`文件 ${fileName} 导入成功!`)
       }
       // 读取错误
-      reader.onerror = function () {
+      reader.onerror = function() {
         that.$message.success(`文件 ${fileName} 读取失败，请检查后重试`)
       }
       this.$refs.refFile.value = ''
