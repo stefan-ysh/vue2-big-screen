@@ -10,6 +10,7 @@
   "dependencies": {
     "@jiaminghi/data-view": "^2.10.0",
     "@vue/composition-api": "^1.7.1",
+    "animate.css": "^4.1.1",
     "core-js": "^3.8.3",
     "dayjs": "1.11.5",
     "echarts": "4.9.0",

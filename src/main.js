@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import plugins from './plugins' // plugins
+// 引入动画
+import 'animate.css/animate.min.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/style/reset.css'
 import './utils/RegisterMap'
