@@ -1,37 +1,42 @@
 <template>
   <div class="custom-form" :style="{ height: windowHeight - 140 + 'px' }">
-    <el-form size="mini" label-position="top">
+    <el-form size="mini" label-position="top" @submit.native.prevent="refreshCptData(refName)">
       <el-form-item>
         <el-row>
           <el-col :span="8"> 数据类型 </el-col>
-          <el-col :span="16">
+          <el-col :span="16" style="padding: 8px 0 0 0">
             <el-radio-group
               v-model="currentCpt.configProps.cptDataForm.dataSource"
+              style="display: flex; flex-direction: column"
               size="mini"
               @change="changeDataSource"
             >
-              <el-radio-button :label="1">静态</el-radio-button>
-              <el-radio-button :label="2">接口</el-radio-button>
-              <el-radio-button :label="3">sql</el-radio-button>
+              <el-radio
+                v-for="radio in dataSourceRadios"
+                :key="radio.value"
+                style="margin-bottom: 10px"
+                :label="radio.value"
+                >{{ radio.label }}</el-radio
+              >
             </el-radio-group>
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item
-        v-show="currentCpt.configProps.cptDataForm.dataSource !== 1"
-      >
+      <el-row v-show="currentCpt.configProps.cptDataForm.dataSource === 4">
+        <el-col :span="8"> 接口地址 </el-col>
+        <el-col :span="16">
+          <el-input v-model="currentCpt.configProps.cptDataForm.socketUrl" type="textarea" :rows="3" />
+        </el-col>
+      </el-row>
+      <el-form-item v-show="![1, 4].includes(currentCpt.configProps.cptDataForm.dataSource)">
         <el-row>
           <el-col :span="8"> 轮询 </el-col>
           <el-col :span="16">
-            <el-switch
-              v-model="dataPollEnable"
-              active-text="开启"
-              inactive-text="关闭"
-            />
+            <el-switch v-model="dataPollEnable" />
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item v-show="dataPollEnable">
+      <el-form-item v-show="dataPollEnable && ![1, 4].includes(currentCpt.configProps.cptDataForm.dataSource)">
         <el-row>
           <el-col :span="8"> 轮询时间(s) </el-col>
           <el-col :span="16">
@@ -46,6 +51,25 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item v-show="currentCpt.configProps.cptDataForm.dataSource === 2">
+        <el-row>
+          <el-col :span="8"> 请求方式 </el-col>
+          <el-col :span="16">
+            <el-radio-group v-model="currentCpt.configProps.cptDataForm.reqType">
+              <el-radio label="GET" value="GET" />
+              <el-radio label="POST" value="POST" />
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item v-show="currentCpt.configProps.cptDataForm.dataSource === 2">
+        <el-row>
+          <el-col :span="8">请求参数</el-col>
+          <el-col :span="16">
+            <el-button @click="showCodeEditor('params')">编辑</el-button>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-form-item>
         <el-row v-if="currentCpt.configProps.cptDataForm.dataSource === 1">
           <el-col :span="8">数据值</el-col>
@@ -54,15 +78,9 @@
           </el-col>
         </el-row>
         <el-row v-show="currentCpt.configProps.cptDataForm.dataSource === 2">
-          <el-col :span="8">
-            {{ dataLabels[currentCpt.configProps.cptDataForm.dataSource - 1] }}
-          </el-col>
+          <el-col :span="8"> 接口地址 </el-col>
           <el-col :span="16">
-            <el-input
-              v-model="currentCpt.configProps.cptDataForm.apiUrl"
-              type="textarea"
-              :rows="3"
-            />
+            <el-input v-model="currentCpt.configProps.cptDataForm.apiUrl" type="textarea" :rows="3" />
           </el-col>
         </el-row>
         <el-row v-if="currentCpt.configProps.cptDataForm.dataSource === 3">
@@ -87,12 +105,35 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="primary"
-          style="width: 100%"
-          @click="refreshCptData(refName)"
-          >刷新数据</el-button
-        >
+        <el-row>
+          <el-col :span="8">加载动画</el-col>
+          <el-col :span="16">
+            <el-switch v-model="currentCpt.configProps.cptDataForm.loading" />
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item v-show="currentCpt.configProps.cptDataForm.loading">
+        <el-row>
+          <el-col :span="8">加载文字</el-col>
+          <el-col :span="16">
+            <el-input v-model="currentCpt.configProps.cptDataForm.loadingText" />
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item v-show="currentCpt.configProps.cptDataForm.loading">
+        <el-col :span="8">加载图标</el-col>
+        <el-col :span="16">
+          <el-input v-model="currentCpt.configProps.cptDataForm.loadingIcon" />
+        </el-col>
+      </el-form-item>
+      <el-form-item v-show="currentCpt.configProps.cptDataForm.loading">
+        <el-col :span="8">遮罩颜色</el-col>
+        <el-col :span="16">
+          <BColorPicker :data="currentCpt.configProps.cptDataForm" field="maskColor" show-alpha />
+        </el-col>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" style="width: 100%" @click="refreshCptData(refName)">刷新数据</el-button>
       </el-form-item>
     </el-form>
     <!-- 代码编辑器 -->
@@ -109,9 +150,11 @@
 
 <script>
 import BCodeMirror from '@/components/BCodeMirror.vue'
+import BColorPicker from '@/components/BColorPicker.vue'
 export default {
   name: 'CptDataConfig',
   components: {
+    BColorPicker,
     BCodeMirror
   },
   inject: ['refreshCptData'],
@@ -120,7 +163,24 @@ export default {
       codeVisible: false,
       codeMode: '',
       codeField: '',
-      dataLabels: ['数据', '接口地址', 'sql']
+      dataSourceRadios: [
+        {
+          value: 1,
+          label: '静态数据'
+        },
+        {
+          value: 2,
+          label: '动态数据'
+        },
+        {
+          value: 3,
+          label: 'sql'
+        },
+        {
+          value: 4,
+          label: 'WebSocket'
+        }
+      ]
     }
   },
   computed: {
@@ -128,7 +188,8 @@ export default {
       return this.$store.state.bigScreen.curComponentIndex
     },
     refName() {
-      return this.currentCpt.componentName + this.currentCptIndex
+      // return this.currentCpt.componentName + this.currentCptIndex
+      return this.currentCpt.id
     },
     windowHeight() {
       return this.$store.state.bigScreen.windowHeight
@@ -159,6 +220,12 @@ export default {
   },
   methods: {
     confirmEditCode(val) {
+      if (val === 'reqParams') {
+        // 修改传参时，需要同步更新当前组件的传参
+        const id = this.currentCpt.id
+        const params = JSON.parse(this.currentCpt.configProps.cptDataForm[this.codeField])
+        this.$store.dispatch('bigScreen/changeReqParams', { id, params })
+      }
       this.codeVisible = false
     },
     cancelEditCode(val) {
@@ -169,6 +236,11 @@ export default {
         case 'val':
           this.codeMode = 'json'
           this.codeField = 'dataText'
+          break
+
+        case 'params':
+          this.codeMode = 'json'
+          this.codeField = 'reqParams'
           break
 
         case 'sql':
