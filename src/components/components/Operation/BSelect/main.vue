@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      cptData: {},
+      cptData: [],
       uuid: null,
       defaultValue: ''
     }
@@ -54,6 +54,7 @@ export default {
     loadData() {
       getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
         this.cptData = res
+        this.handleParams(this.configProps.attribute.paramsList, true)
       })
     },
     changeCptHiddenStatus(id, hidden) {
@@ -77,14 +78,30 @@ export default {
         })
       }
     },
-    handleParams(paramsList) {
+    handleParams(paramsList, init) {
       paramsList.forEach((_p) => {
         _p.paramsCpt.forEach((id) => {
           const temVal = {}
-          if (_p.paramsSource === 'selectItemValue') {
-            temVal[_p.paramsName] = this.defaultValue
+          // 默认选中第一项
+          if (init && this.configProps.attribute.firstItemSelectedByDefault) {
+            this.defaultValue = this.cptData[0].value
+            if (_p.paramsSource === 'selectItemValue') {
+              temVal[_p.paramsName] = this.cptData[0].value
+            } else if (_p.paramsSource === 'selectItemLabel') {
+              temVal[_p.paramsName] = this.cptData[0].label
+            }
           } else {
-            temVal[_p.paramsName] = _p.paramsVal
+            if (_p.paramsSource === 'selectItemValue') {
+              temVal[_p.paramsName] = this.defaultValue
+            } else if (_p.paramsSource === 'selectItemLabel') {
+              const v = this.cptData.find(c => {
+                // eslint-disable-next-line eqeqeq
+                return c.value == this.defaultValue
+              })
+              if (v) temVal[_p.paramsName] = v.label
+            } else {
+              temVal[_p.paramsName] = _p.paramsVal
+            }
           }
           this.$store.dispatch('bigScreen/changeReqParams', {
             id,
