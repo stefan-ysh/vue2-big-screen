@@ -10,15 +10,17 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Index.vue')
+    component: () => import(/* webpackChunkName: "about" */ '@/views/Index.vue')
   },
   {
     path: '/design',
     name: 'BigScreenDesign',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/designer')
+    component: () => import(/* webpackChunkName: "about" */ '@/views/designer')
+  },
+  {
+    path: '/preview',
+    name: 'PreviewBigscreen',
+    component: () => import(/* webpackChunkName: "about" */ '@/views/preview')
   }
 ]
 

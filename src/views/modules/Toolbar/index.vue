@@ -483,9 +483,9 @@ export default {
       localStorage.setItem('designCache', Base64.encode(JSON.stringify(this.designData)))
       // 生成预览链接
       const routeUrl = this.$router.resolve({
-        name: 'BigScreenPreview',
+        name: 'PreviewBigscreen',
         params: {
-          pageId: this.bigscreenId
+          // pageId: this.bigscreenId
         },
         query: {
           mode: 'preview'
