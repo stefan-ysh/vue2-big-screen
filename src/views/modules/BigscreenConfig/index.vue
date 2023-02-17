@@ -12,7 +12,7 @@
           <el-row>
             <el-col :span="11">
               <el-input-number
-                v-model="designData.scaleX"
+                v-model="designData.screenWidth"
                 size="mini"
                 controls-position="right"
                 :min="640"
@@ -22,7 +22,7 @@
             <el-col :span="2" style="text-align: center; color: #fff"> x </el-col>
             <el-col :span="11">
               <el-input-number
-                v-model="designData.scaleY"
+                v-model="designData.screenHeight"
                 size="mini"
                 controls-position="right"
                 :min="320"
@@ -48,6 +48,28 @@
         <div v-else>
           <el-button class="select-bg-img" type="primary" size="mini" plain @click="showGallery">选择图片</el-button>
         </div>
+      </el-form-item>
+      <el-form-item label="适配方式">
+        <el-radio-group
+          v-model="designData.previewScaleType"
+          size="mini"
+          class="big-screen-radio-group scale-type-radio"
+        >
+          <el-tooltip class="item" effect="dark" content="强行拉伸填充，视图变形" placement="top-start">
+            <el-radio-button label="fill"> 填充 </el-radio-button>
+          </el-tooltip>
+          <!-- <el-tooltip class="item" effect="dark" content="自适应比例展示，页面会有留白" placement="top-start">
+            <el-radio-button label="fit">
+              <BSvgIcon icon-class="scale"  style="font-size:15px;" />
+            </el-radio-button>
+          </el-tooltip> -->
+          <el-tooltip class="item" effect="dark" content="x轴铺满, y轴自适应滚动" placement="top-start">
+            <el-radio-button label="scrollY"> x轴铺满 </el-radio-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="y轴铺满, x轴自适应滚动" placement="top-start">
+            <el-radio-button label="scrollX"> y轴铺满 </el-radio-button>
+          </el-tooltip>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="公开">
         <el-switch v-model="designData.isPublic" />
