@@ -2,19 +2,40 @@
 <template>
   <el-form label-width="100px" size="mini">
     <el-form-item label="边框粗细">
-      <el-input-number v-model="attribute.lineWidth" size="mini" style="width: 100%" controls-position="right" :min="1" :max="100" />
+      <el-input-number
+        v-model="attribute.lineWidth"
+        size="mini"
+        style="width: 100%"
+        controls-position="right"
+        :min="1"
+        :max="100"
+      />
     </el-form-item>
     <el-form-item label="半径">
-      <el-input-number v-model="attribute.radius" size="mini" style="width: 100%" controls-position="right" :min="1" :max="500" />
+      <el-input-number
+        v-model="attribute.radius"
+        size="mini"
+        style="width: 100%"
+        controls-position="right"
+        :min="1"
+        :max="500"
+      />
     </el-form-item>
     <el-form-item label="动态半径">
-      <el-input-number v-model="attribute.activeRadius" size="mini" style="width: 100%" controls-position="right" :min="1" :max="510" />
+      <el-input-number
+        v-model="attribute.activeRadius"
+        size="mini"
+        style="width: 100%"
+        controls-position="right"
+        :min="1"
+        :max="510"
+      />
     </el-form-item>
     <el-form-item label="显示百分比">
       <el-switch
         v-model="attribute.showOriginValue"
         size="mini"
-        style="width:100%"
+        style="width: 100%"
         active-text="数值"
         inactive-text="百分比"
       />

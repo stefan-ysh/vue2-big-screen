@@ -7,19 +7,11 @@
   >
     <div
       class="hidden-pane-bar-top"
-      :class="
-        cptPaneWidth === 200
-          ? 'hidden-pane-bar-top-left-active'
-          : 'hidden-pane-bar-top-left'
-      "
+      :class="cptPaneWidth === 200 ? 'hidden-pane-bar-top-left-active' : 'hidden-pane-bar-top-left'"
     />
     <div
       class="hidden-pane-bar-bottom"
-      :class="
-        cptPaneWidth === 200
-          ? 'hidden-pane-bar-bottom-left-active'
-          : 'hidden-pane-bar-bottom-left'
-      "
+      :class="cptPaneWidth === 200 ? 'hidden-pane-bar-bottom-left-active' : 'hidden-pane-bar-bottom-left'"
     />
   </div>
 </template>
@@ -51,5 +43,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import url("./index.less");
+@import url('./index.less');
 </style>

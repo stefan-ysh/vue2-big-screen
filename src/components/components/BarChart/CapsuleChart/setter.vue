@@ -15,28 +15,13 @@
         <BColorPicker :data="attribute" field="titleTextColor" show-alpha />
       </el-form-item>
       <el-form-item v-show="attribute.titleShow" label="标题大小">
-        <el-input-number
-          v-model="attribute.titleFontSize"
-          style="width: 100%"
-          controls-position="right"
-          size="mini"
-        />
+        <el-input-number v-model="attribute.titleFontSize" style="width: 100%" controls-position="right" size="mini" />
       </el-form-item>
       <el-form-item v-show="attribute.titleShow" label="标题位置(x)">
-        <el-input-number
-          v-model="attribute.titleLeft"
-          style="width: 100%"
-          controls-position="right"
-          size="mini"
-        />
+        <el-input-number v-model="attribute.titleLeft" style="width: 100%" controls-position="right" size="mini" />
       </el-form-item>
       <el-form-item v-show="attribute.titleShow" label="标题位置(y)">
-        <el-input-number
-          v-model="attribute.titleTop"
-          style="width: 100%"
-          controls-position="right"
-          size="mini"
-        />
+        <el-input-number v-model="attribute.titleTop" style="width: 100%" controls-position="right" size="mini" />
       </el-form-item>
 
       <el-form-item label="x轴">
@@ -59,11 +44,7 @@
           <BColorPicker :data="attribute" field="xLabelColor" show-alpha />
         </el-form-item>
         <el-form-item label="x轴字体大小">
-          <el-input-number
-            v-model="attribute.xLabelFontSize"
-            controls-position="right"
-            style="width: 100%"
-          />
+          <el-input-number v-model="attribute.xLabelFontSize" controls-position="right" style="width: 100%" />
         </el-form-item>
         <el-form-item label="x轴字体倾斜">
           <el-slider v-model="attribute.xFontRotate" :min="-180" :max="180" />
@@ -89,11 +70,7 @@
           <BColorPicker :data="attribute" field="yLabelColor" show-alpha />
         </el-form-item>
         <el-form-item label="y轴字体大小">
-          <el-input-number
-            v-model="attribute.yLabelFontSize"
-            controls-position="right"
-            style="width: 100%"
-          />
+          <el-input-number v-model="attribute.yLabelFontSize" controls-position="right" style="width: 100%" />
         </el-form-item>
         <el-form-item label="y轴字体倾斜">
           <el-slider v-model="attribute.yFontRotate" :min="-180" :max="180" />

@@ -21,7 +21,7 @@
         'line-height': configProps.attribute.menuHeight + 'px',
         'text-align': configProps.attribute.textAlign,
         'font-weight': configProps.attribute.fontWeight,
-        'font-size': configProps.attribute.fontSize + 'px',
+        'font-size': configProps.attribute.fontSize + 'px'
       }"
     >
       <!-- <i class="el-icon-setting"></i> -->
@@ -66,7 +66,7 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         this.cptData = res
         this.handleParams(this.configProps.attribute.paramsList, true)
       })
@@ -87,8 +87,8 @@ export default {
       } else {
         // 组件显隐交互
         // 只显示与当前 tab 绑定的组件，其他 tab 的组件隐藏
-        this.configProps.attribute.eventList.forEach((_e) => {
-          _e.cpt.forEach((cId) => {
+        this.configProps.attribute.eventList.forEach(_e => {
+          _e.cpt.forEach(cId => {
             const hidden = curMenu !== _e.tab
             this.changeCptHiddenStatus(cId, hidden)
           })
@@ -96,8 +96,8 @@ export default {
       }
     },
     handleParams(paramsList, init) {
-      paramsList.forEach((_p) => {
-        _p.paramsCpt.forEach((id) => {
+      paramsList.forEach(_p => {
+        _p.paramsCpt.forEach(id => {
           const temVal = {}
           // 默认选中第一项
           if (init && this.configProps.attribute.firstItemSelectedByDefault) {

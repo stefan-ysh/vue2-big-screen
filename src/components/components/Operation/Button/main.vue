@@ -1,12 +1,12 @@
 <template>
   <div style="height: 100%">
     <button
-      style="width: 100%; height: 100%; border: none;cursor: pointer;"
+      style="width: 100%; height: 100%; border: none; cursor: pointer"
       :style="{
         background: configProps.attribute.bgColor,
         color: configProps.attribute.textColor,
         'font-size': configProps.attribute.fontSize + 'px',
-        borderRadius: configProps.attribute.radius + 'px',
+        borderRadius: configProps.attribute.radius + 'px'
       }"
       @click="handleClickEvent"
     >
@@ -41,7 +41,7 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         this.cptData = res
       })
     },

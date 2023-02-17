@@ -26,7 +26,7 @@ export default {
       handler(newObj) {
         this.loadChart(newObj)
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
     width() {
       this.chart.resize()
@@ -56,9 +56,9 @@ export default {
       const that = this
       const series = []
       let xData = []
-      this.cptData.forEach((c) => {
+      this.cptData.forEach(c => {
         if (xData.length === 0) {
-          xData = (c.xData.split(','))
+          xData = c.xData.split(',')
         }
         series.push({
           data: c.yData.split(','),
@@ -97,7 +97,10 @@ export default {
           subtextStyle: { fontSize: 12, color: attribute.subtextColor }
         },
         grid: {
-          x: 10, y: 30, x2: 10, y2: 10,
+          x: 10,
+          y: 30,
+          x2: 10,
+          y2: 10,
           containLabel: true
         },
         xAxis: {
@@ -113,7 +116,8 @@ export default {
               color: attribute.xLineColor
             }
           },
-          axisTick: { // x轴刻度线
+          axisTick: {
+            // x轴刻度线
             show: attribute.xTickShow
           }
         },
@@ -129,10 +133,12 @@ export default {
               color: attribute.yLineColor
             }
           },
-          axisTick: { // y轴刻度线
+          axisTick: {
+            // y轴刻度线
             show: attribute.yTickShow
           },
-          splitLine: { // 网格线
+          splitLine: {
+            // 网格线
             show: attribute.yGridLineShow
           }
         },
@@ -156,6 +162,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

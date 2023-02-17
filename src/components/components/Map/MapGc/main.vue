@@ -1,4 +1,3 @@
-
 <template>
   <div :id="uuid" :style="{ width: '100%', height: '100%' }" />
 </template>
@@ -48,7 +47,7 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         this.cptData = res
         this.loadChart(this.configProps.attribute)
       })

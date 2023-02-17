@@ -7,7 +7,10 @@ export default {
   height: 50,
   props: {
     cptDataForm: {
-      dataText: JSON.stringify([{ value: '2022-08', label: '8月' }, { value: '2022-09', label: '9月' }]),
+      dataText: JSON.stringify([
+        { value: '2022-08', label: '8月' },
+        { value: '2022-09', label: '9月' }
+      ]),
       dataSource: 1,
       pollTime: 0
     },

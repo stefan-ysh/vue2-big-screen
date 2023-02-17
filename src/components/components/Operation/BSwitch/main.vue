@@ -53,7 +53,7 @@ export default {
     // width: 100% !important;
     // height: 100%;
     // border-radius: 50%;
-    &::after{
+    &::after {
       width: auto;
       height: 100%;
       aspect-ratio: 1/1;

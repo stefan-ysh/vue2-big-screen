@@ -37,14 +37,7 @@ export default {
         { name: 'Marketing' }
       ]),
       axisNameFontSize: 18,
-      pieColor: [
-        '#91cc75',
-        '#fac858',
-        '#ee6666',
-        '#73c0de',
-        '#5470c6',
-        '#ff8c71'
-      ]
+      pieColor: ['#91cc75', '#fac858', '#ee6666', '#73c0de', '#5470c6', '#ff8c71']
     },
     cptDataForm: {
       dataText:
@@ -54,4 +47,3 @@ export default {
     }
   }
 }
-

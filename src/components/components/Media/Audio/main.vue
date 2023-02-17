@@ -4,19 +4,15 @@
       class="el-icon-view"
       :style="{
         color: configProps.attribute.color,
-        'font-size': configProps.attribute.fontSize + 'px',
+        'font-size': configProps.attribute.fontSize + 'px'
       }"
     />
     <audio :autoplay="autoplay" :loop="configProps.attribute.isLoop">
       <source
         :src="
-          require(`@/assets/audio/${
-            configProps.attribute.audioSrc
-              ? configProps.attribute.audioSrc
-              : 'Bottle'
-          }.ogg`)
+          require(`@/assets/audio/${configProps.attribute.audioSrc ? configProps.attribute.audioSrc : 'Bottle'}.ogg`)
         "
-      >
+      />
       您的浏览器不支持 audio 元素。
     </audio>
   </div>

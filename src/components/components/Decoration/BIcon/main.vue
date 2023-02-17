@@ -5,7 +5,7 @@
       height: height + 'px',
       color: configProps.attribute.color,
       background: configProps.attribute.background,
-      'font-size': configProps.attribute.iconSize + 'px',
+      'font-size': configProps.attribute.iconSize + 'px'
     }"
     :class="configProps.attribute.iconType"
   />

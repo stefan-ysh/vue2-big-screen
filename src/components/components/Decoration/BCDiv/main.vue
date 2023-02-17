@@ -31,8 +31,7 @@ export default {
           'border-left-style': newVal.attribute.borderLeftStyle,
           'border-left-width': newVal.attribute.borderLeftWidth + 'px',
           'border-top-right-radius': newVal.attribute.topRightRadius + 'px',
-          'border-bottom-right-radius':
-            newVal.attribute.bottomRightRadius + 'px',
+          'border-bottom-right-radius': newVal.attribute.bottomRightRadius + 'px',
           'border-top-left-radius': newVal.attribute.topLeftRadius + 'px',
           'border-bottom-left-radius': newVal.attribute.bottomLeftRadius + 'px',
           background: newVal.attribute.bgColor

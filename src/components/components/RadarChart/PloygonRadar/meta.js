@@ -46,21 +46,13 @@ export default {
       axisNameColor: 18,
       // 坐标数值
       axisLabelVisible: false,
-      pieColor: [
-        '#91cc75',
-        '#fac858',
-        '#ee6666',
-        '#73c0de',
-        '#5470c6',
-        '#ff8c71'
-      ]
+      pieColor: ['#91cc75', '#fac858', '#ee6666', '#73c0de', '#5470c6', '#ff8c71']
     },
     cptDataForm: {
       dataText:
-      '[{"value":[144,122,233,211,134,231],"name":"Allocated Budget"},{"value":[432,234,123,213,233,231],"name":"Actual Spending"}]',
+        '[{"value":[144,122,233,211,134,231],"name":"Allocated Budget"},{"value":[432,234,123,213,233,231],"name":"Actual Spending"}]',
       dataSource: 1,
       pollTime: 0
     }
   }
 }
-

@@ -13,20 +13,15 @@
       v-if="configProps.attribute.thead"
       style="background-color: #001a59"
       :style="{
-        backgroundImage:
-          'linear-gradient(' + configProps.attribute.theadBg.toString() + ')',
+        backgroundImage: 'linear-gradient(' + configProps.attribute.theadBg.toString() + ')',
         height: configProps.attribute.theadHeight + 'px',
         color: configProps.attribute.theadColor,
-        fontSize: configProps.attribute.theadSize + 'px',
+        fontSize: configProps.attribute.theadSize + 'px'
       }"
     >
       <tr>
         <td v-if="configProps.attribute.showIndex">序号</td>
-        <td
-          v-for="column in configProps.attribute.columns"
-          :key="column.colKey"
-          :ref="column.colKey"
-        >
+        <td v-for="column in configProps.attribute.columns" :key="column.colKey" :ref="column.colKey">
           {{ column.title }}
         </td>
       </tr>
@@ -40,19 +35,12 @@
           width: width + 'px',
           height: rowHeight + 'px',
           marginTop: index * rowHeight + 'px',
-          backgroundColor:
-            temp.rowNum % 2 === 0
-              ? configProps.attribute.oddRowBg
-              : configProps.attribute.evenRowBg,
+          backgroundColor: temp.rowNum % 2 === 0 ? configProps.attribute.oddRowBg : configProps.attribute.evenRowBg,
           color: configProps.attribute.tbodyColor,
-          fontSize: configProps.attribute.tbodySize + 'px',
+          fontSize: configProps.attribute.tbodySize + 'px'
         }"
       >
-        <td
-          v-if="configProps.attribute.showIndex"
-          style="width: 60px"
-          :style="{ lineHeight: rowHeight + 'px' }"
-        >
+        <td v-if="configProps.attribute.showIndex" style="width: 60px" :style="{ lineHeight: rowHeight + 'px' }">
           {{ temp.rowNum + 1 }}
         </td>
         <td
@@ -72,12 +60,8 @@
             <img
               v-if="column.type === 'img'"
               style="width: 60px; height: 60px"
-              :src="
-                temp[column.colKey].indexOf('http') === 0
-                  ? temp[column.colKey]
-                  : uploadUrl + temp[column.colKey]
-              "
-            >
+              :src="temp[column.colKey].indexOf('http') === 0 ? temp[column.colKey] : uploadUrl + temp[column.colKey]"
+            />
             <span v-else>{{ temp[column.colKey] }}</span>
           </div>
         </td>
@@ -169,15 +153,13 @@ export default {
       if (!this.configProps.attribute.thead) {
         this.rowHeight = this.height / this.showLine
       } else {
-        this.rowHeight =
-          (this.height - this.configProps.attribute.theadHeight) /
-          this.showLine
+        this.rowHeight = (this.height - this.configProps.attribute.theadHeight) / this.showLine
       }
     },
     computeColWidth() {
       const that = this
       that.colWidths = {}
-      this.configProps.attribute.columns.forEach((item) => {
+      this.configProps.attribute.columns.forEach(item => {
         this.$nextTick(() => {
           that.colWidths[item.colKey] = that.$refs[item.colKey][0].clientWidth
         })
@@ -187,7 +169,7 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         const parse = res
         for (let i = 0; i < parse.length; i++) {
           parse[i].rowNum = i

@@ -9,8 +9,7 @@ export default {
     cptDataForm: {
       dataSource: 1,
       pollTime: 0,
-      dataText:
-        '[{"value":100,"label":"小明"},{"value":68,"label":"小兰"},{"value":96,"label":"小红"}]'
+      dataText: '[{"value":100,"label":"小明"},{"value":68,"label":"小兰"},{"value":96,"label":"小红"}]'
     },
     attribute: {
       olBgColor: '#ffffff00',

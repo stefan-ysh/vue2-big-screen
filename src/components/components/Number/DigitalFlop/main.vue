@@ -27,7 +27,7 @@ export default {
       handler() {
         this.loadData()
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
     width() {
       this.loadData()
@@ -57,6 +57,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

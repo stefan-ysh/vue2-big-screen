@@ -7,8 +7,7 @@ export default {
     cptDataForm: {
       dataSource: 1,
       pollTime: 0,
-      dataText:
-        '{"xData":"Mon,Tue,Wed,Thu,Fri,Sat,Sun","yData":"120,200,150,80,70,110,130"}'
+      dataText: '{"xData":"Mon,Tue,Wed,Thu,Fri,Sat,Sun","yData":"120,200,150,80,70,110,130"}'
     },
     attribute: {
       title: '一天用电量分布',

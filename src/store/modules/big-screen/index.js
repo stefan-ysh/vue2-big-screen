@@ -1,27 +1,12 @@
 // 大屏设计器状态存储
 
 // 公用
-import {
-  commonState,
-  commonActions,
-  commonMutations,
-  commonGetters
-} from './common'
+import { commonState, commonActions, commonMutations, commonGetters } from './common'
 // 设计时
-import {
-  designState,
-  designActions,
-  designMutations,
-  designGetters
-} from './design'
+import { designState, designActions, designMutations, designGetters } from './design'
 
 // 预览时/运行时
-import {
-  previewState,
-  previewActions,
-  previewMutations,
-  previewGetters
-} from './preview'
+import { previewState, previewActions, previewMutations, previewGetters } from './preview'
 
 const state = {
   ...commonState,
@@ -37,7 +22,6 @@ const mutations = {
   ...commonMutations,
   ...designMutations,
   ...previewMutations
-
 }
 const getters = {
   ...commonGetters,

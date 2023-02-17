@@ -1,9 +1,5 @@
 <template>
-  <dv-water-level-pond
-    :key="refreshFlagKey"
-    :config="config"
-    :style="{ width: width + 'px', height: height + 'px' }"
-  />
+  <dv-water-level-pond :key="refreshFlagKey" :config="config" :style="{ width: width + 'px', height: height + 'px' }" />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
@@ -59,7 +55,7 @@ export default {
       this.refreshFlagKey = require('uuid').v1()
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         const tempVal = JSON.parse(JSON.stringify(this.configProps.attribute))
         tempVal.colors = [tempVal.topColor, tempVal.bottomColor]
         this.config = tempVal

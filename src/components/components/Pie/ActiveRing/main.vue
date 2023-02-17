@@ -27,7 +27,7 @@ export default {
       handler() {
         this.loadData()
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
     width() {
       this.refreshFlagKey = require('uuid').v1()
@@ -55,6 +55,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

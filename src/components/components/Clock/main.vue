@@ -1,9 +1,9 @@
 <template>
-  <div style="width: 100%;height: 100%;overflow: hidden;">
+  <div style="width: 100%; height: 100%; overflow: hidden">
     <div
       :id="uuid"
       class="clock"
-      :class="{'animation-class': configProps.attribute.animation}"
+      :class="{ 'animation-class': configProps.attribute.animation }"
       :style="{
         width: '100%',
         height: '100%',
@@ -19,7 +19,6 @@
       }"
     />
   </div>
-
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
@@ -45,7 +44,6 @@ export default {
   },
 
   methods: {
-
     showTime() {
       let format = this.configProps.attribute.format
 
@@ -75,12 +73,12 @@ export default {
 .animation-class {
   animation: move 4s linear infinite;
 }
-	@keyframes move {
-			0% {
-				transform: translateX(0);
-			}
-			100% {
-				transform: translateX(-100%);
-			}
-		}
+@keyframes move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
 </style>

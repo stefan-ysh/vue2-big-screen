@@ -1,5 +1,5 @@
 <template>
-  <dv-scroll-ranking-board :config="config" :style="{ width: width + 'px', height: height + 'px'}" />
+  <dv-scroll-ranking-board :config="config" :style="{ width: width + 'px', height: height + 'px' }" />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
@@ -26,7 +26,7 @@ export default {
       handler() {
         this.loadData()
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     }
   },
   created() {
@@ -47,6 +47,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

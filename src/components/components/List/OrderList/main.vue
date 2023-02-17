@@ -16,17 +16,12 @@
       v-for="(item, index) in cptData"
       :key="index"
       :style="{
-        background:
-          index % 2 !== 0
-            ? configProps.attribute.liEvenBgColor
-            : configProps.attribute.liOddBgColor,
-        ...style,
+        background: index % 2 !== 0 ? configProps.attribute.liEvenBgColor : configProps.attribute.liOddBgColor,
+        ...style
       }"
       :title="`${item.label}: ${item.value}`"
     >
-      <span v-if="configProps.attribute.showIndex">
-        {{ index + 1 }}.
-      </span>
+      <span v-if="configProps.attribute.showIndex"> {{ index + 1 }}. </span>
       <span :style="{ color: configProps.attribute.textColor }">
         {{ item.label }}
       </span>
@@ -91,7 +86,7 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         this.cptData = res
       })
     }
@@ -104,13 +99,13 @@ export default {
 ol::-webkit-scrollbar {
   width: 25px;
   height: 25px;
-  background-color: #ECECEC;
+  background-color: #ececec;
 }
 
 /*滚动条中间滑块*/
 ol::-webkit-scrollbar-thumb {
   border-radius: 0px;
-  background-color: rgba(163, 163, 163, .6);
+  background-color: rgba(163, 163, 163, 0.6);
 }
 
 /* 滚动条轨道 */
@@ -119,7 +114,7 @@ ol::-webkit-scrollbar-track:hover {
 }
 /* 外层轨道  与 ::-webkit-scrollbar 不同的是 ::-webkit-scrollbar-track 设置的是滑块滑动区域的样式。*/
 ol::-webkit-scrollbar-track {
-  background-color: #ECECEC;
+  background-color: #ececec;
 }
 
 /* 内层滚动槽 */
@@ -131,7 +126,7 @@ ol::-webkit-scrollbar-button:decrement:start {
   width: 20px;
   height: 20px;
   display: block;
-  background:rgba(236, 236, 236, 1);
+  background: rgba(236, 236, 236, 1);
 }
 
 /* // 滚动条的轨道的两端按钮，允许通过点击微调小方块的位置 */
@@ -139,6 +134,6 @@ ol::-webkit-scrollbar-button:increment:end {
   width: 20px;
   height: 20px;
   display: block;
-  background:rgba(236, 236, 236, 1);
+  background: rgba(236, 236, 236, 1);
 }
 </style>

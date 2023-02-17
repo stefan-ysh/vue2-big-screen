@@ -15,14 +15,7 @@ export default {
       radius: 80,
       activeRadius: 60,
       showOriginValue: false,
-      color: [
-        '#91cc75',
-        '#fac858',
-        '#ee6666',
-        '#73c0de',
-        '#5470c6',
-        '#ff8c71'
-      ]
+      color: ['#91cc75', '#fac858', '#ee6666', '#73c0de', '#5470c6', '#ff8c71']
     }
   }
 }

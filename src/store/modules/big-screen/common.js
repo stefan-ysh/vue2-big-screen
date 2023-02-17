@@ -2,9 +2,7 @@
 const commonState = {
   cptRefs: new Map()
 }
-const commonActions = {
-
-}
+const commonActions = {}
 const commonMutations = {
   ADD_BIG_SCREEN_CPT_REF(state, data) {
     const { id, ref } = data
@@ -16,16 +14,7 @@ const commonMutations = {
   CLEAR_BIG_SCREEN_CPT_REF(state) {
     state.cptRefs.clear()
   }
-
 }
-const commonGetters = {
+const commonGetters = {}
 
-}
-
-export {
-  commonState,
-  commonActions,
-  commonMutations,
-  commonGetters
-}
-
+export { commonState, commonActions, commonMutations, commonGetters }

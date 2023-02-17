@@ -1,9 +1,9 @@
 <template>
-  <div :style="{ width:width + 'px', height: height + 'px' }">
+  <div :style="{ width: width + 'px', height: height + 'px' }">
     <div
       v-if="configProps.attribute.showSortButton && cptData.length > 0"
       :style="{
-        'z-index':9999,
+        'z-index': 9999,
         position: 'absolute',
         left: configProps.attribute.sortBtnLeft + 'px',
         top: configProps.attribute.sortBtnTop + 'px'
@@ -63,10 +63,10 @@ export default {
     const that = this
     this.chart = this.$echarts.init(document.getElementById(this.uuid))
     this.refreshCptData()
-    this.chart.on('click', (params) => {
+    this.chart.on('click', params => {
       debugger
     })
-    that.chart.on('legendselectchanged', (params) => {
+    that.chart.on('legendselectchanged', params => {
       that.activeLegends = params.selected
       that.loadChart(that.configProps.attribute)
     })
@@ -86,30 +86,30 @@ export default {
       const result = this._.cloneDeep(this.cptData)
       if (!result) return
       if (this.configProps.attribute.showSortButton) {
-        result.forEach((s) => {
+        result.forEach(s => {
           let num = 0
           for (const k in s) {
             if (this.activeLegends && !this.activeLegends[k]) {
               delete s.k
             } else if (!['name'].includes(k)) {
-              num += (s[k] * 1)
+              num += s[k] * 1
             }
           }
           s['__total'] = num
         })
         result.sort((a, b) => {
           if (this.sortType === 'desc') {
-          // 降序
+            // 降序
             return b.__total - a.__total
           } else {
-          // 升序
+            // 升序
             return a.__total - b.__total
           }
         })
       }
       const xAxisLabels = []
       const obj = {}
-      result.forEach((d) => {
+      result.forEach(d => {
         // eslint-disable-next-line no-unused-vars
         const { name, __total, ...vals } = d
         xAxisLabels.push({
@@ -173,7 +173,7 @@ export default {
           trigger: 'axis',
           // 坐标轴指示器，坐标轴触发有效
           axisPointer: {
-          // 默认为直线，可选为：'line' | 'shadow'
+            // 默认为直线，可选为：'line' | 'shadow'
             type: 'shadow'
           },
           confine: true,
@@ -197,7 +197,9 @@ export default {
           show: attribute.xAxisShow,
           type: 'category',
           // type: attribute.barDirection === 'horizontal' ? 'value' : 'category',
-          data: result.xAxisLabels.map(c => { return c.name }),
+          data: result.xAxisLabels.map(c => {
+            return c.name
+          }),
           axisLabel: {
             color: attribute.xLabelColor,
             rotate: attribute.xFontRotate,
@@ -280,6 +282,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

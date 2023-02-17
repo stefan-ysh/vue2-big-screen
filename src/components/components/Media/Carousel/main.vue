@@ -1,7 +1,5 @@
 <template>
-  <div
-    style="width: 100%; height: 100%; text-align: center"
-  >
+  <div style="width: 100%; height: 100%; text-align: center">
     <el-carousel
       :type="configProps.attribute.carouseltype"
       :autoplay="configProps.attribute.autoplay"

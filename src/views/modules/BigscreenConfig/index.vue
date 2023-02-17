@@ -1,20 +1,11 @@
 <template>
   <div class="custom-form" :style="{ height: windowHeight - 130 + 'px' }">
-    <el-form
-      class="big-screen-config-form"
-      :model="designData"
-      label-width="70px"
-      size="mini"
-    >
+    <el-form class="big-screen-config-form" :model="designData" label-width="70px" size="mini">
       <el-form-item label="大屏名称">
         <el-input v-model="designData.title" size="mini" autocomplete="off" />
       </el-form-item>
       <el-form-item label="大屏简介">
-        <el-input
-          v-model="designData.description"
-          size="mini"
-          type="textarea"
-        />
+        <el-input v-model="designData.description" size="mini" type="textarea" />
       </el-form-item>
       <el-form-item label="大屏尺寸">
         <div>
@@ -28,9 +19,7 @@
                 :max="10240"
                 style="width: 100%"
             /></el-col>
-            <el-col :span="2" style="text-align: center; color: #fff">
-              x
-            </el-col>
+            <el-col :span="2" style="text-align: center; color: #fff"> x </el-col>
             <el-col :span="11">
               <el-input-number
                 v-model="designData.scaleY"
@@ -54,21 +43,10 @@
               title="更改背景图片"
               @click.stop="handleChangePic"
             /> -->
-          <i
-            class="del-bg-img-btn el-icon-delete"
-            title="删除背景图片"
-            @click.stop="handleRemoveBgImg"
-          />
+          <i class="del-bg-img-btn el-icon-delete" title="删除背景图片" @click.stop="handleRemoveBgImg" />
         </div>
         <div v-else>
-          <el-button
-            class="select-bg-img"
-            type="primary"
-            size="mini"
-            plain
-            @click="showGallery"
-            >选择图片</el-button
-          >
+          <el-button class="select-bg-img" type="primary" size="mini" plain @click="showGallery">选择图片</el-button>
         </div>
       </el-form-item>
       <el-form-item label="公开">

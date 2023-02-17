@@ -40,14 +40,6 @@ const previewMutations = {
     }
   }
 }
-const previewGetters = {
+const previewGetters = {}
 
-}
-
-export {
-  previewState,
-  previewActions,
-  previewMutations,
-  previewGetters
-}
-
+export { previewState, previewActions, previewMutations, previewGetters }

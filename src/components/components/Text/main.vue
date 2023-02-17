@@ -1,8 +1,5 @@
 <template>
-  <div
-    :style="convertStyle(configProps.attribute)"
-    @click="redirect"
-  >
+  <div :style="convertStyle(configProps.attribute)" @click="redirect">
     {{ cptData.value }}
   </div>
 </template>
@@ -58,7 +55,7 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         this.cptData = res
       })
     },

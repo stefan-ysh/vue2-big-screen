@@ -6,13 +6,7 @@
         <el-input v-model="attribute.unit" />
       </el-form-item>
       <el-form-item label="显示行数">
-        <el-input-number
-          v-model="attribute.rowNum"
-          controls-position="right"
-          style="width: 100%"
-          :min="1"
-          :max="60"
-        />
+        <el-input-number v-model="attribute.rowNum" controls-position="right" style="width: 100%" :min="1" :max="60" />
       </el-form-item>
       <el-form-item label="时间间隔(ms)">
         <el-input-number

@@ -3,16 +3,10 @@
   <div>
     <el-form labelWidth="100px" size="mini">
       <el-form-item label="显示序号">
-        <el-switch
-          v-model="attribute.showIndex"
-          size="mini"
-        />
+        <el-switch v-model="attribute.showIndex" size="mini" />
       </el-form-item>
       <el-form-item label="显示表头">
-        <el-switch
-          v-model="attribute.thead"
-          size="mini"
-        />
+        <el-switch v-model="attribute.thead" size="mini" />
       </el-form-item>
       <el-form-item v-show="attribute.thead" label="表头高度">
         <el-input-number
@@ -69,29 +63,14 @@
       </el-form-item>
       <el-form-item label="表格字体">
         <el-select v-model="attribute.tbodyFontFamily" popper-class="big-screen-select">
-          <el-option
-            v-for="(item, index) in textFamilyList"
-            :key="index + item"
-            :label="item"
-            :value="item"
-          />
+          <el-option v-for="(item, index) in textFamilyList" :key="index + item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
       <el-form-item label="奇数行背景">
-        <BColorPicker
-          :data="attribute"
-          field="oddRowBg"
-          size="mini"
-          show-alpha
-        />
+        <BColorPicker :data="attribute" field="oddRowBg" size="mini" show-alpha />
       </el-form-item>
       <el-form-item label="偶数行背景">
-        <BColorPicker
-          :data="attribute"
-          field="evenRowBg"
-          size="mini"
-          show-alpha
-        />
+        <BColorPicker :data="attribute" field="evenRowBg" size="mini" show-alpha />
       </el-form-item>
       <el-form-item label="显示行数">
         <el-input-number
@@ -115,29 +94,15 @@
       </el-form-item>
 
       <div style="text-indent: 1em">
-        表格列设置：<el-button
-          size="mini"
-          theme="primary"
-          @click="addCol"
-        >新增列</el-button>
+        表格列设置：<el-button size="mini" theme="primary" @click="addCol">新增列</el-button>
       </div>
-      <el-table
-        style="font-size: 12px; margin-top: 10px"
-        size="mini"
-        :data="attribute.columns"
-        @row-click="editRow"
-      >
+      <el-table style="font-size: 12px; margin-top: 10px" size="mini" :data="attribute.columns" @row-click="editRow">
         <el-table-column label="标识" prop="colKey" />
         <el-table-column label="名称" prop="title" />
         <el-table-column label="宽度" prop="width" />
       </el-table>
     </el-form>
-    <el-dialog
-      :title="currentRow.id ? '编辑' : '添加'"
-      :visible.sync="modelShow"
-      :append-to-body="true"
-      width="400px"
-    >
+    <el-dialog :title="currentRow.id ? '编辑' : '添加'" :visible.sync="modelShow" :append-to-body="true" width="400px">
       <el-form labelWidth="100px" size="mini">
         <el-form-item label="字段标识">
           <el-input v-model="currentRow.colKey" />
@@ -189,7 +154,16 @@ export default {
       ],
       modelShow: false,
       currentIndex: 0,
-      textFamilyList: Object.freeze(['微软雅黑', '黑体', '宋体', '仿宋', '楷体', '华文宋体', '优设标题黑', 'SourceHanSans-Medium']),
+      textFamilyList: Object.freeze([
+        '微软雅黑',
+        '黑体',
+        '宋体',
+        '仿宋',
+        '楷体',
+        '华文宋体',
+        '优设标题黑',
+        'SourceHanSans-Medium'
+      ]),
       currentRow: {}
     }
   },

@@ -1,4 +1,3 @@
-
 <template>
   <div :id="uuid" :style="{ width: '100%', height: '100%' }" />
 </template>
@@ -51,7 +50,7 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         this.cptData = res
         this.loadChart(this.configProps.attribute)
       })
@@ -85,7 +84,9 @@ export default {
         },
         radar: {
           shape: attribute.shape,
-          indicator: this.cptData.map((d) => { return { name: d.name, color: '#D6E8FF' } }),
+          indicator: this.cptData.map(d => {
+            return { name: d.name, color: '#D6E8FF' }
+          }),
           // 设置雷达图中间射线的颜色
           axisLine: {
             lineStyle: {
@@ -110,10 +111,7 @@ export default {
           },
           splitNumber: attribute.splitNumber,
           axisNameGap: attribute.nameGap,
-          radius: [
-            attribute.radiusInside + '%',
-            attribute.radiusOutside + '%'
-          ],
+          radius: [attribute.radiusInside + '%', attribute.radiusOutside + '%'],
           // 坐标名字
           axisName: {
             fontSize: attribute.axisNameFontSize
@@ -139,7 +137,9 @@ export default {
             data: [
               {
                 name: attribute.chartTitle,
-                value: this.cptData.map(c => { return c.value })
+                value: this.cptData.map(c => {
+                  return c.value
+                })
               }
             ]
           }

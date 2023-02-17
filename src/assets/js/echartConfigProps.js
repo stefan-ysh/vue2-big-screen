@@ -2,10 +2,28 @@ export const props = {
   // 全图默认背景
   // backgroundColor: ‘rgba(0,0,0,0)’,
   // 默认色板
-  color: ['#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',
-    '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0',
-    '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#ffd700',
-    '#6699FF', '#ff6666', '#3cb371', '#b8860b', '#30e0e0'],
+  color: [
+    '#ff7f50',
+    '#87cefa',
+    '#da70d6',
+    '#32cd32',
+    '#6495ed',
+    '#ff69b4',
+    '#ba55d3',
+    '#cd5c5c',
+    '#ffa500',
+    '#40e0d0',
+    '#1e90ff',
+    '#ff6347',
+    '#7b68ee',
+    '#00fa9a',
+    '#ffd700',
+    '#6699FF',
+    '#ff6666',
+    '#3cb371',
+    '#b8860b',
+    '#30e0e0'
+  ],
 
   // 图表标题
   title: {
@@ -128,14 +146,17 @@ export const props = {
     borderWidth: 0, // 提示边框线宽，单位px，默认为0（无边框）
     padding: 5, // 提示内边距，单位px，默认各方向内边距为5，
     // 接受数组分别设定上右下左边距，同css
-    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+    axisPointer: {
+      // 坐标轴指示器，坐标轴触发有效
       type: 'line', // 默认为直线，可选为：'line' | 'shadow'
-      lineStyle: { // 直线指示器样式设置
+      lineStyle: {
+        // 直线指示器样式设置
         color: '#48b',
         width: 2,
         type: 'solid'
       },
-      shadowStyle: { // 阴影指示器样式设置
+      shadowStyle: {
+        // 阴影指示器样式设置
         width: 'auto', // 阴影大小
         color: 'rgba(150,150,150,0.3)' // 阴影颜色
       }
@@ -179,48 +200,58 @@ export const props = {
     position: 'bottom', // 位置
     nameLocation: 'end', // 坐标轴名字位置，支持'start' | 'end'
     boundaryGap: true, // 类目起始和结束两端空白策略
-    axisLine: { // 坐标轴线
+    axisLine: {
+      // 坐标轴线
       show: true, // 默认显示，属性show控制显示与否
-      lineStyle: { // 属性lineStyle控制线条样式
+      lineStyle: {
+        // 属性lineStyle控制线条样式
         color: '#48b',
         width: 2,
         type: 'solid'
       }
     },
-    axisTick: { // 坐标轴小标记
+    axisTick: {
+      // 坐标轴小标记
       show: true, // 属性show控制显示与否，默认不显示
       interval: 'auto',
       // onGap: null,
       inside: false, // 控制小标记是否在grid里
       length: 5, // 属性length控制线长
-      lineStyle: { // 属性lineStyle控制线条样式
+      lineStyle: {
+        // 属性lineStyle控制线条样式
         color: '#333',
         width: 1
       }
     },
-    axisLabel: { // 坐标轴文本标签，详见axis.axisLabel
+    axisLabel: {
+      // 坐标轴文本标签，详见axis.axisLabel
       show: true,
       interval: 'auto',
       rotate: 0,
       margin: 8,
       // formatter: null,
-      textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+      textStyle: {
+        // 其余属性默认使用全局文本样式，详见TEXTSTYLE
         color: '#333'
       }
     },
-    splitLine: { // 分隔线
+    splitLine: {
+      // 分隔线
       show: true, // 默认显示，属性show控制显示与否
       // onGap: null,
-      lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+      lineStyle: {
+        // 属性lineStyle（详见lineStyle）控制线条样式
         color: ['#ccc'],
         width: 1,
         type: 'solid'
       }
     },
-    splitArea: { // 分隔区域
+    splitArea: {
+      // 分隔区域
       show: false, // 默认不显示，属性show控制显示与否
       // onGap: null,
-      areaStyle: { // 属性areaStyle（详见areaStyle）控制区域样式
+      areaStyle: {
+        // 属性areaStyle（详见areaStyle）控制区域样式
         color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)']
       }
     }
@@ -233,43 +264,53 @@ export const props = {
     nameTextStyle: {}, // 坐标轴文字样式，默认取全局样式
     boundaryGap: [0, 0], // 数值起始和结束两端空白策略
     splitNumber: 5, // 分割段数，默认为5
-    axisLine: { // 坐标轴线
+    axisLine: {
+      // 坐标轴线
       show: true, // 默认显示，属性show控制显示与否
-      lineStyle: { // 属性lineStyle控制线条样式
+      lineStyle: {
+        // 属性lineStyle控制线条样式
         color: '#48b',
         width: 2,
         type: 'solid'
       }
     },
-    axisTick: { // 坐标轴小标记
+    axisTick: {
+      // 坐标轴小标记
       show: false, // 属性show控制显示与否，默认不显示
       inside: false, // 控制小标记是否在grid里
       length: 5, // 属性length控制线长
-      lineStyle: { // 属性lineStyle控制线条样式
+      lineStyle: {
+        // 属性lineStyle控制线条样式
         color: '#333',
         width: 1
       }
     },
-    axisLabel: { // 坐标轴文本标签，详见axis.axisLabel
+    axisLabel: {
+      // 坐标轴文本标签，详见axis.axisLabel
       show: true,
       rotate: 0,
       margin: 8,
       // formatter: null,
-      textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+      textStyle: {
+        // 其余属性默认使用全局文本样式，详见TEXTSTYLE
         color: '#333'
       }
     },
-    splitLine: { // 分隔线
+    splitLine: {
+      // 分隔线
       show: true, // 默认显示，属性show控制显示与否
-      lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+      lineStyle: {
+        // 属性lineStyle（详见lineStyle）控制线条样式
         color: ['#ccc'],
         width: 1,
         type: 'solid'
       }
     },
-    splitArea: { // 分隔区域
+    splitArea: {
+      // 分隔区域
       show: false, // 默认不显示，属性show控制显示与否
-      areaStyle: { // 属性areaStyle（详见areaStyle）控制区域样式
+      areaStyle: {
+        // 属性areaStyle（详见areaStyle）控制区域样式
         color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)']
       }
     }
@@ -282,21 +323,26 @@ export const props = {
     splitNumber: 5,
     name: {
       show: true,
-      textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+      textStyle: {
+        // 其余属性默认使用全局文本样式，详见TEXTSTYLE
         color: '#333'
       }
     },
-    axisLine: { // 坐标轴线
+    axisLine: {
+      // 坐标轴线
       show: true, // 默认显示，属性show控制显示与否
-      lineStyle: { // 属性lineStyle控制线条样式
+      lineStyle: {
+        // 属性lineStyle控制线条样式
         color: '#ccc',
         width: 1,
         type: 'solid'
       }
     },
-    axisLabel: { // 坐标轴文本标签，详见axis.axisLabel
+    axisLabel: {
+      // 坐标轴文本标签，详见axis.axisLabel
       show: false,
-      textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+      textStyle: {
+        // 其余属性默认使用全局文本样式，详见TEXTSTYLE
         color: '#333'
       }
     },
@@ -535,7 +581,8 @@ export const props = {
           }
         }
       },
-      emphasis: { // 也是选中样式
+      emphasis: {
+        // 也是选中样式
         // color: 各异,
         borderColor: 'rgba(0,0,0,0)',
         borderWidth: 1,
@@ -682,7 +729,8 @@ export const props = {
           show: false,
           // 可选为 'start'|'end'|'left'|'right'|'top'|'bottom'
           position: 'inside',
-          textStyle: { // 默认使用全局文本样式，详见TEXTSTYLE
+          textStyle: {
+            // 默认使用全局文本样式，详见TEXTSTYLE
             color: '#333'
           }
         },
@@ -719,8 +767,14 @@ export const props = {
 
   // 默认标志图形类型列表
   symbolList: [
-    'circle', 'rectangle', 'triangle', 'diamond',
-    'emptyCircle', 'emptyRectangle', 'emptyTriangle', 'emptyDiamond'
+    'circle',
+    'rectangle',
+    'triangle',
+    'diamond',
+    'emptyCircle',
+    'emptyRectangle',
+    'emptyTriangle',
+    'emptyDiamond'
   ],
   loadingText: 'Loading...',
   // 可计算特性配置，孤岛，提示颜色

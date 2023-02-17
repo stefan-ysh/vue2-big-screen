@@ -3,9 +3,10 @@
     :is="configProps.attribute.decorationType"
     v-if="isDataV"
     :key="refreshFlagKey"
-    :style="{ width: width + 'px', height: height + 'px', color: configProps.attribute.textColor}"
+    :style="{ width: width + 'px', height: height + 'px', color: configProps.attribute.textColor }"
     :color="[configProps.attribute.color1, configProps.attribute.color2]"
-  >{{ configProps.attribute.text }}</component>
+    >{{ configProps.attribute.text }}</component
+  >
   <div v-else :style="{ width }" class="custom-decoration" />
 </template>
 <!-- eslint-disable vue/require-default-prop -->
@@ -43,9 +44,9 @@ export default {
   watch: {
     configProps: {
       handler() {
-        this.refreshFlagKey = require('uuid').v1()// 强制刷新视图
+        this.refreshFlagKey = require('uuid').v1() // 强制刷新视图
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
     width() {
       this.refreshFlagKey = require('uuid').v1()
@@ -54,12 +55,12 @@ export default {
 }
 </script>
 
-<style scoped lang='less'>
+<style scoped lang="less">
 .custom-decoration {
   height: 100%;
-  box-shadow: inset 0px 0px 30px 1px #0E84DA;
+  box-shadow: inset 0px 0px 30px 1px #0e84da;
   border-radius: 0px 0px 0px 0px;
   opacity: 1;
-  border: 1px solid #1E93E2;
+  border: 1px solid #1e93e2;
 }
 </style>

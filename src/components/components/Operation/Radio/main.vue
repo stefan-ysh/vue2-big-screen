@@ -26,7 +26,11 @@
           :key="o.value"
           :border="configProps.attribute.border"
           :label="o.value"
-          :style="{ ...convertGap(configProps.attribute.flexDirection, configProps.attribute.gap), height: configProps.attribute.radioHeight + 'px', width: configProps.attribute.radioWidth + 'px' }"
+          :style="{
+            ...convertGap(configProps.attribute.flexDirection, configProps.attribute.gap),
+            height: configProps.attribute.radioHeight + 'px',
+            width: configProps.attribute.radioWidth + 'px'
+          }"
         >
           <span
             class="b-option-label"
@@ -51,11 +55,12 @@
           <span
             class="b-option-label"
             :style="{
-              'font-size': configProps.attribute.fontSize + 'px',
+              'font-size': configProps.attribute.fontSize + 'px'
             }"
           >
             {{ o.label }}
-          </span></el-radio>
+          </span></el-radio
+        >
       </template>
     </el-radio-group>
   </div>
@@ -105,7 +110,7 @@ export default {
     },
     // 加载数据
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         this.cptData = res
       })
     },
@@ -122,8 +127,8 @@ export default {
       } else {
         // 组件显隐交互
         // 只显示与当前 tab 绑定的组件，其他 tab 的组件隐藏
-        this.configProps.attribute.eventList.forEach((_e) => {
-          _e.cpt.forEach((cId) => {
+        this.configProps.attribute.eventList.forEach(_e => {
+          _e.cpt.forEach(cId => {
             const hidden = curTab !== _e.tab
             this.changeCptHiddenStatus(cId, hidden)
           })
@@ -132,7 +137,7 @@ export default {
     },
     handleParams(paramsList) {
       paramsList.forEach(_p => {
-        _p.paramsCpt.forEach((id) => {
+        _p.paramsCpt.forEach(id => {
           const temVal = {}
           if (_p.paramsSource === 'selectItemValue') {
             temVal[_p.paramsName] = this.radioValue

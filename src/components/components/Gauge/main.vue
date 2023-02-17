@@ -26,7 +26,7 @@ export default {
       handler(newObj) {
         this.loadChart(newObj)
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     },
     width() {
       this.chart.resize()
@@ -133,6 +133,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

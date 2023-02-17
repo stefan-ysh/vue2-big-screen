@@ -7,7 +7,7 @@
           :key="item"
           :style="{
             width: (1 / cptData.value.length) * 100 + '%',
-            padding: configProps.attribute.padding + 'px',
+            padding: configProps.attribute.padding + 'px'
           }"
         >
           <div
@@ -17,7 +17,7 @@
               backgroundColor: configProps.attribute.bgColor,
               borderColor: configProps.attribute.borderColor,
               fontSize: configProps.attribute.fontSize + 'px',
-              color: configProps.attribute.color,
+              color: configProps.attribute.color
             }"
           >
             {{ cptData.value.substr(item - 1, 1) }}
@@ -57,7 +57,7 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         this.cptData = res
       })
     }

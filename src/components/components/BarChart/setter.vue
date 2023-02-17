@@ -11,17 +11,9 @@
           <el-option label="象形柱状图" value="pictorialBar" />
         </el-select>
       </el-form-item>
-      <el-form-item
-        v-show="attribute.barType === 'pictorialBar'"
-        label="柱体样式"
-      >
+      <el-form-item v-show="attribute.barType === 'pictorialBar'" label="柱体样式">
         <el-select v-model="attribute.barPath" popper-class="big-screen-select">
-          <el-option
-            v-for="(item, index) in barPaths"
-            :key="index"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="(item, index) in barPaths" :key="index" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="柱体朝向">
@@ -34,20 +26,10 @@
         <el-input v-model="attribute.chartTitle" size="mini" />
       </el-form-item>
       <el-form-item label="标题位置(x)">
-        <el-input-number
-          v-model="attribute.titleLeft"
-          style="width: 100%"
-          controls-position="right"
-          size="mini"
-        />
+        <el-input-number v-model="attribute.titleLeft" style="width: 100%" controls-position="right" size="mini" />
       </el-form-item>
       <el-form-item label="标题位置(y)">
-        <el-input-number
-          v-model="attribute.titleTop"
-          style="width: 100%"
-          controls-position="right"
-          size="mini"
-        />
+        <el-input-number v-model="attribute.titleTop" style="width: 100%" controls-position="right" size="mini" />
       </el-form-item>
       <el-form-item label="标题颜色">
         <BColorPicker :data="attribute" field="titleTextColor" show-alpha />
@@ -121,13 +103,19 @@
         <el-input-number
           v-model="attribute.barBorderRadius"
           controls-position="right"
-          style="width:100%"
+          style="width: 100%"
           :min="0"
           :max="50"
         />
       </el-form-item>
       <el-form-item label="柱体宽度">
-        <el-input-number v-model="attribute.barWidth" controls-position="right" style="width:100%" :min="1" :max="100" />
+        <el-input-number
+          v-model="attribute.barWidth"
+          controls-position="right"
+          style="width: 100%"
+          :min="1"
+          :max="100"
+        />
       </el-form-item>
       <el-form-item label="数值显示">
         <el-switch v-model="attribute.barLabelShow" />
@@ -137,7 +125,7 @@
           <el-input-number
             v-model="attribute.barLabelSize"
             controls-position="right"
-            style="width:100%"
+            style="width: 100%"
             :min="2"
             :max="100"
           />
@@ -182,8 +170,7 @@ export default {
         { label: '直角三角形', value: 'path://m1,153l0,-152l146,152l-146,0z' },
         {
           label: '五角星',
-          value:
-            'path://M100,0 L41.22,180.90 L195.10,69.09 L4.89,69.09 L158.77,180.90 z'
+          value: 'path://M100,0 L41.22,180.90 L195.10,69.09 L4.89,69.09 L158.77,180.90 z'
         },
         {
           label: '南瓜头',
@@ -207,13 +194,11 @@ export default {
         },
         {
           label: '五边形2',
-          value:
-            'path://m0.75,72.94l98,-72.19l98,72.19l-37.43,116.81l-121.13,0l-37.43-116.81z'
+          value: 'path://m0.75,72.94l98,-72.19l98,72.19l-37.43,116.81l-121.13,0l-37.43-116.81z'
         },
         {
           label: '六边形',
-          value:
-            'path://m0.75,89.75l43.93,-89l117.14,0l43.93,89l-43.93,89l-117.14,0l-43.93,-89z'
+          value: 'path://m0.75,89.75l43.93,-89l117.14,0l43.93,89l-43.93,89l-117.14,0l-43.93,-89z'
         },
         {
           label: '八边形',
@@ -231,8 +216,7 @@ export default {
         },
         {
           label: '心形',
-          value:
-            'path://m67.25,28.9c27.42,-69.1 134.84,0 0,88.85c-134.84,-88.85 -27.42,-157.96 0,-88.85z'
+          value: 'path://m67.25,28.9c27.42,-69.1 134.84,0 0,88.85c-134.84,-88.85 -27.42,-157.96 0,-88.85z'
         },
         {
           label: '自行车',
@@ -266,8 +250,7 @@ export default {
         },
         {
           label: '垃圾箱',
-          value:
-            'path://M6 32h20l2-22h-24zM20 4v-4h-8v4h-10v6l2-2h24l2 2v-6h-10zM18 4h-4v-2h4v2z'
+          value: 'path://M6 32h20l2-22h-24zM20 4v-4h-8v4h-10v6l2-2h24l2 2v-6h-10zM18 4h-4v-2h4v2z'
         },
         {
           label: '闪电',
@@ -275,8 +258,7 @@ export default {
         },
         {
           label: '鹅毛笔',
-          value:
-            'path://M0 32c4-12 14.469-32 32-32-8.219 6.594-12 22-18 22s-6 0-6 0l-6 10h-2z'
+          value: 'path://M0 32c4-12 14.469-32 32-32-8.219 6.594-12 22-18 22s-6 0-6 0l-6 10h-2z'
         },
         {
           label: '音乐',
@@ -285,8 +267,7 @@ export default {
         },
         {
           label: '铁路',
-          value:
-            'path://M22 32h10l-8-32h-6l1 8h-6l1-8h-6l-8 32h10l1-8h10l1 8zM11.5 20l1-8h7l1 8h-9z'
+          value: 'path://M22 32h10l-8-32h-6l1 8h-6l1-8h-6l-8 32h10l1-8h10l1 8zM11.5 20l1-8h7l1 8h-9z'
         },
         {
           label: '沙漏',

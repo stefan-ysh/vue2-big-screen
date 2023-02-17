@@ -7,8 +7,7 @@ export default {
   height: 50,
   props: {
     cptDataForm: {
-      dataText:
-        '[{"value":"2021","label":"2021年"},{"value":"2022","label":"2022年" }]',
+      dataText: '[{"value":"2021","label":"2021年"},{"value":"2022","label":"2022年" }]',
       dataSource: 1,
       pollTime: 0
     },

@@ -5,9 +5,7 @@
         <el-row>
           <el-col :span="8"> 开启 </el-col>
           <el-col :span="16">
-            <el-switch
-              v-model="currentCpt.configProps.interaction.interactable"
-            />
+            <el-switch v-model="currentCpt.configProps.interaction.interactable" />
           </el-col>
         </el-row>
         <el-row v-if="currentCpt.configProps.interaction.interactable">
@@ -16,23 +14,13 @@
             <el-switch v-model="currentCpt.configProps.interaction.clickAble" />
           </el-col>
         </el-row>
-        <el-row
-          v-if="
-            currentCpt.configProps.interaction.interactable &&
-            currentCpt.configProps.interaction.clickAble
-          "
-        >
+        <el-row v-if="currentCpt.configProps.interaction.interactable && currentCpt.configProps.interaction.clickAble">
           <el-col :span="8"> 跳转链接 </el-col>
           <el-col :span="16">
             <el-input v-model="currentCpt.configProps.interaction.url" />
           </el-col>
         </el-row>
-        <el-row
-          v-if="
-            currentCpt.configProps.interaction.interactable &&
-            currentCpt.configProps.interaction.clickAble
-          "
-        >
+        <el-row v-if="currentCpt.configProps.interaction.interactable && currentCpt.configProps.interaction.clickAble">
           <el-col :span="8"> 携带参数 </el-col>
           <el-col :span="16">
             <el-input v-model="currentCpt.configProps.interaction.params" />

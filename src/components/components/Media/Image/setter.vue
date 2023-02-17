@@ -17,11 +17,7 @@
         /> -->
         <el-image
           style="width: 168px; height: 160px"
-          :src="
-            attribute.url
-              ? attribute.url
-              : require('@/assets/logo/logo.png')
-          "
+          :src="attribute.url ? attribute.url : require('@/assets/logo/logo.png')"
           fit="fill"
           @click="showGallery"
         />
@@ -33,11 +29,22 @@
       </el-form-item>
       <el-form-item v-if="attribute.rotatable" label="旋转时间(s)">
         <el-col>
-          <el-input-number v-model="attribute.rotateDuration" :min="0.1" :step="0.1" style="width: 100%" controls-position="right" />
+          <el-input-number
+            v-model="attribute.rotateDuration"
+            :min="0.1"
+            :step="0.1"
+            style="width: 100%"
+            controls-position="right"
+          />
         </el-col>
       </el-form-item>
       <el-form-item label="填充方式">
-        <el-select v-model="attribute.fit" placeholder="请选择填充方式" style="width:100%" popper-class="big-screen-select">
+        <el-select
+          v-model="attribute.fit"
+          placeholder="请选择填充方式"
+          style="width: 100%"
+          popper-class="big-screen-select"
+        >
           <el-option label="拉伸填充" value="fill" />
           <el-option label="比例缩放" value="contain" />
           <el-option label="封面比例" value="cover" />
@@ -46,7 +53,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="点击放大">
-        <el-switch v-model="attribute.preview" style="width:100%" :active-value="true" :inactive-value="false" />
+        <el-switch v-model="attribute.preview" style="width: 100%" :active-value="true" :inactive-value="false" />
       </el-form-item>
     </el-form>
     <BGallery ref="gallery" type="img" @confirmCheck="confirmCheck" />

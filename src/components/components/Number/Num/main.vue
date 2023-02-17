@@ -5,13 +5,10 @@
       :style="{
         color: configProps.attribute.numColor,
         fontSize: configProps.attribute.numSize + 'px',
-        lineHeight: configProps.attribute.numHeight + 'px',
+        lineHeight: configProps.attribute.numHeight + 'px'
       }"
     >
-      {{ cptData.value
-      }}<span style="font-size: 14px; color: #ccc">{{
-        cptData.unit ? cptData.unit : ""
-      }}</span>
+      {{ cptData.value }}<span style="font-size: 14px; color: #ccc">{{ cptData.unit ? cptData.unit : '' }}</span>
     </div>
     <div style="color: #ccc">{{ configProps.attribute.title }}</div>
   </div>
@@ -45,7 +42,7 @@ export default {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataJson(this.configProps.cptDataForm, this.cptId).then((res) => {
+      getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
         this.cptData = res
       })
     }

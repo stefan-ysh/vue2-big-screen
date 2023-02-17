@@ -3,7 +3,6 @@
     <!--    组件内部没有设置deep监听props，数据变更时，请生成新的props，不然组件将无法刷新状态-->
     <dv-scroll-board :key="refreshFlagKey" :config="config" :style="{ width: width + 'px', height: height + 'px' }" />
   </div>
-
 </template>
 <!-- eslint-disable vue/require-default-prop -->
 <script>
@@ -31,7 +30,7 @@ export default {
       handler() {
         this.loadData()
       },
-      deep: true// 深度监听
+      deep: true // 深度监听
     }
   },
   created() {
@@ -48,10 +47,10 @@ export default {
         const temp = JSON.parse(JSON.stringify(this.configProps.attribute))
         const columns = JSON.parse(temp.columns)
         temp.header = []
-        temp.columnWidth = []// 列宽
+        temp.columnWidth = [] // 列宽
         temp.data = []
         temp.waitTime *= 1000
-        temp.align = [temp.textAlign]// 对齐方式
+        temp.align = [temp.textAlign] // 对齐方式
         columns.forEach(item => {
           temp.header.push(item.title)
           if (item.width) {
@@ -74,6 +73,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

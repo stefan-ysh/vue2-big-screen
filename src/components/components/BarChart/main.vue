@@ -41,7 +41,7 @@ export default {
   mounted() {
     this.chart = this.$echarts.init(document.getElementById(this.uuid))
     this.refreshCptData()
-    this.chart.on('click', (params) => {
+    this.chart.on('click', params => {
       debugger
     })
   },
@@ -59,13 +59,11 @@ export default {
       const that = this
       let columnColor = attribute.barColor
       if (attribute.gradualColor) {
-        columnColor = new this.$echarts.graphic.LinearGradient(
-          0, 0, 0, 1,
-          [
-            { offset: 0, color: attribute.barColor1 },
-            { offset: 0.5, color: attribute.barColor2 },
-            { offset: 1, color: attribute.barColor3 }
-          ])
+        columnColor = new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: attribute.barColor1 },
+          { offset: 0.5, color: attribute.barColor2 },
+          { offset: 1, color: attribute.barColor3 }
+        ])
       }
       that.chartOption = {
         backgroundColor: attribute.backgroundColor,
@@ -82,12 +80,15 @@ export default {
           trigger: 'axis',
           // 坐标轴指示器，坐标轴触发有效
           axisPointer: {
-          // 默认为直线，可选为：'line' | 'shadow'
+            // 默认为直线，可选为：'line' | 'shadow'
             type: 'shadow'
           }
         },
         grid: {
-          x: 10, y: 30, x2: 10, y2: 10,
+          x: 10,
+          y: 30,
+          x2: 10,
+          y2: 10,
           containLabel: true
         },
         xAxis: {
@@ -131,26 +132,28 @@ export default {
             show: attribute.yGridLineShow
           }
         },
-        series: [{
-          data: this.cptData.yData.split(','),
-          type: attribute.barType, // pictorialBar || bar
-          showBackground: attribute.barBgShow,
-          symbol: attribute.barPath,
-          backgroundStyle: {
-            color: attribute.barBgColor
-          },
-          barWidth: attribute.barWidth,
-          itemStyle: {
-            borderRadius: attribute.barBorderRadius
-          },
-          label: {
-            // 开启显示
-            show: attribute.barLabelShow,
-            position: 'top',
-            color: attribute.barLabelColor,
-            fontSize: attribute.barLabelSize
+        series: [
+          {
+            data: this.cptData.yData.split(','),
+            type: attribute.barType, // pictorialBar || bar
+            showBackground: attribute.barBgShow,
+            symbol: attribute.barPath,
+            backgroundStyle: {
+              color: attribute.barBgColor
+            },
+            barWidth: attribute.barWidth,
+            itemStyle: {
+              borderRadius: attribute.barBorderRadius
+            },
+            label: {
+              // 开启显示
+              show: attribute.barLabelShow,
+              position: 'top',
+              color: attribute.barLabelColor,
+              fontSize: attribute.barLabelSize
+            }
           }
-        }]
+        ]
       }
       // 图表处理
       if (this.configProps.cptDataForm.convertChart) {
@@ -164,6 +167,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
