@@ -22,9 +22,25 @@
         </span>
         <el-row>
           <el-col :span="24">
-            <el-switch v-model="currentCpt.hidden" :active-value="true" :inactive-value="false" size="mini" />
+            <el-switch
+              v-model="currentCpt.hidden"
+              :active-value="true"
+              :inactive-value="false"
+              size="mini"
+              @change="changeHiddenStatus"
+            />
           </el-col>
         </el-row>
+      </el-form-item>
+      <el-form-item label="透明度">
+        <el-slider
+          v-model="currentCpt.opacity"
+          :disabled="currentCpt.hidden"
+          :min="-0"
+          :max="1"
+          :step="0.01"
+          @change="changeOpacity"
+        />
       </el-form-item>
       <el-form-item label="尺寸" class="mt5">
         <el-row>
@@ -32,8 +48,7 @@
             <el-input-number
               v-model="currentCpt.cptWidth"
               controls-position="right"
-              :min="20"
-              :max="2000"
+              :min="1"
               size="mini"
               style="width: 100%"
           /></el-col>
@@ -42,8 +57,7 @@
             <el-input-number
               v-model="currentCpt.cptHeight"
               controls-position="right"
-              :min="20"
-              :max="1500"
+              :min="1"
               size="mini"
               style="width: 100%"
           /></el-col>
@@ -115,19 +129,19 @@
         <el-row class="mb5">
           <el-col :span="4">x</el-col>
           <el-col :span="20">
-            <el-slider v-model="currentCpt.rotateX" size="mini" style="width: 100%" />
+            <el-slider v-model="currentCpt.rotateX" size="mini" :min="0" :max="360" style="width: 100%" />
           </el-col>
         </el-row>
         <el-row class="mb5">
           <el-col :span="4">y</el-col>
           <el-col :span="20">
-            <el-slider v-model="currentCpt.rotateY" size="mini" style="width: 100%" />
+            <el-slider v-model="currentCpt.rotateY" size="mini" :min="0" :max="360" style="width: 100%" />
           </el-col>
         </el-row>
         <el-row class="mb5">
           <el-col :span="4">z</el-col>
           <el-col :span="20">
-            <el-slider v-model="currentCpt.rotateZ" size="mini" style="width: 100%" />
+            <el-slider v-model="currentCpt.rotateZ" size="mini" :min="0" :max="360" style="width: 100%" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -156,6 +170,18 @@ export default {
 
     //   }
     // }
+  },
+  methods: {
+    // 改变透明度
+    changeOpacity(val) {
+      if (val === 0) {
+        this.currentCpt.hidden = true
+      }
+    },
+    // 改变显隐状态
+    changeHiddenStatus(val) {
+      this.currentCpt.opacity = !val * 1
+    }
   }
 }
 </script>
@@ -165,12 +191,5 @@ export default {
   padding: 10px;
   overflow-y: auto;
   background: #2b3340;
-  // .cur-cpt-title {
-  //   margin-bottom: 10px;
-  //   font-size: 12px;
-  //   &-content {
-  //     text-align: center;
-  //   }
-  // }
 }
 </style>
