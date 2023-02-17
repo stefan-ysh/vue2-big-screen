@@ -1,11 +1,14 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
   <div>
-    <el-form label-width="80px" size="mini">
-      <el-form-item label="开启默认值">
+    <el-form label-width="90px" size="mini">
+      <el-form-item label="默认选中首项">
+        <el-switch v-model="attribute.firstItemSelectedByDefault" />
+      </el-form-item>
+      <el-form-item v-show="!attribute.firstItemSelectedByDefault" label="开启默认值">
         <el-switch v-model="attribute.hasDefaultVal" />
       </el-form-item>
-      <el-form-item v-show="attribute.hasDefaultVal" label="默认值">
+      <el-form-item v-show="attribute.hasDefaultVal && !attribute.firstItemSelectedByDefault" label="默认值">
         <el-select v-model="attribute.defaultValue" popper-class="big-screen-select">
           <el-option v-for="tab in tabList" :key="tab.value" :label="tab.label" :value="tab.value" />
         </el-select>
@@ -91,6 +94,7 @@
           <el-col :span="6">
             <el-select v-model="p.paramsSource" size="mini" popper-class="big-screen-select">
               <el-option value="selectItemValue" label="选项值" />
+              <el-option value="selectItemLabel" label="选项名" />
               <el-option value="customValue" label="自定义" />
             </el-select>
           </el-col>
