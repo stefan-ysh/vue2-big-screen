@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
-import plugins from './plugins' // plugins
+import plugins from './plugins'
 // 引入动画
 import 'animate.css/animate.min.css'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -17,13 +17,20 @@ import * as echarts from 'echarts'
 import dataV from '@jiaminghi/data-view'
 Vue.use(rightContext)
 Vue.use(bigScreenCpt)
-Vue.prototype.$echarts = echarts
 Vue.use(dataV)
-Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(plugins)
-new Vue({
+
+Vue.prototype.$echarts = echarts
+Vue.config.productionTip = false
+
+const _vue = new Vue({
+  el: '#app',
+  beforeCreate() {
+    Vue.prototype.$bus = this
+  },
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+})
+export default _vue
