@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex; align-items: center; flex-direction: column; padding: 10px">
-    <h1 style="margin: 10px 0">大屏列表</h1>
+    <h1 style="margin: 10px 0">大屏00列表</h1>
     <el-table :data="bigscreenList" border style="width: 90%">
       <el-table-column prop="name" label="标题"> </el-table-column>
       <el-table-column prop="createTime" label="创建时间"> </el-table-column>
