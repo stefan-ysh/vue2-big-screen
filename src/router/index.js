@@ -13,21 +13,21 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '@/views/Index.vue')
   },
   {
-    path: '/vue2-big-screen/design',
+    path: '/design',
     name: 'BigScreenDesign',
     component: () => import(/* webpackChunkName: "about" */ '@/views/designer')
   },
   {
-    path: '/vue2-big-screen/preview',
+    path: '/preview',
     name: 'PreviewBigscreen',
     component: () => import(/* webpackChunkName: "about" */ '@/views/preview')
   }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   // base: process.env.BASE_URL,
-  base: '/vue2-big-screen',
+  // base: '/vue2-big-screen',
   routes
 })
 
