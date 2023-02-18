@@ -42,7 +42,7 @@ export default {
     this.chart = this.$echarts.init(document.getElementById(this.uuid))
     this.refreshCptData()
     this.chart.on('click', params => {
-      debugger
+      // debugger
     })
   },
   methods: {
