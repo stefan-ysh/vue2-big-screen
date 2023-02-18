@@ -3,7 +3,7 @@
     <el-row class="operation-area">
       <!-- 左侧 -->
       <el-col :span="4" class="operation-area-left">
-        <el-button type="text" @click="goBack">a回home</el-button>
+        <el-button size="mini" type="primary"  @click="goBack" icon="el-icon-house"></el-button>
       </el-col>
       <!-- 中间画布设置栏 -->
       <el-col :span="14" class="operation-area-center">
