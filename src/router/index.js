@@ -27,15 +27,8 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   // base: process.env.BASE_URL,
-  base: '/vue2-big-screen',
+  // base: '/vue2-big-screen',
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.length === 0) {
-    next('/404.html');
-  } else {
-    next();
-  }
-});
 export default router
