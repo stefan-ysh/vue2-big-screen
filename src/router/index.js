@@ -13,12 +13,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '@/views/Index.vue')
   },
   {
-    path: '/design',
+    path: '/vue2-big-screen/design',
     name: 'BigScreenDesign',
     component: () => import(/* webpackChunkName: "about" */ '@/views/designer')
   },
   {
-    path: '/preview',
+    path: '/vue2-big-screen/preview',
     name: 'PreviewBigscreen',
     component: () => import(/* webpackChunkName: "about" */ '@/views/preview')
   }
