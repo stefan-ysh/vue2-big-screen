@@ -800,7 +800,7 @@ export default {
           }
         }
         .no-cpt-placeholder {
-          font-size: 2rem;
+          font-size: 1rem;
           height: 100%;
           width: 100%;
           display: flex;
