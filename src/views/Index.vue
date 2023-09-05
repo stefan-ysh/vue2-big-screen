@@ -6,7 +6,7 @@
       <el-table-column prop="createTime" label="创建时间"> </el-table-column>
       <el-table-column prop="prop" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="editBigscreen(scope.row.id)" plain icon="el-icon-edit-outline" type="primary"
+          <el-button size="mini" plain icon="el-icon-edit-outline" type="primary" @click="editBigscreen(scope.row.id)"
             >编辑</el-button
           >
           <el-button
@@ -19,7 +19,7 @@
             <span v-show="isPublished(scope.row.isPublished)">取消</span>
             发布</el-button
           >
-          <el-button size="mini" @click="delBigscreen(scope.row.id)" icon="el-icon-delete" type="danger"
+          <el-button size="mini" icon="el-icon-delete" type="danger" @click="delBigscreen(scope.row.id)"
             >删除</el-button
           >
         </template>
