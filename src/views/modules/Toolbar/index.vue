@@ -600,9 +600,9 @@ export default {
         }
       }
       .big-screen-opetatin-btn {
-        width: 30px;
-        padding: 0 5px;
-        height: 30px;
+        width: 15px;
+        padding: 5px;
+        height: 15px;
         cursor: pointer;
         margin-left: 5px;
         transition: all 0.2s;
@@ -618,8 +618,8 @@ export default {
         }
       }
       .export-btn {
-        font-size: 30px;
-        padding: 0 5px;
+        font-size: 15px;
+        padding: 5px;
         // height: 100vh;
         margin-left: 5px;
         transition: all 0.2s;
