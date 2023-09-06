@@ -123,6 +123,7 @@ import Toolbar from '../modules/Toolbar'
 import RightPaneControlBar from '../modules/PaneControlBar/right-bar'
 import LeftPaneControlBar from '../modules/PaneControlBar/left-bar'
 import SketchRuler from '../modules/SketchRuler'
+import mockData from './mockData'
 // import * as BigscreenApi from '@/api'
 import { Base64 } from 'js-base64'
 export default {
@@ -510,23 +511,11 @@ export default {
     async loadData() {
       this.$modal.loading('加载中')
       let bigscreenData = ''
-      const initData = {
-        id: '',
-        title: '测试大屏',
-        screenWidth: 1920,
-        screenHeight: 1080,
-        bgColor: '#040f22',
-        description: '',
-        bgImg: '',
-        isPublic: true,
-        password: '',
-        components: []
-      }
       const cacheData = localStorage.getItem('viewData')
       if (cacheData) {
         bigscreenData = JSON.parse(Base64.decode(cacheData))
       } else {
-        bigscreenData = initData
+        bigscreenData = mockData
       }
 
       const cptList = bigscreenData.components
