@@ -35,3 +35,46 @@ npm run serve
 ```
 npm run build
 ```
+
+## 组件开发流程
+1. 增加配置文件
+
+   增加配置文件后，运行时会自动读取相关文件生成大屏组件列表，无需额外配置注册，文件分别是：
+- `meta.js`：组件的元信息文件，包括分组、标题、默认数据等
+- `main.vue`：组件的UI文件，为最终呈现方式
+- `setter.vue`：组件属性设置器文件，对组件的各项属性进行配置
+
+
+2. 数据获取
+   
+   通过调用大屏工具方法并传入当前组件的`数据配置`(如请求地址、是否轮询、轮询间隔等)来实现数据获取
+    ```js
+    import { getDataJson, pollingRefresh } from '@/utils/big-screen'
+    import { v1 as uuidv1 } from 'uuid'
+    export default {
+        props: {
+            // 当前组件的配置属性
+            configProps: Object
+        },
+
+        created() {
+            this.uuid = uuidv1()
+        },
+
+        mounted() {
+            // 刷新数据
+            this.refreshCptData()
+        },
+        methods: {
+            refreshCptData() {
+                // 刷新数据，传输当前数据配置，内部会根据具体属性进行操作，如是否轮询、加载数据等
+                pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
+            },
+            loadData() {
+                getDataJson(this.configProps.cptDataForm, this.cptId).then(res => {
+                    // res 为当前数据，可以进行渲染操作
+                })
+            }
+        }
+    }
+    ```
