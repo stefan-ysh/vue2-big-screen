@@ -16,7 +16,7 @@
 - [x] 丰富的图片素材库
 - [x] 预览
 
-## [Live Demo](https://stefan-ysh.github.io/vue2-big-screen/)
+## [Live Demo](https://www.bs.543.zone/)
 
 ## get started
 
