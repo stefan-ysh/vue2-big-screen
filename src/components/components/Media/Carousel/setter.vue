@@ -122,6 +122,7 @@ export default {
       // todo 文件上传url
       uploadUrl: 'example/upload',
       // uploadHeaders: { 'X-Token': getToken() },
+      uploadHeaders: {},
       fileList: []
     }
   },
