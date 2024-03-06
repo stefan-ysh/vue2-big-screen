@@ -109,6 +109,36 @@ export default {
     async loadData() {
       const cacheData = localStorage.getItem('designCache')
       const bigscreenData = JSON.parse(Base64.decode(cacheData))
+        console.log('[ 非公开 ] >')
+        const pattern = bigscreenData.password
+        const regex = new RegExp('^' + pattern + '$')
+        this.$prompt('请输入邮箱', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: regex,
+          showClose: false,
+          showCancelButton: false,
+          closeOnClickModal: false,
+          closeOnPressEscape: false,
+          closeOnHashChange: false,
+          inputErrorMessage: '访问密码不正确，请重新输入'
+          // inputType: 'password'
+        })
+          .then(({ value }) => {
+            this.$message({
+              type: 'success',
+              message: '密码输入成功'
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '取消输入'
+            })
+          })
+      } else {
+        console.log('[ 可公开访问的页面 ] ')
+      }
       // 显示器标题
       document.title = bigscreenData.title
       // 渲染数据赋值
