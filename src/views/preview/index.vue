@@ -109,6 +109,7 @@ export default {
     async loadData() {
       const cacheData = localStorage.getItem('designCache')
       const bigscreenData = JSON.parse(Base64.decode(cacheData))
+      if (!bigscreenData.isPublic) {
         console.log('[ 非公开 ] >')
         const pattern = bigscreenData.password
         const regex = new RegExp('^' + pattern + '$')
