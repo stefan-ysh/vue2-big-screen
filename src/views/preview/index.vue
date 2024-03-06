@@ -107,7 +107,7 @@ export default {
     },
     // 加载数据
     async loadData() {
-      const cacheData = localStorage.getItem('viewData')
+      const cacheData = localStorage.getItem('designCache')
       const bigscreenData = JSON.parse(Base64.decode(cacheData))
       // 显示器标题
       document.title = bigscreenData.title
