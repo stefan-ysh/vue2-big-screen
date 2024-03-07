@@ -10,26 +10,23 @@
             plain
             icon="el-icon-edit-outline"
             type="primary"
+            title="编辑大屏"
             @click="editBigscreen(scope.row.id)"
-            >编辑</el-button
-          >
+          />
           <el-button
             size="mini"
-            :type="isPublished(scope.row.isPublished) ? 'danger' : 'default'"
             plain
             :icon="!isPublished(scope.row.isPublished) ? 'el-icon-microphone' : 'el-icon-turn-off-microphone'"
             @click="changeBigscreenStatus(scope.row.id, scope.row.isPublished)"
-          >
-            <span v-show="isPublished(scope.row.isPublished)">取消</span>
-            发布</el-button
-          >
+            :title="isPublished(scope.row.isPublished) ? '取消发布' : '发布'"
+          />
           <el-button
             size="mini"
             icon="el-icon-delete"
             type="danger"
+            title="删除大屏"
             @click="delBigscreen(scope.row.id)"
-            >删除</el-button
-          >
+          />
         </template>
       </el-table-column>
     </el-table>
