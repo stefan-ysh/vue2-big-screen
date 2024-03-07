@@ -46,6 +46,17 @@
           <div slot="content">恢复比例</div>
           <i class="btn el-icon-aim" @click="$store.dispatch('bigScreen/initContainerSize')" />
         </el-tooltip>
+        <!-- 切换设计模式，分为pc和移动端 -->
+        <div>
+          <el-radio-group v-model="designMode" size="small" style="min-width: 90px">
+            <el-radio-button label="pc">
+              <i class="el-icon-monitor" />
+            </el-radio-button>
+            <el-radio-button label="mobile">
+              <i class="el-icon-mobile-phone" />
+            </el-radio-button>
+          </el-radio-group>
+        </div>
         <el-tooltip class="align-btn" placement="bottom">
           <div slot="content">上对齐</div>
           <BSvgIcon
@@ -194,6 +205,7 @@ export default {
   data() {
     return {
       appId: '',
+      designMode: 'pc',
       bigscreenId: ''
     }
   },
