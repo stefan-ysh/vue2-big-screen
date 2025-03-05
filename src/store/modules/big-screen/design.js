@@ -13,6 +13,7 @@ const designState = {
     password: '',
     components: []
   },
+  designMode: 'pc',
   // 窗口宽度
   windowWidth: 0,
   // 窗口高度
@@ -131,6 +132,9 @@ const designActions = {
   }
 }
 const designMutations = {
+  SWITCH_DESIGN_MODE(state, val) {
+    state.designMode = val
+  },
   INIT_BIG_SCREEN_DATA(state, data) {
     state.bigScreenData = data
   },

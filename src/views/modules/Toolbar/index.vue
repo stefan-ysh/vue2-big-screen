@@ -48,7 +48,7 @@
         </el-tooltip>
         <!-- 切换设计模式，分为pc和移动端 -->
         <div>
-          <el-radio-group v-model="designMode" size="small" style="min-width: 90px">
+          <el-radio-group v-model="designMode" @change="changeDesignMode" size="mini" style="min-width: 90px">
             <el-radio-button label="pc">
               <i class="el-icon-monitor" />
             </el-radio-button>
@@ -259,6 +259,10 @@ export default {
     this.bigscreenId = this.$route.params.pageId
   },
   methods: {
+    changeDesignMode(val) {
+      this.$store.commit('bigScreen/SWITCH_DESIGN_MODE', val)
+      console.log('[ toolbar ] >', this.$store.state.bigScreen.designMode)
+    },
     goBack() {
       this.$router.go(-1)
     },

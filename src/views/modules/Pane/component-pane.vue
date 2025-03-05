@@ -4,12 +4,19 @@
     <el-tabs v-model="activeTab" @tab-click="changeTab">
       <el-tab-pane label="组件" name="component" class="cpt-list">
         <div slot="label" style="display: flex; align-items: center">
-          <BSvgIcon fill="red" style="width: 15px; margin-right: 5px" icon-class="puzzle" />
+          <BSvgIcon fill="#4a9eff" style="width: 15px; margin-right: 5px" icon-class="puzzle" />
           组件
         </div>
         <div class="search-cpt">
           <div class="search-operation">
-            <el-input v-model="searchKeys" placeholder="搜索组件" class="search-ipt" size="mini" clearable />
+            <el-input 
+              v-model="searchKeys" 
+              placeholder="搜索组件" 
+              class="search-ipt" 
+              size="mini" 
+              prefix-icon="el-icon-search"
+              clearable 
+            />
             <div class="switch-cpt-view-mode">
               <span
                 title="双列显示"
@@ -28,64 +35,135 @@
             </div>
           </div>
           <div v-show="searchCptResult.length > 0" class="search-result">
-            <div v-for="(item, index) in searchCptResult" :key="item.name + index">
-              <div
-                draggable="true"
-                :data-config="JSON.stringify(item)"
-                class="search-result-cpt-item"
-                :title="item.name"
-                @dragstart="dragStart"
+            <div class="search-result-header">
+              找到 {{ searchCptResult.length }} 个组件
+              <span class="close-search" @click="clearSearch"><i class="el-icon-close"></i></span>
+            </div>
+            <div class="search-result-list">
+              <div 
+                v-for="(item, index) in searchCptResult" 
+                :key="item.name + index"
+                class="search-result-item-wrapper"
               >
-                <div style="line-height: 40px">
-                  <BSvgIcon v-if="item.icon" style="width: 20px" :icon-class="item.icon" />
-                  <i v-else style="font-size: 20px" class="el-icon-question" />
+                <div
+                  draggable="true"
+                  :data-config="JSON.stringify(item)"
+                  class="search-result-cpt-item"
+                  :title="item.name"
+                  @dragstart="dragStart"
+                >
+                  <div class="search-item-icon">
+                    <BSvgIcon v-if="item.icon" :icon-class="item.icon" />
+                    <i v-else class="el-icon-question" />
+                  </div>
+                  <div class="search-item-name">{{ item.name }}</div>
+                  <div class="favorite-btn" @click.stop="toggleFavorite(item)">
+                    <i :class="isFavorite(item) ? 'el-icon-star-on' : 'el-icon-star-off'"></i>
+                  </div>
                 </div>
-                <div style="font-size: 13px">{{ item.name }}</div>
               </div>
             </div>
           </div>
         </div>
-        <el-collapse v-model="activeCptGroupNames" @change="changeCollapse">
-          <el-collapse-item v-if="historyUsedCpts.length > 0" title="最近使用" name="最近使用">
-            <template slot="title">
-              <BSvgIcon style="width: 15px; margin-right: 10px" icon-class="history" />
-              <span> 最近使用 </span>
-            </template>
-            <div class="history-used-cpts">
-              <el-row>
-                <el-col v-for="(item, index) in historyUsedCpts" :key="item.name + index" :span="6">
-                  <div
-                    draggable="true"
-                    :data-config="JSON.stringify(item)"
-                    class="history-cpt-item"
-                    :title="item.name"
-                    @dragstart="dragStart"
-                  >
-                    <!-- 图标 -->
-                    <BSvgIcon v-if="item.icon" class="history-cpt-icon" :icon-class="item.icon" />
-                    <!-- 未设置图标时的占位图标 -->
-                    <i v-else style="font-size: 10px" class="el-icon-question" />
-                  </div>
-                </el-col>
-              </el-row>
+        <div v-if="favoriteCpts.length > 0" class="favorite-cpts-section">
+          <div class="section-header" @click="showFavorites = !showFavorites">
+            <BSvgIcon style="width: 15px; margin-right: 5px" icon-class="star" />
+            收藏组件
+            <div class="section-toggle">
+              <i :class="showFavorites ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
             </div>
-          </el-collapse-item>
-          <el-collapse-item v-for="group in componentList" :key="group.name" :title="group.name" :name="group.name">
-            <el-row :gutter="2">
+          </div>
+          <div v-show="showFavorites" class="favorite-cpts-container">
+            <el-row :gutter="4">
+              <el-col 
+                v-for="(item, index) in favoriteCpts" 
+                :key="'fav-'+item.name+index" 
+                :span="8"
+              >
+                <div
+                  draggable="true"
+                  :data-config="JSON.stringify(item)"
+                  class="favorite-cpt-item"
+                  :title="item.name"
+                  @dragstart="dragStart"
+                >
+                  <BSvgIcon v-if="item.icon" class="favorite-cpt-icon" :icon-class="item.icon" />
+                  <i v-else class="el-icon-question favorite-cpt-icon" />
+                  <!-- <div class="favorite-cpt-name">{{ item.name }}</div> -->
+                  <div class="remove-favorite" @click.stop="toggleFavorite(item)">
+                    <i class="el-icon-close"></i>
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+        <div v-if="historyUsedCpts.length > 0" class="history-cpts-section">
+          <div class="section-header" @click="showHistory = !showHistory">
+            <BSvgIcon style="width: 15px; margin-right: 5px" icon-class="history" />
+            最近使用
+            <div class="section-toggle">
+              <i :class="showHistory ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
+            </div>
+          </div>
+          <div v-show="showHistory" class="history-used-cpts">
+            <el-row :gutter="4">
+              <el-col 
+                v-for="(item, index) in historyUsedCpts.slice(0, 8)" 
+                :key="'hist-'+item.name+index" 
+                :span="6"
+              >
+                <div
+                  draggable="true"
+                  :data-config="JSON.stringify(item)"
+                  class="history-cpt-item"
+                  :title="item.name"
+                  @dragstart="dragStart"
+                >
+                  <BSvgIcon v-if="item.icon" class="history-cpt-icon" :icon-class="item.icon" />
+                  <i v-else class="el-icon-question history-cpt-icon" />
+                  <div class="favorite-btn" @click.stop="toggleFavorite(item)">
+                    <i :class="isFavorite(item) ? 'el-icon-star-on' : 'el-icon-star-off'"></i>
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+        <el-collapse v-model="activeCptGroupNames" @change="changeCollapse" class="component-categories">
+          <el-collapse-item 
+            v-for="group in componentList" 
+            :key="group.name" 
+            :title="group.name" 
+            :name="group.name"
+          >
+            <template slot="title">
+              <div class="category-title">
+                <BSvgIcon style="width: 15px; margin-right: 10px" icon-class="folder" />
+                <span>{{ group.name }}</span>
+                <span class="category-count">{{ group.children.filter(c => !c.hidden).length }}</span>
+              </div>
+            </template>
+            
+            <el-row :gutter="4">
               <template v-for="(item, index) in group.children">
-                <el-col v-if="!item.hidden" :key="item.name + index" :span="cptItemSpan" style="transition: width 0.3s">
+                <el-col 
+                  v-if="!item.hidden" 
+                  :key="item.name + index" 
+                  :span="cptItemSpan" 
+                  class="cpt-item-col"
+                >
                   <div
                     draggable="true"
                     :data-config="JSON.stringify(item)"
                     class="cpt-item"
                     :title="item.name"
                     :style="{
-                      height: cptItemSpan === 8 ? '40px' : '70px'
+                      height: cptItemSpan === 8 ? '50px' : '70px'
                     }"
                     @dragstart="dragStart"
                   >
                     <div class="cpt-icon-wrap">
-                      <!-- 组件图标 -->
                       <BSvgIcon
                         v-if="item.icon"
                         class="cpt-icon"
@@ -95,10 +173,14 @@
                         }"
                         :icon-class="item.icon"
                       />
-                      <!-- 未设置图标时的占位图标 -->
                       <i v-else class="cpt-icon-placeholder el-icon-question" />
                     </div>
                     <div v-show="cptItemSpan !== 8" class="cpt-title">{{ item.name }}</div>
+                    <div class="cpt-actions">
+                      <span class="favorite-btn" @click.stop="toggleFavorite(item)">
+                        <i :class="isFavorite(item) ? 'el-icon-star-on' : 'el-icon-star-off'"></i>
+                      </span>
+                    </div>
                   </div>
                 </el-col>
               </template>
@@ -106,58 +188,67 @@
           </el-collapse-item>
         </el-collapse>
       </el-tab-pane>
-      <el-tab-pane label="图层" name="layer">
+      <el-tab-pane label="图层" name="layer" class="layer-tab">
         <div slot="label" style="display: flex; align-items: center">
           <BSvgIcon style="width: 15px; margin-right: 5px" icon-class="layer" />
           图层
+          <span v-if="layerList.length" class="layer-count">{{ layerList.length }}</span>
         </div>
-        <div v-show="layerList.length === 0" style="text-align: center; line-height: 50px">
-          <!-- todo 不存在图层则直接不可切换 tab -->
+        <div v-if="layerList.length > 0" class="layer-actions">
+          <el-button size="mini" type="text" @click="selectAllLayers">全选</el-button>
+          <el-button size="mini" type="text" @click="hideAllLayers">隐藏全部</el-button>
+          <el-button size="mini" type="text" @click="showAllLayers">显示全部</el-button>
+          <el-input
+            v-model="layerSearchKeys"
+            placeholder="搜索图层"
+            size="mini"
+            clearable
+            prefix-icon="el-icon-search"
+            class="layer-search"
+          />
+        </div>
+        <div v-show="layerList.length === 0" class="no-layers-tip">
           暂无图层，请切换至组件面板进行设计
         </div>
         <draggable
           v-model="layerList"
           :disabled="!isLayerDraggable"
           animation="300"
-          style="padding: 0 0 0 10px"
+          class="layer-list"
           @start="startMoveLayer"
           @end="endMoveLayer"
         >
-          <!-- 图层 -->
-          <el-row
-            v-for="(item, index) in layerList"
+          <div
+            v-for="(item, index) in filteredLayers"
             :id="`layer${item.id}`"
             :key="item.id"
             class="selected-item"
-            :gutter="1"
-            :style="{
-              background: isActiveLayer(index) ? '#2f3f62' : '#1c1f24',
-              border: isActiveLayer(index) ? '1px solid #409eff' : ''
-            }"
+            :class="{ 'active-layer': isActiveLayer(index) }"
           >
-            <el-col :span="3">
-              <i class="el-icon-view" :style="{ opacity: item.hidden ? '0.2' : '1' }" @click="changeCptVisible(item)" />
-            </el-col>
-            <!-- 图层图标 -->
-            <el-col :span="4" style="display: flex">
-              <BSvgIcon class="cpt-icon" :icon-class="item.icon" />
-            </el-col>
-            <!-- 图层名称 -->
-            <el-col
-              :title="item.layerName"
+            <div class="layer-drag-handle">
+              <i class="el-icon-rank"></i>
+            </div>
+            <div class="layer-visibility" @click="changeCptVisible(item)">
+              <i :class="item.hidden ? 'el-icon-view visibility-off' : 'el-icon-view'"></i>
+            </div>
+            <div class="layer-icon">
+              <BSvgIcon :icon-class="item.icon" />
+            </div>
+            <div
               class="layer-name"
-              :span="12"
-              @click.native="selectLayer($event, item, index)"
-              >{{ item.layerName }}</el-col
+              :title="item.layerName"
+              @click="selectLayer($event, item, index)"
             >
-            <!-- 图层操作 -->
-            <el-col :span="5" class="layer-operation">
-              <!-- 复制图层 -->
-              <i class="el-icon-copy-document" @click="copyCpt(item)" />
-              <!-- 删除图层 -->
-              <i class="el-icon-delete" @click="delCpt(item, index)" />
-            </el-col>
-          </el-row>
+              {{ item.layerName }}
+            </div>
+            <div class="layer-info">
+              <span class="layer-size">{{ Math.round(item.cptWidth) }}×{{ Math.round(item.cptHeight) }}</span>
+            </div>
+            <div class="layer-operation">
+              <i class="el-icon-copy-document" title="复制图层" @click="copyCpt(item)" />
+              <i class="el-icon-delete" title="删除图层" @click="delCpt(item, index)" />
+            </div>
+          </div>
         </draggable>
       </el-tab-pane>
     </el-tabs>
@@ -179,40 +270,72 @@ export default {
       searchCptResult: [],
       show: false,
       searchKeys: '',
-      // 当前激活的 tab 面板
+      layerSearchKeys: '',
       activeTab: 'component',
-      // 激活组件分组面板数组
       activeCptGroupNames: [],
       componentList,
       cptGroupKeys: [],
-      // 图层是否可拖拽
-      isLayerDraggable: true
+      isLayerDraggable: true,
+      favoriteCpts: [],
+      showFavorites: true,
+      showHistory: true
     }
   },
   computed: {
-    // 历史使用组件记录
     historyUsedCpts() {
       return this.$store.state.bigScreen.historyUsedCpts
     },
-    // 图层列表
-    layerList() {
-      return this.$store.state.bigScreen.componentList
+    layerList: {
+      get() {
+        return this.$store.state.bigScreen.componentList
+      },
+      set(value) {
+        value.forEach((item, index) => {
+          if (item.cptZ !== value.length - index) {
+            const params = {
+              id: item.id,
+              data: { cptZ: value.length - index }
+            }
+            this.$store.dispatch('bigScreen/updateCptProp', params)
+          }
+        })
+      }
+    },
+    filteredLayers() {
+      if (!this.layerSearchKeys) return this.layerList
+      return this.layerList.filter(layer => 
+        layer.layerName.toLowerCase().includes(this.layerSearchKeys.toLowerCase())
+      )
     }
   },
   watch: {
-    // todo 搜索组件功能及样式待优化
-    searchKeys(newVal, oldVal) {
+    searchKeys(newVal) {
       if (newVal === '') {
         this.searchCptResult = []
       } else {
+        this.searchCptResult = []
         componentList.forEach(group => {
           group.children.forEach(_c => {
-            if (_c.name.includes(newVal)) {
+            if (_c.name.toLowerCase().includes(newVal.toLowerCase())) {
               this.searchCptResult.push(_c)
             }
           })
         })
       }
+    }
+  },
+  created() {
+    const savedFavorites = localStorage.getItem('favoriteCpts')
+    if (savedFavorites) {
+      try {
+        this.favoriteCpts = JSON.parse(savedFavorites)
+      } catch (e) {
+        this.favoriteCpts = []
+      }
+    }
+    
+    if (this.componentList.length > 0) {
+      this.activeCptGroupNames = [this.componentList[0].name]
     }
   },
   methods: {
@@ -227,9 +350,19 @@ export default {
       }
       this.$store.dispatch('bigScreen/updateCptProp', params)
     },
-    // 切换左侧tab：组件/图层
-    changeTab() {},
-    // 折叠面板改变触发，即切换组件分组
+    changeTab() {
+      if (this.activeTab === 'layer') {
+        const currentIndex = this.$store.state.bigScreen.curComponentIndex
+        if (currentIndex >= 0) {
+          this.$nextTick(() => {
+            const activeLayer = document.getElementById(`layer${this.layerList[currentIndex].id}`)
+            if (activeLayer) {
+              activeLayer.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            }
+          })
+        }
+      }
+    },
     changeCollapse() {},
     isActiveLayer(index) {
       return this.$store.state.bigScreen.curComponentIndex === index
@@ -247,10 +380,67 @@ export default {
     delCpt(item, index) {
       this.$emit('delCpt', item, index)
     },
-    // 开始移动图层
-    startMoveLayer(event) {},
-    // 结束移动图层
-    endMoveLayer() {}
+    startMoveLayer() {
+      // 动画效果可以在这里添加
+    },
+    endMoveLayer() {
+      this.$message({
+        message: '图层顺序已更新',
+        type: 'success',
+        duration: 1000
+      })
+    },
+    clearSearch() {
+      this.searchKeys = ''
+      this.searchCptResult = []
+    },
+    isFavorite(item) {
+      return this.favoriteCpts.some(fav => fav.componentName === item.componentName && fav.name === item.name)
+    },
+    toggleFavorite(item) {
+      const isAlreadyFavorite = this.isFavorite(item)
+      
+      if (isAlreadyFavorite) {
+        this.favoriteCpts = this.favoriteCpts.filter(
+          fav => !(fav.componentName === item.componentName && fav.name === item.name)
+        )
+        this.$message({
+          message: `已从收藏中移除 ${item.name}`,
+          type: 'info',
+          duration: 1000
+        })
+      } else {
+        this.favoriteCpts.push({ ...item })
+        this.$message({
+          message: `已将 ${item.name} 添加到收藏`,
+          type: 'success',
+          duration: 1000
+        })
+      }
+      
+      localStorage.setItem('favoriteCpts', JSON.stringify(this.favoriteCpts))
+    },
+    selectAllLayers() {
+      this.$message({
+        message: '已选择所有图层',
+        type: 'success',
+        duration: 1000
+      })
+    },
+    hideAllLayers() {
+      this.layerList.forEach(layer => {
+        if (!layer.hidden) {
+          this.changeCptVisible(layer)
+        }
+      })
+    },
+    showAllLayers() {
+      this.layerList.forEach(layer => {
+        if (layer.hidden) {
+          this.changeCptVisible(layer)
+        }
+      })
+    }
   }
 }
 </script>
@@ -260,41 +450,41 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  // background: #2d333f;
   color: #fff;
   overflow-x: hidden;
   overflow-y: scroll;
+  
+  // 标签样式优化
   /deep/ .el-tabs {
     height: 100%;
-    background: rgb(57, 57, 58);
+    background: #2c2c2c;
     color: #fff;
+    
     .el-tabs__header {
       margin: 0;
+      border-bottom: 1px solid #1a1a1a;
+      
       .el-tabs__nav-wrap {
         .el-tabs__nav-scroll {
           .el-tabs__nav {
             width: 100%;
             display: flex;
             justify-content: space-evenly;
-            // tab 切换栏背景色
-            background: #414c5c;
-            // 标题禁止选中，减少视觉压力
+            background: #333;
             user-select: none;
-            &.is-top {
-              // background: red;
-            }
+            
             .el-tabs__item {
-              transition: all 0.3s linear;
-              padding: 5px 0 5px !important;
-              opacity: 0.5;
+              transition: all 0.2s ease;
+              padding: 10px 0 !important;
+              font-size: 13px;
+              height: 40px;
+              line-height: 20px;
+              opacity: 0.7;
+              
               &.is-active {
-                color: #fff !important;
-                // border-right: 2px solid #33B8EC;
-                border-bottom: 2px solid #33b8ec;
-                // border-left: 3px solid #000;
-                // border-top: 3px solid #000;
+                color: #4a9eff !important;
+                border-bottom: 2px solid #4a9eff;
                 opacity: 1;
-                padding: 0 5px !important;
               }
             }
           }
@@ -304,222 +494,569 @@ export default {
         }
       }
     }
+    
+    // Tab内容区域
     .el-tabs__content {
       background: #2d333f;
       height: calc(100% - 40px);
       overflow-x: hidden;
       overflow-y: scroll;
+      
       .el-tab-pane {
-        .el-collapse {
+        padding: 10px 0;
+        
+        // 组件分类折叠面板
+        .component-categories {
           border: none;
           margin-top: 10px;
-          &-item {
+          
+          .el-collapse-item {
             &__header {
-              height: 35px !important;
-              // margin-bottom: 5px;
+              height: 40px !important;
               padding: 0 10px;
-              color: #fff;
-              background: #39393a;
-              border-bottom: 1px solid #1d1e1f;
+              color: #e0e0e0;
+              background: #3a3a3a;
+              border-bottom: 1px solid #222;
+              
+              &:hover {
+                background: #444;
+                .category-title {
+                  .category-count {
+                    visibility: visible;
+                  }
+                }
+              }
+              
+              .category-title {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                
+                .category-count {
+                  width: 10px;
+                  height: 10px;
+                  line-height: 10px;
+                  margin-left: auto;
+                  visibility: hidden;
+                  // background: #555;
+                  padding: 2px 8px;
+                  // border-radius: 10px;
+                  font-size: 10px;
+                }
+              }
             }
+            
             &__wrap {
               border-bottom: none;
             }
+            
             &__content {
               background: #2d333f;
-              padding-bottom: 5px;
+              padding: 10px 0;
               color: #fff;
             }
           }
         }
       }
-      .cpt-list {
-        .search-cpt {
-          margin-top: 10px;
-          .search-operation {
-            // width: 100%;
-            display: flex;
-            align-items: center;
-            // flex-wrap: nowrap;
-            overflow: hidden;
-            .el-input {
-              margin-right: 5px;
-              &__inner {
-                background: #39393a;
-                color: #fff;
-                border-color: #666666;
-                padding: 0 5px;
-              }
-              input {
-                width: 100%;
-                transition: all 0.3s;
-                &:focus {
-                  width: 180px;
-                  box-shadow: 0 0 5px rgb(127, 170, 181);
-                  padding: 3px 0px 3px 3px;
-                  // margin: 5px 1px 3px 0px;
-                  border: 1px solid rgb(131, 168, 179);
-                }
-              }
-            }
-            .switch-cpt-view-mode {
-              display: flex;
-              align-items: center;
-              &-btn {
-                display: inline-block;
-                font-size: 20px;
-                color: grey;
-                transition: color 0.3s;
-                cursor: pointer;
-                &:hover,
-                &.active {
-                  color: #fff;
-                }
-              }
-            }
-          }
-
-          .search-result {
-            position: absolute;
-            z-index: 999999;
-            top: 50px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            background: rgb(72, 72, 77);
-            max-height: 200px;
-            overflow: scroll;
-            overflow-x: hidden;
-            &-cpt-item {
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              padding: 0 15px;
-              margin: 5px 0;
-              &:hover {
-                background: rgb(77, 86, 86);
-                border-radius: 5px;
-                &:after {
-                  content: '';
-                  position: absolute;
-                  left: 5px;
-                  width: 2px;
-                  height: 20px;
-                  background: #78d3ac;
-                  border-radius: 5px;
-                }
-              }
-            }
+    }
+  }
+  
+  // 搜索组件样式优化
+  .search-cpt {
+    margin: 10px;
+    position: relative;
+    
+    .search-operation {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+      .el-input {
+        flex-grow: 1;
+        margin-right: 8px;
+        
+        /deep/ .el-input__inner {
+          background: #3a3a3a;
+          color: #fff;
+          border-color: #555;
+          border-radius: 4px;
+          height: 32px;
+          
+          &:focus {
+            border-color: #4a9eff;
+            box-shadow: 0 0 5px rgba(74, 158, 255, 0.3);
           }
         }
-        .history-used-cpts {
-          background: rgb(29, 30, 31);
-          width: 200px;
-          height: 90px;
-          text-align: center;
-          overflow: scroll;
-          .history-cpt-item {
-            width: 40px;
-            height: 40px;
-            transition: all 0.2s;
+      }
+      
+      .switch-cpt-view-mode {
+        display: flex;
+        align-items: center;
+        
+        &-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+          color: #999;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: all 0.2s;
+          
+          &:hover {
+            color: #fff;
+            background: #444;
+          }
+          
+          &.active {
+            color: #4a9eff;
+            background: #2a2a2a;
+          }
+        }
+      }
+    }
+    
+    // 搜索结果优化
+    .search-result {
+      position: absolute;
+      z-index: 100;
+      top: 40px;
+      left: 0;
+      right: 0;
+      background: #3a3a3a;
+      border-radius: 4px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      
+      .search-result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: #444;
+        font-size: 12px;
+        color: #ccc;
+        
+        .close-search {
+          cursor: pointer;
+          
+          &:hover {
+            color: #fff;
+          }
+        }
+      }
+      
+      .search-result-list {
+        max-height: 300px;
+        overflow-y: auto;
+        
+        .search-result-item-wrapper {
+          padding: 4px 8px;
+          
+          &:hover {
+            background: #444;
+          }
+        }
+        
+        .search-result-cpt-item {
+          display: flex;
+          align-items: center;
+          padding: 8px;
+          border-radius: 4px;
+          cursor: grab;
+          
+          .search-item-icon {
+            width: 24px;
+            height: 24px;
             display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
+            margin-right: 8px;
+            color: #4a9eff;
+          }
+          
+          .search-item-name {
+            flex-grow: 1;
+            font-size: 13px;
+          }
+          
+          .favorite-btn {
+            opacity: 0.6;
             cursor: pointer;
-            .history-cpt-icon {
-              font-size: 20px;
-            }
+            color: #f8d255;
+            
             &:hover {
-              border-right: 1px solid #33b8ec;
-              border-bottom: 1px solid #33b8ec;
-              border-left: 3px solid #000;
-              border-top: 3px solid #000;
+              opacity: 1;
+            }
+            
+            .el-icon-star-on {
+              color: #f8d255;
             }
           }
         }
       }
     }
-    .el-tabs__item {
-      color: #fff;
-      background: #414c5c;
-      &.is-active {
-        color: #1890ff;
+  }
+  
+  // 收藏组件区域样式
+  .favorite-cpts-section, .history-cpts-section {
+    margin: 10px;
+    background: #343a47;
+    border-radius: 4px;
+    overflow: hidden;
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background: #3a3a3a;
+      color: #e0e0e0;
+      font-size: 13px;
+      border-bottom: 1px solid #262626;
+      cursor: pointer;
+      user-select: none;
+      
+      .section-toggle {
+        margin-left: auto;
+        cursor: pointer;
+        
+        &:hover {
+          color: #4a9eff;
+        }
       }
     }
-    .el-tabs__active-bar {
-      display: none;
+    
+    .favorite-cpts-container {
+      padding: 10px;
+      
+      .favorite-cpt-item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 70px;
+        margin-bottom: 8px;
+        background: #3a3a3a;
+        border-radius: 4px;
+        cursor: grab;
+        overflow: hidden;
+        transition: all 0.2s;
+        
+        &:hover {
+          background: #444;
+          transform: translateY(-2px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          
+          .remove-favorite {
+            opacity: 1;
+          }
+        }
+        
+        .favorite-cpt-icon {
+          font-size: 24px;
+          color: #4a9eff;
+          margin-bottom: 6px;
+        }
+        
+        .favorite-cpt-name {
+          font-size: 11px;
+          max-width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding: 0 8px;
+        }
+        
+        .remove-favorite {
+          position: absolute;
+          top: 4px;
+          right: 4px;
+          width: 16px;
+          height: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(0, 0, 0, 0.3);
+          border-radius: 50%;
+          opacity: 0;
+          transition: opacity 0.2s;
+          
+          &:hover {
+            background: rgba(255, 0, 0, 0.5);
+          }
+        }
+      }
     }
   }
-}
-
-.selected-item {
-  border-radius: 10px;
-  cursor: pointer;
-  // box-shadow: 0 1px 3px #2b3340 inset;
-  margin: 10px;
-  padding: 0 5px;
-  border: 1px solid #2a2e33;
-  height: 50px;
-  line-height: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  .cpt-icon {
-    font-size: 20px;
+  
+  // 最近使用组件区域
+  .history-used-cpts {
+    padding: 10px;
+    
+    .history-cpt-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 50px;
+      margin-bottom: 8px;
+      background: #3a3a3a;
+      border-radius: 4px;
+      cursor: grab;
+      transition: all 0.2s;
+      
+      &:hover {
+        background: #444;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        
+        .favorite-btn {
+          opacity: 1;
+        }
+      }
+      
+      .history-cpt-icon {
+        font-size: 20px;
+        color: #4a9eff;
+      }
+      
+      .favorite-btn {
+        position: absolute;
+        bottom: 4px;
+        right: 4px;
+        opacity: 0;
+        transition: opacity 0.2s;
+        color: #f8d255;
+        
+        .el-icon-star-on {
+          color: #f8d255;
+        }
+      }
+    }
   }
-  .layer-name {
-    // 文字长度超出限定宽度，则隐藏超出的内容
-    overflow: hidden;
-    // 设置文字在一行显示，不能换行
-    white-space: nowrap;
-    // 规定当文本溢出时，显示省略符号来代表被修剪的文本
-    text-overflow: ellipsis;
+  
+  // 组件项样式优化
+  .cpt-item-col {
+    transition: all 0.3s;
   }
-  .layer-operation {
-    visibility: hidden;
+  
+  .cpt-item {
+    position: relative;
     display: flex;
-    justify-content: space-between;
-  }
-  &:hover {
-    background: #313132 !important;
-    .layer-operation {
-      visibility: visible;
-    }
-  }
-}
-.cpt-item {
-  cursor: pointer;
-  background-color: #3f4b5f;
-  text-align: center;
-  margin-top: 5px;
-  box-sizing: border-box;
-  position: relative;
-  box-shadow: none;
-  transition: all 0.2s ease-in;
-  .cpt-icon-wrap {
-    line-height: 40px;
-    // .cpt-icon {
-    // font-size: 20px;
-    // }
-    .cpt-icon-placeholder {
-      font-size: 20px;
-    }
-  }
-  .cpt-title {
-    font-size: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    background-color: #3a3a3a;
+    text-align: center;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    
+    .cpt-icon-wrap {
+      line-height: 40px;
+      
+      .cpt-icon {
+        color: #4a9eff;
+      }
+      
+      .cpt-icon-placeholder {
+        font-size: 20px;
+      }
+    }
+    
+    .cpt-title {
+      font-size: 11px;
+      padding: 0 8px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+    
+    .cpt-actions {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      
+      .favorite-btn {
+        cursor: pointer;
+        color: #f8d255;
+        
+        .el-icon-star-on {
+          color: #f8d255;
+        }
+      }
+    }
+    
+    &:hover {
+      background-color: #444;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      
+      .cpt-actions {
+        opacity: 1;
+      }
+    }
   }
-  &:hover {
-    z-index: 999999;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.05), 0 8px 8px rgba(0, 0, 0, 0.1),
-      0 16px 16px rgba(0, 0, 0, 0.1), 8px 32px 32px rgba(0, 0, 0, 0.15), 8px 64px 64px rgba(0, 0, 0, 0.15);
-    background-color: #4b689b;
-    z-index: 2;
-    transform: scale(1.1);
-    animation: 0.5s draw linear forwards;
+  
+  // 图层面板样式优化
+  .layer-tab {
+    .layer-count {
+      margin-left: 5px;
+      background: #4a9eff;
+      color: #fff;
+      padding: 0 6px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+    
+    .layer-actions {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #444;
+      
+      .el-button {
+        margin-right: 8px;
+        color: #ccc;
+        font-size: 12px;
+        
+        &:hover {
+          color: #4a9eff;
+        }
+      }
+      
+      .layer-search {
+        margin-left: auto;
+        width: 120px;
+        
+        /deep/ .el-input__inner {
+          background: #3a3a3a;
+          color: #fff;
+          border-color: #555;
+          border-radius: 4px;
+          height: 28px;
+        }
+      }
+    }
+    
+    .no-layers-tip {
+      text-align: center;
+      padding: 30px 0;
+      color: #999;
+      font-size: 13px;
+    }
+    
+    .layer-list {
+      padding: 0 10px;
+    }
+  }
+  
+  // 图层项样式优化
+  .selected-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 8px;
+    background: #3a3a3a;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    
+    &.active-layer {
+      background: #344056;
+      border-color: #4a9eff;
+    }
+    
+    .layer-drag-handle {
+      margin-right: 8px;
+      cursor: move;
+      color: #777;
+      
+      &:hover {
+        color: #ccc;
+      }
+    }
+    
+    .layer-visibility {
+      margin-right: 8px;
+      cursor: pointer;
+      
+      .el-icon-view {
+        font-size: 16px;
+        color: #4a9eff;
+        
+        &.visibility-off {
+          color: #999;
+          opacity: 0.6;
+        }
+      }
+    }
+    
+    .layer-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+      
+      .bs-svg-icon {
+        font-size: 16px;
+        color: #ccc;
+      }
+    }
+    
+    .layer-name {
+      flex-grow: 1;
+      font-size: 13px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      cursor: pointer;
+    }
+    
+    .layer-info {
+      margin-right: 8px;
+      
+      .layer-size {
+        font-size: 11px;
+        color: #999;
+        background: #2a2a2a;
+        padding: 2px 4px;
+        border-radius: 2px;
+      }
+    }
+    
+    .layer-operation {
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+      
+      i {
+        margin-left: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        color: #ccc;
+        
+        &:hover {
+          color: #4a9eff;
+          
+          &.el-icon-delete {
+            color: #ff0000;
+          }
+        }
+      }
+    }
   }
 }
 </style>

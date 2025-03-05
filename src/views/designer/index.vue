@@ -54,6 +54,7 @@
           <template v-if="cacheComponents.length > 0">
             <!-- 组件 -->
             <div
+              v-if="$store.state.bigScreen.designMode === 'pc'"
               v-for="(item, index) in cacheComponents"
               :key="item.id"
               :ref="'div' + item.componentName + index"
@@ -68,7 +69,7 @@
               <!--顶部辅助线-->
               <div v-show="currentCptIndex === index" class="x-auxiliary-line" />
               <!--左侧辅助线-->
-              <div v-show="currentCptIndex === index" class="y-auxiliary-line" />
+              <div v-show="currentCptIndex === index" class="y-auxiliary-line" />                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
               <!-- 防止组件交互的时候造成不必要的事件触发以及性能问题，设计状态时此处使用模板覆盖 -->
               <!-- todo 探索其他解决方案 -->
               <div
@@ -99,6 +100,10 @@
                 class="resize-bar"
               />
             </div>
+            <div 
+              v-show="$store.state.bigScreen.designMode === 'mobile'"
+              style="width: 50%;height: 100%;margin: 0 auto;color: #ffffff;font-size: 50px;text-align:center;line-height: 5"
+            >移动端布局设计开发中，敬请期待</div>
           </template>
           <!-- 无组件提示信息 -->
           <div v-else class="no-cpt-placeholder">
@@ -331,6 +336,9 @@ export default {
     },
     cacheComponents() {
       return this.$store.state.bigScreen.componentList
+    },
+    frequentlyUsedComponents() {
+      return this.$store.state.bigScreen.frequentlyUsedComponents.slice(0, 6);
     }
   },
   created() {
@@ -642,11 +650,6 @@ export default {
             '(option) => {\n  // option 为图表需要的样式数据，更多详情可查看 https://echarts.apache.org/zh/option.html\n  return option;\n};'
         }
       }
-      // meta 没设置默认宽高则在此处设置
-      // 宽
-      const w = config.width || 400
-      // 高
-      const h = config.height || 300
       // 生成 id
       const id = require('uuid').v1()
       const animation = {
@@ -655,6 +658,14 @@ export default {
         speed: 'animate__slow',
         repeat: 'animate__repeat-1'
       }
+      
+      // 计算放置位置，使其在鼠标位置居中
+      const containerRect = this.$refs.webContainer.getBoundingClientRect()
+      const dropX = (e.clientX - containerRect.left) / this.containerScale
+      const dropY = (e.clientY - containerRect.top) / this.containerScale
+      const w = config.width || 400
+      const h = config.height || 300
+      
       const cpt = {
         id,
         cptTitle: config.name,
@@ -665,9 +676,9 @@ export default {
         componentName: config.componentName,
         setterName: config.setterName ? config.setterName : config.componentName + '-setter',
         configProps: { ...config.props, ...{ animation } },
-        // 将鼠标 drop 处设置为组件中心
-        cptX: Math.round(e.offsetX) - w / 2,
-        cptY: Math.round(e.offsetY) - h / 2,
+        // 优化放置位置，更精确
+        cptX: Math.round(dropX - w / 2),
+        cptY: Math.round(dropY - h / 2),
         cptZ: this.cacheComponents.length + 1,
         cptWidth: w,
         cptHeight: h,
@@ -675,15 +686,37 @@ export default {
         rotateY: 0,
         rotateZ: 0
       }
+      
+      // 添加放置动画效果
       this.$store.dispatch('bigScreen/addCpt', cpt)
+      
       this.$nextTick(() => {
+        // 添加组件引用
         this.$store.commit('bigScreen/ADD_BIG_SCREEN_CPT_REF', { id, ref: this.$refs[id][0] })
+        
+        // 添加放置动画效果
+        const componentEl = this.$refs['div' + config.componentName + (this.cacheComponents.length - 1)][0]
+        if (componentEl) {
+          componentEl.classList.add('component-drop-animation')
+          setTimeout(() => {
+            componentEl.classList.remove('component-drop-animation')
+          }, 500)
+        }
       })
+      
       // 多选清空
       this.clearMultipleCpts()
       // 丢下组件后刷新组件属性栏,并选中 push 进的最新一个组件
       this.showConfigPane({}, cpt, this.cacheComponents.length - 1)
       this.$refs['configPane'].showCptConfig()
+      
+      // 提供轻量级反馈
+      this.$message.closeAll()
+      this.$message({
+        message: `${config.name} 组件添加成功！`,
+        type: 'success',
+        duration: 1500
+      })
     },
     // 设置多选组件
     setMultipleCpt(e, cpt) {
