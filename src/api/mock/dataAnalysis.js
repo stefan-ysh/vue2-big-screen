@@ -290,241 +290,873 @@ const salesAnalysisScreen = {
 }
 
 // 员工绩效监控大屏
-const employeePerformanceScreen = {
-  id: 'crmp239crm20bbbb',
-  name: '员工绩效监控大屏',
-  type: 'data-analysis',
-  description: '展示企业各部门员工绩效情况，包含完成率、达成率、同环比等指标。',
-  createTime: '2023-03-10',
-  lastModified: '2023-03-15',
-  creator: '赵六',
-  template: 'template-2',
-  accessCount: 1230,
-  isPublished: false,
+// 数据分析大屏模板
+const standardTemplate = {
+  id: 'default',
+  name: '通用数据分析模板',
+  description: '适用于各类数据分析场景的通用模板，包含多种图表和数据展示组件',
+  preview: '/images/templates/data-analysis-default.jpg',
   // 页面布局
   layout: [
     {
       id: 'header',
       component: 'header-title',
       componentData: {
-        ...commonComponents.headerTitle,
-        title: '员工绩效监控大屏',
-        subtitle: '实时员工绩效数据分析与监控'
+        ...commonComponents.headerTitle
       },
       position: { x: 0, y: 0, w: 24, h: 2 }
     },
     {
-      id: 'performanceCards',
+      id: 'dataCards',
       component: 'data-cards',
       componentData: {
-        ...commonComponents.dataCards,
-        items: [
-          { title: '员工总数', value: '325', ratio: '+5.2%', icon: 'user' },
-          { title: '平均绩效分', value: '86.5', ratio: '+2.3%', icon: 'chart' },
-          { title: '任务完成率', value: '92.6%', ratio: '+1.8%', icon: 'task' },
-          { title: '绩效达标率', value: '88.2%', ratio: '+3.5%', icon: 'success' }
-        ]
+        ...commonComponents.dataCards
       },
       position: { x: 0, y: 2, w: 24, h: 3 }
     },
     {
-      id: 'departmentPerformance',
-      component: 'bar-chart',
-      componentData: {
-        ...commonComponents.barChart,
-        title: '各部门绩效评分',
-        xAxis: {
-          type: 'category',
-          data: ['研发部', '市场部', '销售部', '客服部', '财务部', '人力资源', '运维部']
-        },
-        yAxis: {
-          type: 'value',
-          max: 100
-        },
-        series: [
-          {
-            name: '上季度',
-            type: 'bar',
-            data: [85, 78, 92, 86, 82, 80, 88]
-          },
-          {
-            name: '本季度',
-            type: 'bar',
-            data: [88, 82, 94, 89, 84, 83, 90]
-          }
-        ]
-      },
-      position: { x: 0, y: 5, w: 14, h: 8 }
-    },
-    {
-      id: 'performanceDistribution',
-      component: 'pie-chart',
-      componentData: {
-        ...commonComponents.pieChart,
-        title: '员工绩效等级分布',
-        series: [
-          {
-            type: 'pie',
-            radius: ['40%', '70%'],
-            data: [
-              { value: 15, name: '优秀(A+)' },
-              { value: 30, name: '良好(A)' },
-              { value: 40, name: '合格(B)' },
-              { value: 10, name: '待改进(C)' },
-              { value: 5, name: '不合格(D)' }
-            ]
-          }
-        ]
-      },
-      position: { x: 14, y: 5, w: 10, h: 8 }
-    },
-    {
-      id: 'performanceTrend',
+      id: 'lineChart',
       component: 'line-chart',
       componentData: {
-        ...commonComponents.lineChart,
-        title: '员工绩效趋势分析',
-        xAxis: {
-          type: 'category',
-          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-        },
-        series: [
-          {
-            name: '优秀率',
-            type: 'line',
-            data: [12, 15, 14, 16, 15, 18, 20, 19, 18, 21, 22, 24],
-            smooth: true
-          },
-          {
-            name: '达标率',
-            type: 'line',
-            data: [82, 85, 84, 86, 88, 90, 91, 90, 92, 93, 94, 95],
-            smooth: true
-          }
-        ]
+        ...commonComponents.lineChart
       },
-      position: { x: 0, y: 13, w: 24, h: 8 }
+      position: { x: 0, y: 5, w: 16, h: 8 }
     },
     {
-      id: 'topPerformers',
+      id: 'pieChart',
+      component: 'pie-chart',
+      componentData: {
+        ...commonComponents.pieChart
+      },
+      position: { x: 16, y: 5, w: 8, h: 8 }
+    },
+    {
+      id: 'barChart',
+      component: 'bar-chart',
+      componentData: {
+        ...commonComponents.barChart
+      },
+      position: { x: 0, y: 13, w: 12, h: 8 }
+    },
+    {
+      id: 'funnelChart',
+      component: 'funnel-chart',
+      componentData: {
+        ...commonComponents.funnelChart
+      },
+      position: { x: 12, y: 13, w: 12, h: 8 }
+    },
+    {
+      id: 'tableData',
       component: 'data-table',
       componentData: {
-        ...commonComponents.tableData,
-        title: '绩效优秀员工排行',
-        columns: [
-          { label: '排名', prop: 'rank' },
-          { label: '姓名', prop: 'name' },
-          { label: '部门', prop: 'department' },
-          { label: '职位', prop: 'position' },
-          { label: '绩效分', prop: 'score' },
-          { label: '同比增长', prop: 'growth' }
-        ],
-        data: [
-          { rank: 1, name: '张三', department: '销售部', position: '销售经理', score: '98.5', growth: '+5.2%' },
-          { rank: 2, name: '李四', department: '研发部', position: '高级工程师', score: '97.2', growth: '+3.8%' },
-          { rank: 3, name: '王五', department: '市场部', position: '市场总监', score: '96.8', growth: '+4.5%' },
-          { rank: 4, name: '赵六', department: '研发部', position: '产品经理', score: '95.5', growth: '+2.5%' },
-          { rank: 5, name: '钱七', department: '运维部', position: '运维主管', score: '94.8', growth: '+6.2%' }
-        ]
+        ...commonComponents.tableData
       },
       position: { x: 0, y: 21, w: 24, h: 6 }
     }
   ]
-}
+};
 
-// 数据分析大屏模板
-const dataAnalysisTemplates = [
-  {
-    id: 'default',
-    name: '通用数据分析模板',
-    description: '适用于各类数据分析场景的通用模板，包含多种图表和数据展示组件',
-    preview: '/images/templates/data-analysis-default.jpg',
-    // 页面布局
-    layout: [
-      {
-        id: 'header',
-        component: 'header-title',
-        componentData: {
-          ...commonComponents.headerTitle
-        },
-        position: { x: 0, y: 0, w: 24, h: 2 }
-      },
-      {
-        id: 'dataCards',
-        component: 'data-cards',
-        componentData: {
-          ...commonComponents.dataCards
-        },
-        position: { x: 0, y: 2, w: 24, h: 3 }
-      },
-      {
-        id: 'lineChart',
-        component: 'line-chart',
-        componentData: {
-          ...commonComponents.lineChart
-        },
-        position: { x: 0, y: 5, w: 16, h: 8 }
-      },
-      {
-        id: 'pieChart',
-        component: 'pie-chart',
-        componentData: {
-          ...commonComponents.pieChart
-        },
-        position: { x: 16, y: 5, w: 8, h: 8 }
-      },
-      {
-        id: 'barChart',
-        component: 'bar-chart',
-        componentData: {
-          ...commonComponents.barChart
-        },
-        position: { x: 0, y: 13, w: 12, h: 8 }
-      },
-      {
-        id: 'funnelChart',
-        component: 'funnel-chart',
-        componentData: {
-          ...commonComponents.funnelChart
-        },
-        position: { x: 12, y: 13, w: 12, h: 8 }
-      },
-      {
-        id: 'tableData',
-        component: 'data-table',
-        componentData: {
-          ...commonComponents.tableData
-        },
-        position: { x: 0, y: 21, w: 24, h: 6 }
-      }
-    ]
-  },
-  {
-    id: 'sales-analysis',
-    name: '销售数据分析模板',
-    description: '专为销售数据分析定制的模板，重点展示销售趋势、区域分布、产品排行等',
-    preview: '/images/templates/data-analysis-sales.jpg',
-    // 与销售分析大屏相同的布局
-    layout: salesAnalysisScreen.layout
-  },
-  {
-    id: 'performance-analysis',
-    name: '绩效分析模板',
-    description: '专为员工绩效分析定制的模板，重点展示部门绩效、员工评分、完成率等',
-    preview: '/images/templates/data-analysis-performance.jpg',
-    // 与员工绩效大屏相同的布局
-    layout: employeePerformanceScreen.layout
-  }
-]
+const salesTemplate = {
+  id: 'sales-analysis',
+  name: '销售数据分析模板',
+  description: '专为销售数据分析定制的模板，重点展示销售趋势、区域分布、产品排行等',
+  preview: '/images/templates/data-analysis-sales.jpg',
+  // 与销售分析大屏相同的布局
+  layout: salesAnalysisScreen.layout
+};
 
+const marketingTemplate = {
+  id: 'marketing-analysis',
+  name: '营销数据分析模板',
+  description: '专为营销数据分析定制的模板',
+  preview: '/images/templates/data-analysis-marketing.jpg',
+  layout: []
+};
+
+const financeTemplate = {
+  id: 'finance-analysis',
+  name: '财务数据分析模板',
+  description: '专为财务数据分析定制的模板',
+  preview: '/images/templates/data-analysis-finance.jpg',
+  layout: []
+};
+
+const operationTemplate = {
+  id: 'operation-analysis',
+  name: '运营数据分析模板',
+  description: '专为运营数据分析定制的模板',
+  preview: '/images/templates/data-analysis-operation.jpg',
+  layout: []
+};
+
+// 其他大屏数据定义
+const marketingAnalysisScreen = {
+  id: 'marketing001',
+  name: '营销分析大屏',
+  type: 'data-analysis',
+  description: '营销活动分析大屏',
+  createTime: '2023-01-15',
+  lastModified: '2023-02-01',
+  creator: '营销部',
+  template: 'template-1',
+  accessCount: 2650,
+  isPublished: true,
+  layout: []
+};
+
+const userAnalysisScreen = {
+  id: 'user001',
+  name: '用户分析大屏',
+  type: 'data-analysis',
+  description: '用户行为分析大屏',
+  createTime: '2023-01-10',
+  lastModified: '2023-01-20',
+  creator: '用户运营',
+  template: 'template-1',
+  accessCount: 3120,
+  isPublished: true,
+  layout: []
+};
+
+const productAnalysisScreen = {
+  id: 'product001',
+  name: '产品分析大屏',
+  type: 'data-analysis',
+  description: '产品使用分析大屏',
+  createTime: '2023-01-05',
+  lastModified: '2023-01-15',
+  creator: '产品部',
+  template: 'template-1',
+  accessCount: 2850,
+  isPublished: true,
+  layout: []
+};
+
+const operationAnalysisScreen = {
+  id: 'operation001',
+  name: '运营分析大屏',
+  type: 'data-analysis',
+  description: '平台运营分析大屏',
+  createTime: '2022-12-20',
+  lastModified: '2023-01-10',
+  creator: '运营部',
+  template: 'template-1',
+  accessCount: 3450,
+  isPublished: true,
+  layout: []
+};
+
+const financialAnalysisScreen = {
+  id: 'financial001',
+  name: '财务分析大屏',
+  type: 'data-analysis',
+  description: '财务数据分析大屏',
+  createTime: '2022-12-15',
+  lastModified: '2023-01-05',
+  creator: '财务部',
+  template: 'template-1',
+  accessCount: 1850,
+  isPublished: true,
+  layout: []
+};
+
+const logisticsAnalysisScreen = {
+  id: 'logistics001',
+  name: '物流分析大屏',
+  type: 'data-analysis',
+  description: '物流数据分析大屏',
+  createTime: '2022-12-10',
+  lastModified: '2022-12-25',
+  creator: '物流部',
+  template: 'template-1',
+  accessCount: 2250,
+  isPublished: false,
+  layout: []
+};
+
+// 导出默认数据结构
 export default {
-  // 所有屏幕数据
+  // 组件库
+  components: commonComponents,
+  
+  // 模板列表
+  templates: [
+    standardTemplate,
+    salesTemplate,
+    marketingTemplate,
+    financeTemplate,
+    operationTemplate
+  ],
+  
+  // 具体大屏列表
   screens: [
     salesAnalysisScreen,
-    employeePerformanceScreen
+    marketingAnalysisScreen,
+    userAnalysisScreen,
+    productAnalysisScreen,
+    operationAnalysisScreen,
+    financialAnalysisScreen,
+    logisticsAnalysisScreen
   ],
-  // 所有模板
-  templates: dataAnalysisTemplates,
-  // 公共组件
-  components: commonComponents
+  
+  // 不同示例数据集
+  examples: {
+    // 电商数据示例
+    ecommerce: {
+      name: '电商数据分析',
+      description: '电子商务平台的销售、用户、转化率等数据分析',
+      components: {
+        // 电商特定的数据卡片
+        dataCards: {
+          type: 'data-cards',
+          layout: 'horizontal',
+          items: [
+            { title: '昨日GMV', value: '¥2,356,560', ratio: '+15.2%', icon: 'money' },
+            { title: '昨日新增用户', value: '8,856', ratio: '+12.3%', icon: 'user' },
+            { title: '昨日订单量', value: '32,526', ratio: '+9.8%', icon: 'shopping' },
+            { title: '转化率', value: '6.28%', ratio: '+0.5%', icon: 'conversion' }
+          ]
+        },
+        // 电商特定的折线图
+        lineChart: {
+          type: 'line-chart',
+          title: '平台GMV趋势',
+          xAxis: {
+            type: 'category',
+            data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
+          },
+          yAxis: {
+            type: 'value',
+            name: 'GMV (万元)'
+          },
+          series: [
+            {
+              name: '前日',
+              type: 'line',
+              data: [35, 20, 15, 12, 25, 65, 80, 70, 60, 90, 160, 95],
+              smooth: true,
+              lineStyle: { color: '#5470c6' }
+            },
+            {
+              name: '昨日',
+              type: 'line',
+              data: [40, 25, 18, 15, 30, 75, 95, 80, 70, 110, 185, 120],
+              smooth: true,
+              lineStyle: { color: '#91cc75' }
+            }
+          ]
+        },
+        // 电商特定的饼图
+        pieChart: {
+          type: 'pie-chart',
+          title: '商品类目销售占比',
+          series: [
+            {
+              name: '销售占比',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              data: [
+                { value: 1048, name: '服装鞋帽' },
+                { value: 735, name: '数码家电' },
+                { value: 580, name: '美妆护肤' },
+                { value: 484, name: '食品饮料' },
+                { value: 300, name: '家居用品' }
+              ]
+            }
+          ]
+        },
+        // 电商特定的柱状图
+        barChart: {
+          type: 'bar-chart',
+          title: '各渠道订单量对比',
+          xAxis: {
+            type: 'category',
+            data: ['APP', '小程序', 'H5', 'PC官网', '第三方平台']
+          },
+          yAxis: {
+            type: 'value',
+            name: '订单量'
+          },
+          series: [
+            {
+              name: '订单量',
+              type: 'bar',
+              data: [15680, 12450, 8960, 6780, 4320],
+              itemStyle: {
+                color: '#5470c6'
+              }
+            }
+          ]
+        },
+        // 电商特定的漏斗图
+        funnelChart: {
+          type: 'funnel-chart',
+          title: '用户转化漏斗',
+          series: [
+            {
+              name: '转化漏斗',
+              type: 'funnel',
+              left: '10%',
+              top: 60,
+              width: '80%',
+              height: '80%',
+              data: [
+                { value: 100000, name: '访问用户' },
+                { value: 35000, name: '浏览商品' },
+                { value: 12000, name: '加入购物车' },
+                { value: 8500, name: '提交订单' },
+                { value: 6280, name: '支付成功' }
+              ]
+            }
+          ]
+        },
+        // 电商特定的表格数据
+        tableData: {
+          type: 'data-table',
+          title: '热销商品排行',
+          columns: [
+            { prop: 'rank', label: '排名', width: 80 },
+            { prop: 'productName', label: '商品名称', width: 200 },
+            { prop: 'category', label: '类目', width: 120 },
+            { prop: 'sales', label: '销量', width: 100 },
+            { prop: 'revenue', label: '销售额', width: 120 },
+            { prop: 'growth', label: '增长率', width: 100 }
+          ],
+          data: [
+            { rank: 1, productName: 'iPhone 15 Pro', category: '数码', sales: '2,856', revenue: '¥2,856万', growth: '+25.6%' },
+            { rank: 2, productName: '戴森吹风机', category: '家电', sales: '1,968', revenue: '¥786万', growth: '+18.9%' },
+            { rank: 3, productName: 'Nike运动鞋', category: '服装', sales: '1,756', revenue: '¥526万', growth: '+12.3%' },
+            { rank: 4, productName: '雅诗兰黛套装', category: '美妆', sales: '1,456', revenue: '¥436万', growth: '+8.7%' },
+            { rank: 5, productName: '小米手机', category: '数码', sales: '1,256', revenue: '¥376万', growth: '+15.2%' }
+          ]
+        },
+        // 电商特定的标题
+        headerTitle: {
+          type: 'header-title',
+          title: '电商平台数据分析大屏',
+          subtitle: '实时监控平台销售数据、用户行为和业务指标',
+          updateTime: '2024-01-15 14:30:25'
+        }
+      },
+      templates: [
+        {
+          ...standardTemplate,
+          name: '电商数据分析模板',
+          description: '适用于电商平台的数据分析大屏，包含销售、用户、转化率等数据指标'
+        }
+      ],
+      screens: [
+        {
+          id: 'ecommerce001',
+          name: '电商618活动数据大屏',
+          type: 'data-analysis',
+          description: '618大促期间的实时销售监控大屏，展示平台GMV、转化率、用户数据等',
+          createTime: '2023-05-15',
+          lastModified: '2023-06-18',
+          creator: '电商运营部',
+          template: 'template-1',
+          accessCount: 15680,
+          isPublished: true,
+          layout: []
+        },
+        {
+          id: 'ecommerce002',
+          name: '电商用户行为分析大屏',
+          type: 'data-analysis',
+          description: '分析用户浏览、加购、下单等行为数据，优化转化路径',
+          createTime: '2023-04-10',
+          lastModified: '2023-05-20',
+          creator: '用户增长团队',
+          template: 'template-2',
+          accessCount: 8560,
+          isPublished: true,
+          layout: []
+        }
+      ]
+    },
+    
+    // 零售行业示例
+    retail: {
+      name: '零售行业分析',
+      description: '实体零售门店的销售、客流、库存等数据分析',
+      components: {
+        // 零售特定的数据卡片
+        dataCards: {
+          type: 'data-cards',
+          layout: 'horizontal',
+          items: [
+            { title: '今日销售额', value: '¥568,320', ratio: '+8.5%', icon: 'money' },
+            { title: '今日客流量', value: '12,568', ratio: '+6.2%', icon: 'customer' },
+            { title: '客单价', value: '¥45.2', ratio: '+3.8%', icon: 'price' },
+            { title: '库存周转率', value: '3.6次/月', ratio: '+0.2', icon: 'stock' }
+          ]
+        },
+        // 零售特定的折线图
+        lineChart: {
+          type: 'line-chart',
+          title: '门店客流量趋势',
+          xAxis: {
+            type: 'category',
+            data: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00']
+          },
+          yAxis: {
+            type: 'value',
+            name: '客流量 (人)'
+          },
+          series: [
+            {
+              name: '昨日',
+              type: 'line',
+              data: [120, 180, 250, 320, 280, 350, 420, 480, 520, 680, 750, 580],
+              smooth: true,
+              lineStyle: { color: '#5470c6' }
+            },
+            {
+              name: '今日',
+              type: 'line',
+              data: [135, 195, 275, 350, 310, 380, 450, 520, 580, 720, 820, 650],
+              smooth: true,
+              lineStyle: { color: '#91cc75' }
+            }
+          ]
+        },
+        // 零售特定的饼图
+        pieChart: {
+          type: 'pie-chart',
+          title: '商品品类销售占比',
+          series: [
+            {
+              name: '销售占比',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              data: [
+                { value: 2048, name: '服装' },
+                { value: 1535, name: '食品' },
+                { value: 1280, name: '日用品' },
+                { value: 984, name: '化妆品' },
+                { value: 600, name: '其他' }
+              ]
+            }
+          ]
+        },
+        // 零售特定的柱状图
+        barChart: {
+          type: 'bar-chart',
+          title: '各门店销售额对比',
+          xAxis: {
+            type: 'category',
+            data: ['旗舰店', '万达店', '银泰店', '大悦城店', '奥特莱斯店']
+          },
+          yAxis: {
+            type: 'value',
+            name: '销售额 (万元)'
+          },
+          series: [
+            {
+              name: '销售额',
+              type: 'bar',
+              data: [156.8, 124.5, 89.6, 67.8, 43.2],
+              itemStyle: {
+                color: '#ee6666'
+              }
+            }
+          ]
+        },
+        // 零售特定的漏斗图
+        funnelChart: {
+          type: 'funnel-chart',
+          title: '客户购买转化漏斗',
+          series: [
+            {
+              name: '转化漏斗',
+              type: 'funnel',
+              left: '10%',
+              top: 60,
+              width: '80%',
+              height: '80%',
+              data: [
+                { value: 12568, name: '进店客流' },
+                { value: 8956, name: '浏览商品' },
+                { value: 5680, name: '试用体验' },
+                { value: 3456, name: '咨询导购' },
+                { value: 2156, name: '完成购买' }
+              ]
+            }
+          ]
+        },
+        // 零售特定的表格数据
+        tableData: {
+          type: 'data-table',
+          title: '门店业绩排行',
+          columns: [
+            { prop: 'rank', label: '排名', width: 80 },
+            { prop: 'storeName', label: '门店名称', width: 150 },
+            { prop: 'location', label: '所在城市', width: 120 },
+            { prop: 'sales', label: '销售额', width: 120 },
+            { prop: 'traffic', label: '客流量', width: 100 },
+            { prop: 'conversion', label: '转化率', width: 100 }
+          ],
+          data: [
+            { rank: 1, storeName: '北京旗舰店', location: '北京', sales: '¥156.8万', traffic: '3,256', conversion: '18.5%' },
+            { rank: 2, storeName: '上海万达店', location: '上海', sales: '¥124.5万', traffic: '2,968', conversion: '16.8%' },
+            { rank: 3, storeName: '深圳银泰店', location: '深圳', sales: '¥89.6万', traffic: '2,156', conversion: '15.2%' },
+            { rank: 4, storeName: '广州大悦城店', location: '广州', sales: '¥67.8万', traffic: '1,856', conversion: '14.6%' },
+            { rank: 5, storeName: '杭州奥特莱斯店', location: '杭州', sales: '¥43.2万', traffic: '1,456', conversion: '12.8%' }
+          ]
+        },
+        // 零售特定的标题
+        headerTitle: {
+          type: 'header-title',
+          title: '零售连锁门店数据分析大屏',
+          subtitle: '实时监控全国门店销售数据、客流分析和库存管理',
+          updateTime: '2024-01-15 14:30:25'
+        }
+      },
+      templates: [
+        {
+          ...standardTemplate,
+          name: '零售行业分析模板',
+          description: '适用于零售行业的数据分析大屏，包含销售、客流、库存等数据指标'
+        }
+      ],
+      screens: [
+        {
+          id: 'retail001',
+          name: '全国连锁门店销售大屏',
+          type: 'data-analysis',
+          description: '监控全国各地连锁门店的销售情况，对比不同区域和门店的业绩',
+          createTime: '2023-03-15',
+          lastModified: '2023-04-10',
+          creator: '零售分析师',
+          template: 'template-1',
+          accessCount: 5680,
+          isPublished: true,
+          layout: []
+        }
+      ]
+    },
+    
+    // 教育行业示例
+    education: {
+      name: '教育行业分析',
+      description: '教育机构的招生、课程、学员等数据分析',
+      components: {
+        // 教育特定的数据卡片
+        dataCards: {
+          type: 'data-cards',
+          layout: 'horizontal',
+          items: [
+            { title: '本月招生数', value: '1,286人', ratio: '+12.5%', icon: 'student' },
+            { title: '续班率', value: '85.6%', ratio: '+3.2%', icon: 'renew' },
+            { title: '平均课耗', value: '4.2课时/周', ratio: '+0.5', icon: 'class' },
+            { title: '新增咨询量', value: '3,568', ratio: '+15.8%', icon: 'consult' }
+          ]
+        },
+        // 教育特定的折线图
+        lineChart: {
+          type: 'line-chart',
+          title: '月度招生趋势',
+          xAxis: {
+            type: 'category',
+            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+          },
+          yAxis: {
+            type: 'value',
+            name: '招生人数'
+          },
+          series: [
+            {
+              name: '去年',
+              type: 'line',
+              data: [856, 456, 1256, 1856, 2156, 1956, 2456, 2856, 3156, 2756, 2356, 1856],
+              smooth: true,
+              lineStyle: { color: '#5470c6' }
+            },
+            {
+              name: '今年',
+              type: 'line',
+              data: [956, 556, 1456, 2056, 2456, 2256, 2756, 3256, 3556, 3156, 2756, 2156],
+              smooth: true,
+              lineStyle: { color: '#91cc75' }
+            }
+          ]
+        },
+        // 教育特定的饼图
+        pieChart: {
+          type: 'pie-chart',
+          title: '课程类型分布',
+          series: [
+            {
+              name: '课程分布',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              data: [
+                { value: 3048, name: '数学' },
+                { value: 2535, name: '英语' },
+                { value: 1880, name: '语文' },
+                { value: 1284, name: '物理' },
+                { value: 800, name: '化学' }
+              ]
+            }
+          ]
+        },
+        // 教育特定的柱状图
+        barChart: {
+          type: 'bar-chart',
+          title: '各年级学员分布',
+          xAxis: {
+            type: 'category',
+            data: ['小学1-3年级', '小学4-6年级', '初中', '高中', '成人教育']
+          },
+          yAxis: {
+            type: 'value',
+            name: '学员人数'
+          },
+          series: [
+            {
+              name: '学员人数',
+              type: 'bar',
+              data: [2568, 3456, 4256, 3856, 1256],
+              itemStyle: {
+                color: '#fac858'
+              }
+            }
+          ]
+        },
+        // 教育特定的漏斗图
+        funnelChart: {
+          type: 'funnel-chart',
+          title: '招生转化漏斗',
+          series: [
+            {
+              name: '转化漏斗',
+              type: 'funnel',
+              left: '10%',
+              top: 60,
+              width: '80%',
+              height: '80%',
+              data: [
+                { value: 8568, name: '咨询量' },
+                { value: 5680, name: '试听课' },
+                { value: 3456, name: '意向报名' },
+                { value: 2156, name: '缴费报名' },
+                { value: 1856, name: '正式入学' }
+              ]
+            }
+          ]
+        },
+        // 教育特定的表格数据
+        tableData: {
+          type: 'data-table',
+          title: '优秀教师排行',
+          columns: [
+            { prop: 'rank', label: '排名', width: 80 },
+            { prop: 'teacherName', label: '教师姓名', width: 120 },
+            { prop: 'subject', label: '任教科目', width: 100 },
+            { prop: 'students', label: '学员数', width: 100 },
+            { prop: 'satisfaction', label: '满意度', width: 100 },
+            { prop: 'renewal', label: '续班率', width: 100 }
+          ],
+          data: [
+            { rank: 1, teacherName: '张老师', subject: '数学', students: '156', satisfaction: '98.5%', renewal: '92.3%' },
+            { rank: 2, teacherName: '李老师', subject: '英语', students: '142', satisfaction: '97.8%', renewal: '89.6%' },
+            { rank: 3, teacherName: '王老师', subject: '语文', students: '138', satisfaction: '96.9%', renewal: '87.2%' },
+            { rank: 4, teacherName: '刘老师', subject: '物理', students: '125', satisfaction: '96.2%', renewal: '85.8%' },
+            { rank: 5, teacherName: '陈老师', subject: '化学', students: '118', satisfaction: '95.6%', renewal: '84.3%' }
+          ]
+        },
+        // 教育特定的标题
+        headerTitle: {
+          type: 'header-title',
+          title: '教育培训机构数据分析大屏',
+          subtitle: '全面监控招生数据、教学质量和学员管理',
+          updateTime: '2024-01-15 14:30:25'
+        }
+      },
+      templates: [
+        {
+          ...standardTemplate,
+          name: '教育行业分析模板',
+          description: '适用于教育培训机构的数据分析大屏，包含招生、续班、课耗等数据指标'
+        }
+      ],
+      screens: [
+        {
+          id: 'education001',
+          name: '教育机构运营分析大屏',
+          type: 'data-analysis',
+          description: '全面分析教育机构的招生、续班、教学、财务等运营数据',
+          createTime: '2023-02-10',
+          lastModified: '2023-03-15',
+          creator: '教育运营总监',
+          template: 'template-1',
+          accessCount: 3250,
+          isPublished: true,
+          layout: []
+        }
+      ]
+    },
+
+    // 金融行业示例
+    finance: {
+      name: '金融行业分析',
+      description: '金融机构的业务数据、风险控制、客户分析等数据监控',
+      components: {
+        // 金融特定的数据卡片
+        dataCards: {
+          type: 'data-cards',
+          layout: 'horizontal',
+          items: [
+            { title: '今日交易额', value: '¥15.68亿', ratio: '+8.9%', icon: 'money' },
+            { title: '活跃用户数', value: '286.5万', ratio: '+5.6%', icon: 'user' },
+            { title: '风险预警', value: '23笔', ratio: '-12.5%', icon: 'warning' },
+            { title: '资产规模', value: '¥1,256亿', ratio: '+2.3%', icon: 'asset' }
+          ]
+        },
+        // 金融特定的折线图
+        lineChart: {
+          type: 'line-chart',
+          title: '日交易量趋势',
+          xAxis: {
+            type: 'category',
+            data: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00']
+          },
+          yAxis: {
+            type: 'value',
+            name: '交易额 (亿元)'
+          },
+          series: [
+            {
+              name: '昨日',
+              type: 'line',
+              data: [0.5, 0.3, 0.8, 3.2, 5.6, 4.8, 2.1, 1.2],
+              smooth: true,
+              lineStyle: { color: '#5470c6' }
+            },
+            {
+              name: '今日',
+              type: 'line',
+              data: [0.6, 0.4, 0.9, 3.8, 6.2, 5.4, 2.5, 1.5],
+              smooth: true,
+              lineStyle: { color: '#91cc75' }
+            }
+          ]
+        },
+        // 金融特定的饼图
+        pieChart: {
+          type: 'pie-chart',
+          title: '业务类型分布',
+          series: [
+            {
+              name: '业务分布',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              data: [
+                { value: 4048, name: '个人理财' },
+                { value: 3535, name: '企业贷款' },
+                { value: 2880, name: '投资基金' },
+                { value: 1884, name: '保险业务' },
+                { value: 1200, name: '其他业务' }
+              ]
+            }
+          ]
+        },
+        // 金融特定的柱状图
+        barChart: {
+          type: 'bar-chart',
+          title: '各产品收益对比',
+          xAxis: {
+            type: 'category',
+            data: ['货币基金', '债券基金', '股票基金', '混合基金', '理财产品']
+          },
+          yAxis: {
+            type: 'value',
+            name: '年化收益率 (%)'
+          },
+          series: [
+            {
+              name: '年化收益率',
+              type: 'bar',
+              data: [2.8, 4.2, 8.6, 6.5, 3.9],
+              itemStyle: {
+                color: '#73c0de'
+              }
+            }
+          ]
+        },
+        // 金融特定的漏斗图
+        funnelChart: {
+          type: 'funnel-chart',
+          title: '客户转化漏斗',
+          series: [
+            {
+              name: '转化漏斗',
+              type: 'funnel',
+              left: '10%',
+              top: 60,
+              width: '80%',
+              height: '80%',
+              data: [
+                { value: 50000, name: '潜在客户' },
+                { value: 25000, name: '意向客户' },
+                { value: 12000, name: '申请开户' },
+                { value: 8500, name: '完成开户' },
+                { value: 6200, name: '首次交易' }
+              ]
+            }
+          ]
+        },
+        // 金融特定的表格数据
+        tableData: {
+          type: 'data-table',
+          title: '热门理财产品',
+          columns: [
+            { prop: 'rank', label: '排名', width: 80 },
+            { prop: 'productName', label: '产品名称', width: 180 },
+            { prop: 'type', label: '产品类型', width: 120 },
+            { prop: 'yield', label: '年化收益', width: 100 },
+            { prop: 'amount', label: '申购金额', width: 120 },
+            { prop: 'risk', label: '风险等级', width: 100 }
+          ],
+          data: [
+            { rank: 1, productName: '稳健增长理财计划', type: '混合型', yield: '6.5%', amount: '¥12.8亿', risk: '中等' },
+            { rank: 2, productName: '货币增值基金', type: '货币型', yield: '2.8%', amount: '¥8.6亿', risk: '低' },
+            { rank: 3, productName: '成长精选股票基金', type: '股票型', yield: '8.6%', amount: '¥6.2亿', risk: '高' },
+            { rank: 4, productName: '债券稳健基金', type: '债券型', yield: '4.2%', amount: '¥4.8亿', risk: '中低' },
+            { rank: 5, productName: '短期理财产品', type: '理财型', yield: '3.9%', amount: '¥3.2亿', risk: '低' }
+          ]
+        },
+        // 金融特定的标题
+        headerTitle: {
+          type: 'header-title',
+          title: '金融机构业务数据分析大屏',
+          subtitle: '实时监控交易数据、风险控制和客户资产管理',
+          updateTime: '2024-01-15 14:30:25'
+        }
+      },
+      templates: [
+        {
+          ...standardTemplate,
+          name: '金融行业分析模板',
+          description: '适用于金融机构的数据分析大屏，包含交易、风控、客户等数据指标'
+        }
+      ],
+      screens: [
+        {
+          id: 'finance001',
+          name: '金融机构风控监控大屏',
+          type: 'data-analysis',
+          description: '实时监控金融交易风险、客户资产和业务数据',
+          createTime: '2023-01-20',
+          lastModified: '2023-02-15',
+          creator: '风控部门',
+          template: 'template-1',
+          accessCount: 4250,
+          isPublished: true,
+          layout: []
+        }
+      ]
+    }
+  }
 } 

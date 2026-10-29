@@ -71,8 +71,63 @@
           <h3>多端适配</h3>
           <p>支持PC、大屏、平板等多种终端展示</p>
         </div>
+        <div class="feature-item">
+          <i class="el-icon-document-copy"></i>
+          <h3>示例数据</h3>
+          <p>提供多种行业示例数据，快速预览效果</p>
+        </div>
+        <div class="feature-item">
+          <i class="el-icon-refresh"></i>
+          <h3>实时更新</h3>
+          <p>支持数据实时刷新和动态更新</p>
+        </div>
       </div>
     </div>
+
+    <!-- 示例展示区域 -->
+    <div class="example-showcase">
+      <h2>数据示例展示</h2>
+      <p>体验不同行业场景的数据大屏效果</p>
+      
+      <div class="example-categories">
+        <el-tabs v-model="activeExampleType" @tab-click="handleExampleTypeChange">
+          <el-tab-pane 
+            v-for="type in screenTypes" 
+            :key="type.key" 
+            :label="type.name" 
+            :name="type.key"
+          >
+            <div class="example-grid">
+              <div 
+                v-for="example in getExamplesByType(type.key)" 
+                :key="example.key"
+                class="example-card"
+                @click="previewExample(type.key, example)"
+              >
+                <div class="example-card-icon" :style="{ backgroundColor: example.color }">
+                  <i :class="`el-icon-${example.icon}`"></i>
+                </div>
+                <div class="example-card-content">
+                  <h4>{{ example.name }}</h4>
+                  <p>{{ example.description }}</p>
+                  <el-button type="text" size="small">
+                    <i class="el-icon-view"></i>
+                    预览效果
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+    </div>
+
+    <!-- 数据预览对话框 -->
+    <DataPreview 
+      :visible.sync="previewVisible"
+      :example-info="currentPreviewExample"
+      @use-example="handleUseExample"
+    />
 
     <div class="footer">
       <p>© 2023 数据可视化大屏设计系统 版权所有</p>
@@ -82,12 +137,20 @@
 
 <script>
 import { getBigscreenTypes } from '@/api/bigscreen'
+import mockDataManager from '@/utils/mockDataManager'
+import DataPreview from '@/components/DataPreview'
 
 export default {
   name: 'HomePage',
+  components: {
+    DataPreview
+  },
   data() {
     return {
-      screenTypes: []
+      screenTypes: [],
+      activeExampleType: '',
+      previewVisible: false,
+      currentPreviewExample: null
     }
   },
   created() {
@@ -97,6 +160,9 @@ export default {
     async fetchScreenTypes() {
       try {
         this.screenTypes = await getBigscreenTypes()
+        if (this.screenTypes.length > 0) {
+          this.activeExampleType = this.screenTypes[0].key
+        }
       } catch (error) {
         console.error('获取大屏类型失败', error)
         this.$message.error('获取大屏类型失败')
@@ -110,6 +176,26 @@ export default {
     },
     goToList(type) {
       this.$router.push(`/list/${type}`)
+    },
+    getExamplesByType(type) {
+      return mockDataManager.getExampleConfigs(type)
+    },
+    previewExample(type, example) {
+      this.currentPreviewExample = {
+        ...example,
+        screenType: type
+      }
+      this.previewVisible = true
+    },
+    handleExampleTypeChange(tab) {
+      this.activeExampleType = tab.name
+    },
+    handleUseExample(exampleInfo) {
+      // 跳转到模板选择页面，并传递示例参数
+      this.$router.push({
+        path: `/template/${exampleInfo.screenType}`,
+        query: { example: exampleInfo.key }
+      })
     }
   }
 }
@@ -283,6 +369,89 @@ export default {
       font-size: 14px;
       color: #606266;
       line-height: 1.6;
+    }
+  }
+}
+
+.example-showcase {
+  padding: 60px 30px;
+  background-color: #fff;
+  text-align: center;
+
+  h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #303133;
+  }
+
+  > p {
+    font-size: 16px;
+    color: #606266;
+    margin-bottom: 40px;
+  }
+
+  .example-categories {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .example-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .example-card {
+    width: 280px;
+    height: 320px;
+    transition: transform 0.3s;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-10px);
+    }
+
+    .example-card-icon {
+      width: 100%;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+
+      i {
+        font-size: 50px;
+        color: #fff;
+      }
+    }
+
+    .example-card-content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+
+      h4 {
+        font-size: 20px;
+        font-weight: 500;
+        margin-bottom: 15px;
+        color: #303133;
+      }
+
+      p {
+        flex-grow: 1;
+        font-size: 14px;
+        color: #606266;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .el-button {
+        margin-top: auto;
+      }
     }
   }
 }

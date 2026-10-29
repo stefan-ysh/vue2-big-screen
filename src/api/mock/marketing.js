@@ -854,13 +854,187 @@ const marketingTemplates = [
 ];
 
 export default {
-  // 所有屏幕数据
+  // 组件库
+  components: commonComponents,
+  
+  // 模板列表
+  templates: marketingTemplates,
+  
+  // 具体大屏列表
   screens: [
     eCommerce618Screen,
     summerCampaignScreen
   ],
-  // 所有模板
-  templates: marketingTemplates,
-  // 公共组件
-  components: commonComponents
+  
+  // 不同示例数据集
+  examples: {
+    // 电商活动示例
+    ecommerce: {
+      name: '电商营销活动',
+      description: '电商平台的促销、优惠券、活动效果分析',
+      components: {
+        ...commonComponents,
+        // 电商特定的数据卡片
+        marketingCards: {
+          type: 'marketing-cards',
+          layout: 'horizontal',
+          items: [
+            { title: '活动GMV', value: '¥5,862,350', trend: '+25.8%', icon: 'money' },
+            { title: '优惠券领取', value: '125,856', trend: '+32.6%', icon: 'coupon' },
+            { title: '新增用户', value: '36,285', trend: '+18.9%', icon: 'user' },
+            { title: '活动转化率', value: '8.6%', trend: '+2.3%', icon: 'conversion' }
+          ]
+        },
+        // 电商特定的折线图
+        trendChart: {
+          type: 'line-chart',
+          title: '近7日销售趋势',
+          xAxis: {
+            type: 'category',
+            data: ['6/1', '6/2', '6/3', '6/4', '6/5', '6/6', '6/7']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              name: '活动期销售额',
+              type: 'line',
+              data: [350000, 420000, 560000, 890000, 950000, 1250000, 1450000],
+              smooth: true
+            },
+            {
+              name: '去年同期',
+              type: 'line',
+              data: [280000, 350000, 420000, 580000, 650000, 780000, 850000],
+              smooth: true
+            }
+          ]
+        }
+      },
+      templates: [
+        {
+          id: 'ecommerce-marketing-template',
+          name: '电商大促营销模板',
+          description: '适用于电商大促活动的数据分析大屏，包含GMV、转化率、用户等指标',
+          preview: '/images/templates/marketing-ecommerce.jpg',
+          layout: eCommerce618Screen.layout
+        }
+      ],
+      screens: [
+        {
+          id: 'ecommerce-marketing-001',
+          name: '618大促营销大屏',
+          type: 'marketing',
+          description: '618全平台大促活动数据实时监控，包含销售额、转化率、用户活跃度等',
+          createTime: '2023-05-25',
+          lastModified: '2023-06-18',
+          creator: '电商营销中心',
+          template: 'ecommerce-marketing-template',
+          accessCount: 25680,
+          isPublished: true,
+          layout: eCommerce618Screen.layout
+        }
+      ]
+    },
+    
+    // 社交媒体示例
+    social: {
+      name: '社交媒体营销',
+      description: '社交平台内容传播、用户互动、KOL效果分析',
+      components: {
+        ...commonComponents,
+        // 社交特定的数据卡片
+        marketingCards: {
+          type: 'marketing-cards',
+          layout: 'horizontal',
+          items: [
+            { title: '曝光量', value: '1,256万', trend: '+38.5%', icon: 'view' },
+            { title: '互动量', value: '86.5万', trend: '+42.3%', icon: 'interaction' },
+            { title: '转化量', value: '12.8万', trend: '+25.6%', icon: 'conversion' },
+            { title: '互动成本', value: '¥0.85', trend: '-15.8%', icon: 'cost' }
+          ]
+        },
+        // 社交特定的玫瑰图
+        channelPie: {
+          type: 'pie-chart',
+          title: '内容类型互动分布',
+          series: [
+            {
+              type: 'pie',
+              roseType: 'area',
+              radius: ['30%', '70%'],
+              data: [
+                { value: 40, name: '短视频' },
+                { value: 25, name: '图文' },
+                { value: 15, name: '直播' },
+                { value: 12, name: '社区问答' },
+                { value: 8, name: '其他' }
+              ]
+            }
+          ]
+        }
+      },
+      templates: [
+        {
+          id: 'social-marketing-template',
+          name: '社交媒体营销模板',
+          description: '适用于社交媒体营销活动的数据分析大屏，包含互动、转化、KOL等数据',
+          preview: '/images/templates/marketing-social.jpg',
+          layout: summerCampaignScreen.layout
+        }
+      ],
+      screens: [
+        {
+          id: 'social-marketing-001',
+          name: '品牌内容营销大屏',
+          type: 'marketing',
+          description: '品牌在各大社交平台的内容营销效果监控，包含曝光、互动、转化等数据',
+          createTime: '2023-04-10',
+          lastModified: '2023-05-15',
+          creator: '品牌营销部',
+          template: 'social-marketing-template',
+          accessCount: 15680,
+          isPublished: true,
+          layout: summerCampaignScreen.layout
+        }
+      ]
+    },
+    
+    // 线下活动示例
+    offline: {
+      name: '线下活动营销',
+      description: '线下活动的客流、转化、ROI分析',
+      components: {
+        ...commonComponents,
+        // 线下活动特定的数据卡片
+        marketingCards: {
+          type: 'marketing-cards',
+          layout: 'horizontal',
+          items: [
+            { title: '参与人数', value: '15,862人', trend: '+18.5%', icon: 'user' },
+            { title: '现场转化', value: '3,856人', trend: '+22.6%', icon: 'conversion' },
+            { title: '活动成本', value: '¥286,500', trend: '+5.8%', icon: 'cost' },
+            { title: '活动ROI', value: '3.6', trend: '+0.8', icon: 'roi' }
+          ]
+        }
+      },
+      templates: marketingTemplates,
+      screens: [
+        {
+          id: 'offline-marketing-001',
+          name: '城市巡展活动大屏',
+          type: 'marketing',
+          description: '全国城市巡展活动效果实时监控，包含客流、转化、城市对比等数据',
+          createTime: '2023-03-15',
+          lastModified: '2023-04-20',
+          creator: '线下活动运营',
+          template: 'default',
+          accessCount: 8560,
+          isPublished: true,
+          layout: marketingTemplates[0].layout
+        }
+      ]
+    }
+  }
 } 
