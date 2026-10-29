@@ -8,7 +8,6 @@
         :lang="language"
         theme="monokai"
         :options="options"
-        @init="editorInit"
       />
       <div slot="footer">
         <el-button @click="cancel">取消</el-button>
@@ -133,25 +132,13 @@ export default {
       immediate: true
     },
     mode: {
-      handler(newVal, oldVal) {
+      handler(newVal) {
         this.language = newVal
       },
       immediate: true
     }
   },
   methods: {
-    editorInit: function(editor) {
-      console.log('%c [ editor ]-149', 'font-size:13px; background:pink; color:#bf2c9f;', editor)
-      // console.log('debug log --> ', editor)
-      // // 窗口自适应
-      // // editor.resize();
-      // // 监听编辑器变化
-      // editor.getSession().on('change', (val) => {
-      //   console.log('debug log --> ', editor.getValue())
-
-      //   this.$emit('change', editor.getValue())
-      // })
-    },
     confirm() {
       this.$emit('confirm')
     },

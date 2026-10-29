@@ -117,12 +117,13 @@ export function getDateRange(range) {
       start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
       end = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59);
       break;
-    case 'week':
+    case 'week': {
       // 获取本周一和本周日
       const day = now.getDay() || 7;
       start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - day + 1);
       end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (7 - day), 23, 59, 59);
       break;
+    }
     case 'month':
       start = new Date(now.getFullYear(), now.getMonth(), 1);
       end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
