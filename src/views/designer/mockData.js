@@ -62,7 +62,7 @@ export default {
           convertData:
             '(data) => {\n  // data 为图表需要的显示数据，如果数据源为接口请求，则 data 为接口返回数据\n  return data;\n};',
           convertChart:
-            '(option) => {\n  // option 为图表需要的样式数据，更多详情可查看 https://echarts.apache.org/zh/option.html\n  console.log(option)\n  option.xAxis.axisLabel.fontSize = 20\n  option.grid.y = 50\n  return option;\n};'
+            '(option) => {\n  // option 为图表需要的样式数据，更多详情可查看 https://echarts.apache.org/zh/option.html\n  option.xAxis.axisLabel.fontSize = 20\n  option.grid.y = 50\n  return option;\n};'
         },
         animation: {
           name: '',
@@ -848,6 +848,245 @@ export default {
       cptZ: 18,
       cptWidth: 517,
       cptHeight: 258,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0
+    },
+    {
+      id: 'data-cards-1',
+      cptTitle: '数据卡片',
+      layerName: '数据卡片',
+      icon: 'num',
+      hidden: false,
+      opacity: 1,
+      componentName: 'DataCards',
+      setterName: 'DataCards-setter',
+      configProps: {
+        attribute: {
+          layout: 'horizontal',
+          items: [
+            { title: '总销售额', value: '¥9,280,105', ratio: '+15.2%', icon: 'money' },
+            { title: '总资产', value: '¥152,380,000', ratio: '+8.7%', icon: 'assets' },
+            { title: '总负债', value: '¥58,925,000', ratio: '-3.2%', icon: 'debt' }
+          ],
+          backgroundColor: 'rgba(12, 26, 60, 0.7)',
+          borderColor: '#1D2C5E',
+          valueColor: '#ffffff',
+          titleColor: '#a0c4ff'
+        },
+        cptDataForm: {
+          dataSource: 1,
+          pollTime: 0,
+          dataText:
+            '{"items":[{"title":"总销售额","value":"¥9,280,105","ratio":"+15.2%"},{"title":"总资产","value":"¥152,380,000","ratio":"+8.7%"},{"title":"总负债","value":"¥58,925,000","ratio":"-3.2%"}]}'
+        },
+        animation: {
+          name: '',
+          delay: 'animate__delay-0s',
+          speed: 'animate__slow',
+          repeat: 'animate__repeat-1'
+        }
+      },
+      cptX: 100,
+      cptY: 500,
+      cptZ: 10,
+      cptWidth: 600,
+      cptHeight: 150,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0
+    },
+    {
+      id: 'map-visualization-template',
+      cptTitle: '地图可视化模板',
+      layerName: '地图可视化模板',
+      icon: 'map',
+      hidden: false,
+      opacity: 1,
+      componentName: 'MapVisualizationTemplate',
+      setterName: 'MapVisualizationTemplate-setter',
+      configProps: {
+        attribute: {
+          title: '物流网络图',
+          showTitle: true,
+          titleHeight: 40,
+          titleColor: '#a0c4ff',
+          mapType: 'MapMigrate',
+          backgroundColor: 'rgba(12, 26, 60, 0.2)',
+          borderColor: '#1D2C5E',
+          mapConfig: {
+            titleText: '物流网络图',
+            subtext: '模拟数据',
+            seriesName: '物流线路',
+            seriesColor: '#409eff',
+            roam: false,
+            titleLeft: 'center',
+            titleTop: 10,
+            period: 6,
+            symbol: 'diamond',
+            effectColor: '#fff',
+            lineWidth: 0,
+            symbolSize: 6,
+            curveness: 0.2,
+            titleFontSize: 20,
+            titleColor: '#ccc',
+            subTitleColor: '#aaa',
+            subTitleFontSize: 13
+          }
+        },
+        cptDataForm: {
+          dataSource: 1,
+          pollTime: 0,
+          dataText:
+            '{"start":[116.4551,40.2539],"end":[{"name":"上海","value":95},{"name":"广州","value":90},{"name":"深圳","value":85},{"name":"杭州","value":80},{"name":"武汉","value":70},{"name":"成都","value":75},{"name":"重庆","value":65},{"name":"西安","value":60},{"name":"哈尔滨","value":50},{"name":"乌鲁木齐","value":100}]}'
+        },
+        animation: {
+          name: 'fadeInRight',
+          delay: 'animate__delay-0.4s',
+          speed: 'animate__slow',
+          repeat: 'animate__repeat-1'
+        }
+      },
+      cptX: 1270,
+      cptY: 310,
+      cptZ: 12,
+      cptWidth: 600,
+      cptHeight: 360,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0
+    },
+    {
+      id: 'table-001',
+      cptTitle: '表格',
+      layerName: '区域物流排行榜',
+      icon: 'table',
+      hidden: false,
+      opacity: 1,
+      componentName: 'TableComponent',
+      setterName: 'TableComponent-setter',
+      configProps: {
+        attribute: {
+          title: '区域物流量排行',
+          showTitle: true,
+          titleHeight: 40,
+          columns: [
+            { label: '排名', prop: 'rank' },
+            { label: '地区', prop: 'region' },
+            { label: '运单量', prop: 'orders' },
+            { label: '同比增长', prop: 'growth' }
+          ],
+          data: [
+            { rank: 1, region: '华东', orders: '4,562', growth: '12.5%' },
+            { rank: 2, region: '华南', orders: '3,897', growth: '8.3%' },
+            { rank: 3, region: '华北', orders: '3,245', growth: '10.2%' },
+            { rank: 4, region: '西南', orders: '2,876', growth: '15.7%' },
+            { rank: 5, region: '中南', orders: '2,583', growth: '5.8%' },
+            { rank: 6, region: '西北', orders: '1,976', growth: '-2.3%' },
+            { rank: 7, region: '东北', orders: '1,543', growth: '3.1%' },
+            { rank: 8, region: '华中', orders: '1,278', growth: '7.6%' }
+          ],
+          backgroundColor: 'rgba(12, 28, 73, 0.7)',
+          borderColor: '#1d2c5e',
+          textColor: '#a4dbff',
+          headerColor: '#ffffff',
+          headerBgColor: 'rgba(19, 30, 58, 0.7)'
+        },
+        cptDataForm: {
+          dataSource: 1,
+          pollTime: 0,
+          dataText:
+            '{"columns":[{"label":"排名","prop":"rank"},{"label":"地区","prop":"region"},{"label":"运单量","prop":"orders"},{"label":"同比增长","prop":"growth"}],"data":[{"rank":1,"region":"华东","orders":"4,562","growth":"12.5%"},{"rank":2,"region":"华南","orders":"3,897","growth":"8.3%"},{"rank":3,"region":"华北","orders":"3,245","growth":"10.2%"},{"rank":4,"region":"西南","orders":"2,876","growth":"15.7%"},{"rank":5,"region":"中南","orders":"2,583","growth":"5.8%"},{"rank":6,"region":"西北","orders":"1,976","growth":"-2.3%"},{"rank":7,"region":"东北","orders":"1,543","growth":"3.1%"},{"rank":8,"region":"华中","orders":"1,278","growth":"7.6%"}]}'
+        },
+        animation: {
+          name: 'fadeInRight',
+          delay: 'animate__delay-0.6s',
+          speed: 'animate__slow',
+          repeat: 'animate__repeat-1'
+        }
+      },
+      cptX: 100,
+      cptY: 690,
+      cptZ: 12,
+      cptWidth: 1100,
+      cptHeight: 300,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0
+    },
+    {
+      id: 'chart-002',
+      cptTitle: '饼图',
+      layerName: '物流类型分布图',
+      icon: 'pie',
+      hidden: false,
+      opacity: 1,
+      componentName: 'PieChart',
+      setterName: 'PieChart-setter',
+      configProps: {
+        attribute: {
+          title: '物流类型分布',
+          showTitle: true,
+          titleHeight: 40,
+          titleColor: '#a0c4ff',
+          backgroundColor: 'rgba(12, 28, 73, 0.7)',
+          borderColor: '#1d2c5e',
+          textColor: '#ffffff',
+          series: [
+            {
+              name: '物流类型',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              center: ['40%', '50%'],
+              avoidLabelOverlap: false,
+              itemStyle: {
+                borderRadius: 10,
+                borderColor: '#051536',
+                borderWidth: 2
+              },
+              label: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: '18',
+                  fontWeight: 'bold',
+                  color: '#ffffff'
+                }
+              },
+              labelLine: {
+                show: false
+              },
+              data: [
+                { value: 35, name: '公路运输' },
+                { value: 25, name: '铁路运输' },
+                { value: 20, name: '航空运输' },
+                { value: 15, name: '水路运输' },
+                { value: 5, name: '其他方式' }
+              ]
+            }
+          ]
+        },
+        cptDataForm: {
+          dataSource: 1,
+          pollTime: 0,
+          dataText:
+            '[{"value":35,"name":"公路运输"},{"value":25,"name":"铁路运输"},{"value":20,"name":"航空运输"},{"value":15,"name":"水路运输"},{"value":5,"name":"其他方式"}]'
+        },
+        animation: {
+          name: 'fadeInRight',
+          delay: 'animate__delay-0.8s',
+          speed: 'animate__slow',
+          repeat: 'animate__repeat-1'
+        }
+      },
+      cptX: 1270,
+      cptY: 690,
+      cptZ: 12,
+      cptWidth: 600,
+      cptHeight: 300,
       rotateX: 0,
       rotateY: 0,
       rotateZ: 0
