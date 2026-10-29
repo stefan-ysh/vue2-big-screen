@@ -32,6 +32,17 @@
       </el-select>
     </div>
 
+    <!-- 示例选择器 -->
+    <div class="example-section" v-if="selectedType || type">
+      <ExampleSelector 
+        :screen-type="type || selectedType"
+        v-model="selectedExample"
+        @example-change="handleExampleChange"
+        @refresh-data="handleRefreshData"
+        @preview-example="handlePreviewExample"
+      />
+    </div>
+
     <div class="screen-card-view" v-if="viewMode === 'card'">
       <el-row :gutter="20">
         <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="item in screenList" :key="item.id" class="card-col">
@@ -205,8 +216,9 @@
 </template>
 
 <script>
-import { getBigscreenTypes, getBigscreenList, deleteBigscreen, publishBigscreen } from '@/api/bigscreen'
+import { getBigscreenTypes, getBigscreenList, deleteBigscreen, publishBigscreen, getAvailableExamples } from '@/api/bigscreen'
 import { formatDate } from '@/utils/date'
+import ExampleSelector from '@/components/ExampleSelector'
 
 export default {
   name: 'BigScreenList',
@@ -230,6 +242,8 @@ export default {
         pageSize: 12,
         total: 0
       },
+      selectedExample: '',
+      exampleList: [],
       createDialogVisible: false,
       createForm: {
         name: '',
@@ -262,6 +276,7 @@ export default {
   created() {
     this.fetchScreenTypes();
     this.selectedType = this.type;
+    this.fetchExampleList();
     this.fetchScreenList();
   },
   methods: {
@@ -274,6 +289,16 @@ export default {
         this.$message.error('获取大屏类型失败');
       }
     },
+    async fetchExampleList() {
+      if (!this.type && !this.selectedType) return;
+      
+      try {
+        const typeToUse = this.type || this.selectedType;
+        this.exampleList = await getAvailableExamples(typeToUse);
+      } catch (error) {
+        console.error('获取示例数据列表失败', error);
+      }
+    },
     async fetchScreenList() {
       this.loading = true;
       try {
@@ -283,7 +308,8 @@ export default {
           type: typeToUse,
           keyword: this.searchQuery,
           page: this.pagination.page,
-          pageSize: this.pagination.pageSize
+          pageSize: this.pagination.pageSize,
+          example: this.selectedExample
         };
         
         const result = await getBigscreenList(params);
@@ -298,10 +324,13 @@ export default {
     },
     handleTypeChange(type) {
       if (type !== this.selectedType) {
+        this.selectedType = type;
+        this.selectedExample = '';
         this.pagination.page = 1;
+        
+        this.fetchExampleList();
         this.fetchScreenList();
         
-        // 更新路由但不重新加载组件
         if (type) {
           this.$router.push(`/list/${type}`);
         } else {
@@ -331,11 +360,14 @@ export default {
       this.pagination.page = page;
       this.fetchScreenList();
     },
+    handleExampleChange() {
+      this.pagination.page = 1;
+      this.fetchScreenList();
+    },
     getStatusTagType(isPublished) {
       return isPublished ? 'success' : 'info';
     },
     createBigscreen() {
-      // 如果当前在特定类型的列表页，默认选中该类型
       if (this.type) {
         this.createForm.type = this.type;
       }
@@ -346,7 +378,6 @@ export default {
         if (valid) {
           this.createDialogVisible = false;
           
-          // 跳转到模板选择页面
           this.$router.push({
             path: `/template/${this.createForm.type}`,
             query: {
@@ -358,7 +389,8 @@ export default {
       });
     },
     editBigscreen(id, type) {
-      this.$router.push(`/design/${type}/${id}`);
+      const exampleParam = this.selectedExample ? `?example=${this.selectedExample}` : '';
+      this.$router.push(`/design/${type}/${id}${exampleParam}`);
     },
     previewBigscreen(id, type) {
       window.open(`/preview/${type}/${id}`, '_blank');
@@ -418,7 +450,19 @@ export default {
           this.deleteBigscreen(item);
           break;
       }
+    },
+    handleRefreshData() {
+      this.pagination.page = 1;
+      this.fetchScreenList();
+    },
+    handlePreviewExample(example) {
+      this.selectedExample = example.key;
+      this.pagination.page = 1;
+      this.fetchScreenList();
     }
+  },
+  components: {
+    ExampleSelector
   }
 }
 </script>
@@ -454,14 +498,18 @@ export default {
   margin-bottom: 20px;
 
   .search-input {
-    width: 300px;
-    margin-right: 15px;
+    flex: 1;
+    margin-right: 10px;
   }
 
   .status-filter {
     width: 120px;
-    margin-right: 15px;
+    margin-right: 10px;
   }
+}
+
+.example-section {
+  margin-bottom: 20px;
 }
 
 .screen-card-view {
@@ -551,5 +599,11 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
+}
+
+.example-description {
+  font-size: 12px;
+  color: #999;
+  margin-left: 5px;
 }
 </style> 
