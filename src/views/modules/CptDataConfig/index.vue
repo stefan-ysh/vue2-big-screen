@@ -16,6 +16,7 @@
                 :key="radio.value"
                 style="margin-bottom: 10px"
                 :label="radio.value"
+                :disabled="radio.disabled === true"
                 >{{ radio.label }}</el-radio
               >
             </el-radio-group>
@@ -174,11 +175,13 @@ export default {
         },
         {
           value: 3,
-          label: 'sql'
+          label: 'sql（开发中）',
+          disabled: true
         },
         {
           value: 4,
-          label: 'WebSocket'
+          label: 'WebSocket（开发中）',
+          disabled: true
         }
       ]
     }
@@ -228,7 +231,7 @@ export default {
       }
       this.codeVisible = false
     },
-    cancelEditCode(val) {
+    cancelEditCode() {
       this.codeVisible = false
     },
     showCodeEditor(type) {

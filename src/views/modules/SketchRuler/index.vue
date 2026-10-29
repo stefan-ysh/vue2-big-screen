@@ -76,9 +76,15 @@ export default {
 </script>
 
 <style>
+/* 标尺作为悬浮层叠加在画布左上角，不占据文档流空间，
+   否则会把画布容器挤出可视区域 */
 #mb-ruler {
+  position: absolute;
   top: 0;
   left: 0;
+  z-index: 5;
+  /* 标尺仅作位置参照，不拦截画布的拖拽与点击 */
+  pointer-events: none;
 }
 
 /* 适配底部的工具栏不遮盖 */

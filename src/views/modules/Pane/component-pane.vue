@@ -273,12 +273,14 @@ export default {
       layerSearchKeys: '',
       activeTab: 'component',
       activeCptGroupNames: [],
-      componentList,
+      componentList: [],
       cptGroupKeys: [],
       isLayerDraggable: true,
       favoriteCpts: [],
       showFavorites: true,
-      showHistory: true
+      showHistory: true,
+      currentExample: null,
+      currentScreenType: null
     }
   },
   computed: {
@@ -314,7 +316,7 @@ export default {
         this.searchCptResult = []
       } else {
         this.searchCptResult = []
-        componentList.forEach(group => {
+        this.componentList.forEach(group => {
           group.children.forEach(_c => {
             if (_c.name.toLowerCase().includes(newVal.toLowerCase())) {
               this.searchCptResult.push(_c)
@@ -322,6 +324,10 @@ export default {
           })
         })
       }
+    },
+    '$route'() {
+      // 监听路由变化，更新组件数据
+      this.updateComponentData()
     }
   },
   created() {
@@ -334,11 +340,67 @@ export default {
       }
     }
     
-    if (this.componentList.length > 0) {
-      this.activeCptGroupNames = [this.componentList[0].name]
-    }
+    // 初始化组件数据
+    this.updateComponentData()
   },
   methods: {
+    async updateComponentData() {
+      const { type } = this.$route.params
+      const { example } = this.$route.query
+      
+      // 如果参数没有变化，不需要重新加载
+      if (this.currentScreenType === type && this.currentExample === example) {
+        return
+      }
+      
+      this.currentScreenType = type
+      this.currentExample = example
+      
+      try {
+        if (type && example) {
+          // 如果有类型和示例，尝试获取对应的组件数据
+          const { getBigscreenComponents } = await import('@/api/bigscreen')
+          const componentsData = await getBigscreenComponents(type, example)
+
+          // 基于原始组件列表，更新组件的默认数据
+          this.componentList = this.updateComponentListWithExampleData(componentList, componentsData)
+        } else {
+          // 没有示例时使用默认组件列表
+          this.componentList = [...componentList]
+        }
+      } catch (error) {
+        // 获取失败时使用默认数据
+        this.componentList = [...componentList]
+      }
+      
+      // 更新折叠面板状态
+      if (this.componentList.length > 0) {
+        this.activeCptGroupNames = [this.componentList[0].name]
+      }
+    },
+    
+    updateComponentListWithExampleData(originalList, exampleData) {
+      if (!exampleData) return [...originalList]
+      
+      return originalList.map(group => ({
+        ...group,
+        children: group.children.map(component => {
+          const componentType = component.componentName
+          if (exampleData[componentType]) {
+            // 更新组件的默认配置
+            return {
+              ...component,
+              props: {
+                ...component.props,
+                ...exampleData[componentType]
+              }
+            }
+          }
+          return { ...component }
+        })
+      }))
+    },
+    
     changeColSpan(span) {
       this.cptItemSpan = span
     },
@@ -421,11 +483,7 @@ export default {
       localStorage.setItem('favoriteCpts', JSON.stringify(this.favoriteCpts))
     },
     selectAllLayers() {
-      this.$message({
-        message: '已选择所有图层',
-        type: 'success',
-        duration: 1000
-      })
+      this.$emit('selectAllLayers')
     },
     hideAllLayers() {
       this.layerList.forEach(layer => {

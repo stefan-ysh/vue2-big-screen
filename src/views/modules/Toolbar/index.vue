@@ -40,7 +40,23 @@
           <i class="btn el-icon-s-grid" @click="changeCanvasBgStyle('grid')" />
         </el-tooltip>
         <el-checkbox v-model="isShowCoord" class="operation-handler coord-bar">坐标</el-checkbox>
-        <!-- <el-checkbox v-model="isShowRuler" class="operation-handler rule-bar">标尺</el-checkbox> -->
+        <el-checkbox v-model="isShowRuler" class="operation-handler rule-bar">标尺</el-checkbox>
+        <el-tooltip class="operation-handler icon-btn" placement="bottom">
+          <div slot="content">撤销 Ctrl+Z</div>
+          <i
+            class="btn el-icon-refresh-left"
+            :class="{ 'btn-disabled': !canUndo }"
+            @click="undo"
+          />
+        </el-tooltip>
+        <el-tooltip class="operation-handler icon-btn" placement="bottom">
+          <div slot="content">重做 Ctrl+Y</div>
+          <i
+            class="btn el-icon-refresh-right"
+            :class="{ 'btn-disabled': !canRedo }"
+            @click="redo"
+          />
+        </el-tooltip>
         <el-slider v-model="containerScale" class="operation-handler scale-bar" :min="0.02" :max="2" :step="0.01" />
         <el-tooltip class="operation-handler icon-btn" placement="bottom">
           <div slot="content">恢复比例</div>
@@ -167,6 +183,10 @@
           </el-dropdown-menu>
         </el-dropdown>
         <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
+          <div slot="content">存为模板</div>
+          <BSvgIcon icon-class="star" @click="saveAsTemplate" />
+        </el-tooltip>
+        <el-tooltip class="big-screen-opetatin-btn" placement="bottom">
           <div slot="content">预览</div>
           <BSvgIcon icon-class="eye-open" @click="preview" />
         </el-tooltip>
@@ -184,6 +204,7 @@
 import { clearCptInterval, fileDownload } from '@/utils'
 // import BigScreenPreview from '@/views/app/big-screen/preview'
 import html2canvas from 'html2canvas'
+import { saveCustomTemplate } from '@/api/bigscreen'
 
 // import * as BigscreenApi from '@/api/app/big-screen';
 import { Base64 } from 'js-base64'
@@ -204,14 +225,18 @@ export default {
   },
   data() {
     return {
-      appId: '',
-      designMode: 'pc',
-      bigscreenId: ''
+      designMode: 'pc'
     }
   },
   computed: {
     isMultiple() {
       return Object.keys(this.multipleCpts).length >= 2
+    },
+    canUndo() {
+      return this.$store.getters['bigScreen/canUndo']
+    },
+    canRedo() {
+      return this.$store.getters['bigScreen/canRedo']
     },
     cacheComponents() {
       return this.$store.state.bigScreen.componentList
@@ -254,14 +279,15 @@ export default {
       }
     }
   },
-  created() {
-    this.appId = this.$route.params.appId
-    this.bigscreenId = this.$route.params.pageId
-  },
   methods: {
     changeDesignMode(val) {
       this.$store.commit('bigScreen/SWITCH_DESIGN_MODE', val)
-      console.log('[ toolbar ] >', this.$store.state.bigScreen.designMode)
+    },
+    undo() {
+      this.$store.dispatch('bigScreen/undo')
+    },
+    redo() {
+      this.$store.dispatch('bigScreen/redo')
     },
     goBack() {
       this.$router.go(-1)
@@ -415,25 +441,30 @@ export default {
       reader.readAsText(importedFile)
       // 文件加载
       reader.onload = function() {
-        // todo 文件合法性校验待完善
-        const fileJson = JSON.parse(reader.result)
+        let fileJson
+        try {
+          fileJson = JSON.parse(reader.result)
+        } catch (e) {
+          return that.$message.error(`文件 ${fileName} 不是合法的 JSON，请检查后重试`)
+        }
+        if (!fileJson || !Array.isArray(fileJson.components)) {
+          return that.$message.error(`文件 ${fileName} 不是有效的大屏设计文件（缺少 components 数据）`)
+        }
         fileJson.id = that.designData.id
         that.$store.dispatch('bigScreen/initBigScreenData', fileJson)
         that.$store.dispatch('bigScreen/initComponentList', fileJson.components)
-        // 清空现有大屏组件列表
-        // that.$store.dispatch('bigScreen/setBigScreenData', { components: [] })
         that.$message.success(`文件 ${fileName} 导入成功!`)
       }
-      // 读取错误
       reader.onerror = function() {
-        that.$message.success(`文件 ${fileName} 读取失败，请检查后重试`)
+        that.$message.error(`文件 ${fileName} 读取失败，请检查后重试`)
       }
       this.$refs.refFile.value = ''
     },
     // 保存数据
     saveDesignData() {
       const cacheData = Base64.encode(JSON.stringify(this.designData))
-      localStorage.setItem('viewData', cacheData)
+      // 与预览页、设计器 loadData 共用 designCache，保证数据链路一致
+      localStorage.setItem('designCache', cacheData)
       // this.designData.components.map((c) => {
       //   // ? 兼容旧版本大屏数据没有动画参数的
       //   if (!c.configProps.animation) {
@@ -510,6 +541,36 @@ export default {
       // 打开预览窗口
       window.open(routeUrl.href, '_blank')
     },
+    // 保存为自定义模板（持久化到 localStorage，可在模板中心查看使用）
+    saveAsTemplate() {
+      if (!this.cacheComponents.length) {
+        return this.$message.warning('画布为空，无法保存为模板')
+      }
+      this.$prompt('请输入模板名称', '保存为自定义模板', {
+        confirmButtonText: '保存',
+        cancelButtonText: '取消',
+        inputValue: this.designData.title || '',
+        inputValidator: value => (value && value.trim() ? true : '模板名称不能为空')
+      })
+        .then(({ value }) => {
+          saveCustomTemplate({
+            id: 'custom_' + Date.now(),
+            name: value.trim(),
+            description: '来自设计器的自定义模板',
+            type: this.$route.params.type || 'dataAnalysis',
+            screenWidth: this.designData.screenWidth,
+            screenHeight: this.designData.screenHeight,
+            bgColor: this.designData.bgColor,
+            bgImg: this.designData.bgImg,
+            previewScaleType: this.designData.previewScaleType,
+            components: JSON.parse(JSON.stringify(this.cacheComponents)),
+            isCustom: true,
+            createTime: new Date().toISOString()
+          })
+          this.$message.success('模板已保存，可在模板中心查看使用')
+        })
+        .catch(() => {})
+    },
     // 清空画布
     clearDesign() {
       this.$confirm('此操作将会清空画布，是否继续？', '警告', {
@@ -529,9 +590,7 @@ export default {
           clearCptInterval(null, true)
           this.$message.success('画布已清除')
         })
-        .catch(() => {
-          console.log('取消清空')
-        })
+        .catch(() => {})
     }
   }
 }
@@ -580,6 +639,10 @@ export default {
         margin-right: 5px;
         &.pane-active {
           background: #2681ff;
+        }
+        &.btn-disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
         }
       }
       .operation-handler {

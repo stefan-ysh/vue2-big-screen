@@ -20,6 +20,7 @@
           @showConfigPane="showConfigPane"
           @copyCpt="copyCpt"
           @delCpt="delCpt"
+          @selectAllLayers="selectAllLayers"
         />
       </div>
       <!-- 中间组件显示区 -->
@@ -28,13 +29,13 @@
         :style="{ width: windowWidth - cptPaneWidth - configPaneWidth + 'px', opacity: bgOpacity }"
         @click.self="outBlur"
       >
-        <!-- todo 参数优化 -->
-        <!-- <SketchRuler
+        <!-- 画布标尺 -->
+        <SketchRuler
           v-show="isShowRuler"
           :scale="containerScale"
-          :width=" windowWidth - cptPaneWidth - configPaneWidth + -27"
+          :width="windowWidth - cptPaneWidth - configPaneWidth - 27"
           :height="windowHeight - 73"
-        /> -->
+        />
         <div
           ref="webContainer"
           class="web-container"
@@ -51,10 +52,16 @@
           @drop="handleDrop"
           @click.self="outBlur"
         >
-          <template v-if="cacheComponents.length > 0">
+          <template v-if="cacheComponents.length > 0 && $store.state.bigScreen.designMode === 'pc'">
+            <!-- 吸附对齐辅助线 -->
+            <div
+              v-for="(line, i) in snapLines"
+              :key="'snap-' + i"
+              class="snap-line"
+              :style="snapLineStyle(line)"
+            />
             <!-- 组件 -->
             <div
-              v-if="$store.state.bigScreen.designMode === 'pc'"
               v-for="(item, index) in cacheComponents"
               :key="item.id"
               :ref="'div' + item.componentName + index"
@@ -100,11 +107,11 @@
                 class="resize-bar"
               />
             </div>
-            <div 
-              v-show="$store.state.bigScreen.designMode === 'mobile'"
-              style="width: 50%;height: 100%;margin: 0 auto;color: #ffffff;font-size: 50px;text-align:center;line-height: 5"
-            >移动端布局设计开发中，敬请期待</div>
           </template>
+          <div
+            v-else-if="$store.state.bigScreen.designMode === 'mobile' && cacheComponents.length > 0"
+            style="width: 50%;height: 100%;margin: 0 auto;color: #ffffff;font-size: 50px;text-align:center;line-height: 5"
+          >移动端布局设计开发中，敬请期待</div>
           <!-- 无组件提示信息 -->
           <div v-else class="no-cpt-placeholder">
             <BSvgIcon class="no-cpt-tip-img" icon-class="building" />
@@ -116,6 +123,25 @@
       <div class="right-prop-pane" :style="{ width: configPaneWidth + 'px' }">
         <config-pane ref="configPane" :currentCpt.sync="currentCpt" />
       </div>
+    </div>
+    <!-- 示例选择器 -->
+    <div v-if="$route.params.type" class="example-selector-container">
+      <el-select 
+        v-model="currentExample" 
+        placeholder="选择示例数据" 
+        size="small"
+        @change="handleExampleChange"
+        class="example-selector"
+      >
+        <el-option label="默认数据" value=""></el-option>
+        <el-option 
+          v-for="example in availableExamples" 
+          :key="example.key" 
+          :label="example.name" 
+          :value="example.key"
+        >
+        </el-option>
+      </el-select>
     </div>
   </div>
 </template>
@@ -131,6 +157,8 @@ import SketchRuler from '../modules/SketchRuler'
 import mockData from './mockData'
 // import * as BigscreenApi from '@/api'
 import { Base64 } from 'js-base64'
+import templates from './templates'
+
 export default {
   name: 'BigScreenDesigner',
   components: {
@@ -172,6 +200,17 @@ export default {
               that.multipleCpts[key].cptX = newX
               that.multipleCpts[key].cptY = newY
             })
+            // 吸附对齐：以当前组件为基准与其他组件/画布边缘对齐，整组跟随偏移
+            if (that.currentCpt && that.currentCpt.id) {
+              const snap = that.computeSnap(that.currentCpt)
+              if (snap.dx || snap.dy) {
+                Object.keys(that.multipleCpts).forEach(key => {
+                  that.multipleCpts[key].cptX += snap.dx
+                  that.multipleCpts[key].cptY += snap.dy
+                })
+              }
+              that.snapLines = snap.lines
+            }
           } else {
             switch (binding.value) {
               case 'lt':
@@ -224,6 +263,8 @@ export default {
         document.onmouseup = function() {
           that.bgOpacity = 1
           document.onmousemove = document.onmouseup = null
+          // 清除吸附辅助线
+          that.snapLines = []
           // 解决多选移动未松开ctrl键第二次以后拖动定位还原
           that.multipleCptPositions = JSON.parse(JSON.stringify(that.multipleCpts))
         }
@@ -238,7 +279,15 @@ export default {
   },
   data() {
     return {
-      bigscreenId: '',
+      curDragCpt: null,
+      multipleCpts: {},
+      currentExample: '',
+      availableExamples: [],
+      // 撤销/重做：恢复历史期间暂停历史记录，避免恢复动作本身被记入历史
+      restoringHistory: false,
+      historyTimer: null,
+      // 拖拽时的吸附对齐辅助线 [{ type: 'v'|'h', pos }]
+      snapLines: [],
       // 背景透明度
       bgOpacity: 1,
       // 缩放按钮
@@ -280,8 +329,6 @@ export default {
             'top: 50%; border-radius: 5px !important;  right: 0; cursor:ew-resize; transform: translate(50%, -50%);'
         }
       ]),
-      curDragCpt: '',
-      multipleCpts: {},
       // 记录组件原来位置
       multipleCptPositions: {}
     }
@@ -339,10 +386,27 @@ export default {
     },
     frequentlyUsedComponents() {
       return this.$store.state.bigScreen.frequentlyUsedComponents.slice(0, 6);
+    },
+    canUndo() {
+      return this.$store.getters['bigScreen/canUndo']
+    },
+    canRedo() {
+      return this.$store.getters['bigScreen/canRedo']
+    }
+  },
+  watch: {
+    // 画布组件任何变更（增删/移动/属性修改）稳定后记录一条历史快照，用于撤销/重做
+    cacheComponents: {
+      handler() {
+        this.pushHistoryDebounced()
+      },
+      deep: true
     }
   },
   created() {
     this.$store.commit('bigScreen/INIT_FREQUENTLY_USED_COMPONENTS')
+    this.currentExample = this.$route.query.example || ''
+    this.fetchAvailableExamples()
     this.loadData()
   },
   mounted() {
@@ -354,6 +418,7 @@ export default {
     this.$store.commit('bigScreen/CLEAR_BIG_SCREEN_CPT_REF')
     window.removeEventListener('keydown', this.handleKeyDown)
     window.removeEventListener('resize', this.initContainerSize)
+    clearTimeout(this.historyTimer)
   },
   methods: {
     convertAnimation(animation) {
@@ -431,33 +496,33 @@ export default {
               this.currentCpt.cptZ--
               break
             case 'layerTop':
-              // todo
+              this.setCptZLayer('top')
               break
             case 'layerBottom':
-              // todo
+              this.setCptZLayer('bottom')
               break
             case 'copyLayer':
               res.callback(this.currentCpt)
               break
-            case 'delLayer':
-              this.delCpt(this.currentCpt, event.target.dataset.index)
+            case 'delLayer': {
+              // 按组件 id 定位下标，避免误删其它组件
+              const idx = this.cacheComponents.findIndex(c => c.id === this.currentCpt.id)
+              if (idx > -1) {
+                this.delCpt(this.currentCpt, idx)
+              }
               break
+            }
 
             default:
               break
           }
         })
-        .catch(err => {
-          // this.$modal.msg('操作失败，请重试')
-          console.log('右键操作取消/失败', err)
+        .catch(() => {
+          // 右键操作取消时无需处理
         })
     },
 
     handleKeyDown(e) {
-      // 没有组件选中时，则无需做任何处理
-      if (this.currentCptIndex === -1) {
-        return
-      }
       // 是否需在其他输入元素聚焦
       const isIptElFocus = ['INPUT', 'TEXTAREA'].includes(document.activeElement.nodeName)
       // 存在输入框聚焦时，不触发方向键移动事件，持续优化
@@ -466,8 +531,29 @@ export default {
       }
       // 键盘事件的 code
       const keyCode = e.which || e.keyCode
-      // ctrl 键是否按下
-      const isCtrlDown = e.ctrlKey ? e.ctrlKey : keyCode === 17
+      // ctrl / cmd 键是否按下
+      const isCtrlDown = e.ctrlKey || e.metaKey
+      // 撤销/重做：不依赖组件选中状态
+      if (isCtrlDown && keyCode === 90 && !e.shiftKey) {
+        e.preventDefault()
+        this.undo()
+        return
+      }
+      if (isCtrlDown && (keyCode === 89 || (keyCode === 90 && e.shiftKey))) {
+        e.preventDefault()
+        this.redo()
+        return
+      }
+      // 没有组件选中时，则无需做任何处理
+      if (this.currentCptIndex === -1) {
+        return
+      }
+      // ctrl + d 复制当前组件
+      if (keyCode === 68 && isCtrlDown) {
+        e.preventDefault()
+        this.copyCpt(this.currentCpt)
+        return
+      }
       // ctrl + c
       if (keyCode === 67 && isCtrlDown) {
         this.copyCpt(this.currentCpt)
@@ -515,40 +601,154 @@ export default {
       this.$store.dispatch('bigScreen/initContainerSize')
     },
 
+    /** 撤销/重做 */
+    // 画布变更稳定后记录快照（500ms 内的连续变更合并为一条）
+    pushHistoryDebounced() {
+      if (this.restoringHistory) return
+      clearTimeout(this.historyTimer)
+      this.historyTimer = setTimeout(() => {
+        if (this.restoringHistory) return
+        const snapshot = JSON.parse(JSON.stringify(this.cacheComponents))
+        const current = this.$store.state.bigScreen.history[this.$store.state.bigScreen.historyIndex]
+        // 与栈顶相同的状态不入栈（如恢复快照后渲染回响触发的空变更），
+        // 避免覆盖重做分支
+        if (current && JSON.stringify(current) === JSON.stringify(snapshot)) return
+        this.$store.commit('bigScreen/PUSH_HISTORY', snapshot)
+      }, 500)
+    },
+    undo() {
+      if (!this.canUndo) return
+      this.applyHistory(() => this.$store.dispatch('bigScreen/undo'))
+    },
+    redo() {
+      if (!this.canRedo) return
+      this.applyHistory(() => this.$store.dispatch('bigScreen/redo'))
+    },
+    // 恢复快照并重新登记组件引用
+    applyHistory(dispatcher) {
+      this.restoringHistory = true
+      dispatcher()
+      this.$nextTick(() => {
+        this.registerCptRefs()
+        this.restoringHistory = false
+      })
+    },
+    // 重新收集画布组件引用（撤销/重做恢复后原引用失效）
+    registerCptRefs() {
+      this.cacheComponents.forEach(c => {
+        const ref = this.$refs[c.id] && this.$refs[c.id][0]
+        if (ref) {
+          this.$store.commit('bigScreen/ADD_BIG_SCREEN_CPT_REF', { id: c.id, ref })
+        }
+      })
+    },
+
+    // 图层置顶/置底
+    setCptZLayer(type) {
+      const cpt = this.currentCpt
+      if (!cpt || !cpt.id) return
+      const zList = this.cacheComponents.map(c => c.cptZ || 0)
+      if (type === 'top') {
+        cpt.cptZ = Math.max(...zList) + 1
+        this.$message.success('已置顶图层')
+      } else {
+        cpt.cptZ = Math.min(...zList) - 1
+        this.$message.success('已置底图层')
+      }
+    },
+    // 全选图层（配合图层面板的“全选”按钮做多选操作）
+    selectAllLayers() {
+      if (this.cacheComponents.length === 0) return
+      this.clearMultipleCpts()
+      this.cacheComponents.forEach(cpt => {
+        this.setMultipleCpt({ ctrlKey: true }, cpt)
+      })
+      this.$message.success(`已选择 ${this.cacheComponents.length} 个图层`)
+    },
+
     // 加载数据
     async loadData() {
       this.$modal.loading('加载中')
-      let bigscreenData = ''
-      const cacheData = localStorage.getItem('viewData')
-      if (cacheData) {
-        bigscreenData = JSON.parse(Base64.decode(cacheData))
-      } else {
-        bigscreenData = mockData
-      }
+      let bigscreenData = null
 
-      const cptList = bigscreenData.components
+      // 首先尝试从 localStorage 读取缓存
+      // 注意：与预览页（preview/index.vue）、工具栏（Toolbar/index.vue）共用 designCache 这一份缓存，
+      // 保证「设计 -> 保存 -> 预览 -> 回到设计」数据链路一致
+      const cacheData = localStorage.getItem('designCache')
+      if (cacheData) {
+        try {
+          bigscreenData = JSON.parse(Base64.decode(cacheData))
+        } catch (e) {
+          // 缓存损坏时回退到模板数据
+          bigscreenData = null
+        }
+      }
+      if (!bigscreenData) {
+        // 获取路由参数
+        const { type, id } = this.$route.params
+        const { example } = this.$route.query
+
+        // 如果指定了类型和ID，尝试从API加载对应数据
+        if (type && id) {
+          try {
+            // 使用API获取大屏详情，支持示例参数
+            const { getBigscreenDetail } = await import('@/api/bigscreen')
+            bigscreenData = await getBigscreenDetail(id, type, example)
+          } catch (error) {
+            // API加载失败时，回退到模板加载
+            const templateList = templates[type] || []
+            const template = templateList.find(t => t.id === id)
+            bigscreenData = template || templateList[0] || mockData
+          }
+        } else {
+          // 没有指定参数时使用默认模板
+          bigscreenData = mockData
+        }
+      }
+      
+      // 确保有数据
+      if (!bigscreenData) {
+        this.$message.error('获取模板数据失败')
+        this.$modal.closeLoading()
+        return
+      }
+      
+      // 确保数据结构正确
+      if (!bigscreenData.components) {
+        bigscreenData.components = []
+      }
+      if (!Array.isArray(bigscreenData.components)) {
+        bigscreenData.components = []
+      }
+      
+      const cptList = bigscreenData.components || []
       this.$store.dispatch('bigScreen/initViewBigScreenData', bigscreenData)
       this.$store.dispatch('bigScreen/initBigScreenData', bigscreenData)
       this.$store.dispatch('bigScreen/initComponentList', cptList)
+      
       // 全局注册组件引用
       this.$nextTick(() => {
-        this.designData.components.forEach(c => {
-          const id = c.id
-          const ref = this.$refs[id][0]
-          this.$store.commit('bigScreen/ADD_BIG_SCREEN_CPT_REF', { id, ref })
-        })
-      })
-      this.designData.components.forEach(cpt => {
-        if (cpt.configProps.cptDataForm) {
-          // if (!cpt.configProps.cptDataForm.reqParams) {
-          //   console.warn(cpt.layerName + '未设置参数')
-          //   return
-          // }
-          const id = cpt.id
-          const params = JSON.parse(cpt.configProps.cptDataForm.reqParams || '{}')
-          this.$store.dispatch('bigScreen/changeReqParams', { id, params })
+        if (this.designData && this.designData.components && Array.isArray(this.designData.components)) {
+          this.designData.components.forEach(c => {
+            const id = c.id
+            if (this.$refs[id] && this.$refs[id][0]) {
+              const ref = this.$refs[id][0]
+              this.$store.commit('bigScreen/ADD_BIG_SCREEN_CPT_REF', { id, ref })
+            }
+          })
         }
       })
+      
+      if (this.designData && this.designData.components && Array.isArray(this.designData.components)) {
+        this.designData.components.forEach(cpt => {
+          if (cpt.configProps && cpt.configProps.cptDataForm) {
+            const id = cpt.id
+            const params = JSON.parse(cpt.configProps.cptDataForm.reqParams || '{}')
+            this.$store.dispatch('bigScreen/changeReqParams', { id, params })
+          }
+        })
+      }
+      
       this.$modal.closeLoading()
       this.initContainerSize()
     },
@@ -620,6 +820,76 @@ export default {
         this.$refs['div' + item.componentName + index][0].focus()
       }
       this.$refs['configPane'].showCptConfig(item)
+      // 触发组件联动（设计态即时验证联动效果）
+      this.triggerLinkage(item)
+    },
+    // 触发组件联动：点击组件时刷新与其绑定的组件数据
+    triggerLinkage(item) {
+      const interaction = item.configProps && item.configProps.interaction
+      const linkageIds = interaction && interaction.interactable ? interaction.linkageIds : null
+      if (!Array.isArray(linkageIds) || linkageIds.length === 0) return
+      let refreshed = 0
+      linkageIds.forEach(id => {
+        const ref = this.cptRefs.get(id)
+        if (ref && ref.refreshCptData) {
+          ref.refreshCptData()
+          refreshed++
+        }
+      })
+      if (refreshed > 0) {
+        this.$message.success(`已联动刷新 ${refreshed} 个组件`)
+      }
+    },
+    // 拖拽吸附：返回需要对齐的位移与参考线位置
+    computeSnap(cpt) {
+      const THRESHOLD = 6
+      const screenW = this.designData.screenWidth
+      const screenH = this.designData.screenHeight
+      // 候选对齐线：画布边缘/中线 + 其他组件的边缘/中线
+      const vTargets = [0, screenW / 2, screenW]
+      const hTargets = [0, screenH / 2, screenH]
+      this.cacheComponents.forEach(c => {
+        if (c.id === cpt.id) return
+        vTargets.push(c.cptX, c.cptX + c.cptWidth / 2, c.cptX + c.cptWidth)
+        hTargets.push(c.cptY, c.cptY + c.cptHeight / 2, c.cptY + c.cptHeight)
+      })
+      const movingX = [cpt.cptX, cpt.cptX + cpt.cptWidth / 2, cpt.cptX + cpt.cptWidth]
+      const movingY = [cpt.cptY, cpt.cptY + cpt.cptHeight / 2, cpt.cptY + cpt.cptHeight]
+      let bestX = THRESHOLD
+      let bestY = THRESHOLD
+      let dx = 0
+      let dy = 0
+      let snapX = null
+      let snapY = null
+      movingX.forEach(mx => {
+        vTargets.forEach(t => {
+          const d = Math.abs(mx - t)
+          if (d < bestX) {
+            bestX = d
+            dx = t - mx
+            snapX = t
+          }
+        })
+      })
+      movingY.forEach(my => {
+        hTargets.forEach(t => {
+          const d = Math.abs(my - t)
+          if (d < bestY) {
+            bestY = d
+            dy = t - my
+            snapY = t
+          }
+        })
+      })
+      const lines = []
+      if (snapX !== null) lines.push({ type: 'v', pos: Math.round(snapX) })
+      if (snapY !== null) lines.push({ type: 'h', pos: Math.round(snapY) })
+      return { dx, dy, lines }
+    },
+    snapLineStyle(line) {
+      return line.type === 'v'
+        ? { left: line.pos + 'px', top: 0, width: '1px', height: '100%' }
+        : { top: line.pos + 'px', left: 0, height: '1px', width: '100%' }
     },
     dragStart(curDragCpt) {
       // 拖拽开始,及从左侧组件列表拖起组件时
@@ -742,6 +1012,40 @@ export default {
     // 清空多选组件
     clearMultipleCpts() {
       this.multipleCpts = {}
+    },
+    handleExampleChange(value) {
+      // 处理示例变化
+      this.currentExample = value;
+      
+      // 更新URL参数
+      const query = { ...this.$route.query }
+      if (value) {
+        query.example = value
+      } else {
+        delete query.example
+      }
+      
+      this.$router.replace({
+        path: this.$route.path,
+        query
+      }).then(() => {
+        // URL更新后重新加载数据
+        this.loadData()
+      }).catch(() => {
+        // 路由更新失败（含导航重复）时仍需重新加载数据
+        this.loadData()
+      })
+    },
+    async fetchAvailableExamples() {
+      const { type } = this.$route.params
+      if (!type) return
+      
+      try {
+        const { getAvailableExamples } = await import('@/api/bigscreen')
+        this.availableExamples = await getAvailableExamples(type)
+      } catch (error) {
+        this.availableExamples = []
+      }
     }
   }
 }
@@ -749,6 +1053,36 @@ export default {
 
 <style scoped lang="less">
 .bigscreen-designer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: #1d1e1f;
+  overflow: hidden;
+  
+  .example-selector-container {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 1000;
+    
+    .example-selector {
+      width: 150px;
+      
+      /deep/ .el-input__inner {
+        background-color: #3a3a3a;
+        border-color: #555;
+        color: #fff;
+        
+        &:focus {
+          border-color: #4a9eff;
+        }
+      }
+      
+      /deep/ .el-input__suffix {
+        color: #ccc;
+      }
+    }
+  }
   // 设计区
   .design-area {
     // 左侧组件列表/图层
@@ -768,7 +1102,14 @@ export default {
         transform-origin: 0 0;
         // 修复窗口大小变化导致的底部白条问题，暂时注释动画效果
         // transition: all .4s;
-        .cpt-div {
+        .snap-line {
+        position: absolute;
+        background: #ff4d4f;
+        z-index: 3000;
+        pointer-events: none;
+      }
+
+      .cpt-div {
           position: absolute;
           outline: none;
           cursor: pointer;

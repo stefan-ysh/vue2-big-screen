@@ -39,7 +39,10 @@ const designState = {
   // 是否显示配置面板
   configPaneWidth: 300,
   // 是否显示组件坐标
-  isShowCoord: false
+  isShowCoord: false,
+  // 画布组件历史快照（撤销/重做），historyIndex 指向当前生效的快照
+  history: [],
+  historyIndex: -1
 }
 const designActions = {
   /** 大屏总数据操作 */
@@ -54,23 +57,33 @@ const designActions = {
 
   /** 设置画布样式等 */
   // 设置显示坐标 or not
-  setCoordShowStatus({ commit, state, dispatch }, data) {
+  setCoordShowStatus({ commit }, data) {
     commit('SET_COORD_SHOW_STATUS', data)
   },
   // 设置显示标尺 or not
-  setRuleShowStatus({ commit, state, dispatch }, data) {
+  setRuleShowStatus({ commit }, data) {
     commit('SET_RULE_SHOW_STATUS', data)
   },
   // 更改画布背景风格
-  changeCanvasBgStyle({ commit, state, dispatch }, style) {
+  changeCanvasBgStyle({ state }, style) {
     state.canvasBgStyle = style
   },
   // 切换组件及属性设置面板显示状态
-  changePaneDisplayStatus({ commit, state, dispatch }, type) {
+  changePaneDisplayStatus({ state, dispatch }, type) {
     if (type === 'left') {
       state.componentPaneWidth = state.componentPaneWidth === 0 ? 200 : 0
     } else {
       state.configPaneWidth = state.configPaneWidth === 0 ? 300 : 0
+    }
+    dispatch('initContainerSize')
+  },
+  // 拖拽分隔条设置面板宽度，pane 为 left / right
+  setPaneWidth({ state, dispatch }, { pane, width }) {
+    const clamped = Math.min(500, Math.max(0, Math.round(width)))
+    if (pane === 'left') {
+      state.componentPaneWidth = clamped
+    } else {
+      state.configPaneWidth = clamped
     }
     dispatch('initContainerSize')
   },
@@ -86,13 +99,16 @@ const designActions = {
   },
 
   // 初始化容器缩放比例
-  initContainerSize({ state, dispatch }) {
+  initContainerSize({ state }) {
     state.windowWidth = document.documentElement.clientWidth
     state.windowHeight = document.documentElement.clientHeight
+    // 兜底：导入/旧数据可能缺少画布尺寸，避免缩放计算出 NaN
+    const screenWidth = state.bigScreenData.screenWidth || 1920
+    const screenHeight = state.bigScreenData.screenHeight || 1080
     const tempWidth = state.windowWidth - state.componentPaneWidth - state.configPaneWidth - 45
     const tempHeight = state.windowHeight - 65
-    const screenX = (tempWidth / state.bigScreenData.screenWidth).toFixed(2) * 1
-    const screenY = (tempHeight / state.bigScreenData.screenHeight).toFixed(2) * 1
+    const screenX = (tempWidth / screenWidth).toFixed(2) * 1
+    const screenY = (tempHeight / screenHeight).toFixed(2) * 1
     const minScale = Math.min(screenX, screenY)
     // 设置缩放最小值，避免缩放过小页面卡死
     state.containerScale = minScale <= 0.02 ? 0.02 : minScale
@@ -129,6 +145,23 @@ const designActions = {
   // 如：要更改 id 为 1 的组件的可见度，则需要传值为 this.$store.dispatch('bigScreen/updateCptProp', { id: 1, data: { hidden: true } })
   updateCptProp({ commit }, params) {
     commit('UPDATE_CPT_PROP', params)
+  },
+  /** 撤销/重做 */
+  // 记录一条画布组件快照（由设计器在变更稳定后调用）
+  pushHistory({ commit }, snapshot) {
+    commit('PUSH_HISTORY', snapshot)
+  },
+  undo({ state, commit }) {
+    if (state.historyIndex > 0) {
+      state.historyIndex -= 1
+      commit('RESTORE_HISTORY', state.history[state.historyIndex])
+    }
+  },
+  redo({ state, commit }) {
+    if (state.historyIndex < state.history.length - 1) {
+      state.historyIndex += 1
+      commit('RESTORE_HISTORY', state.history[state.historyIndex])
+    }
   }
 }
 const designMutations = {
@@ -136,13 +169,18 @@ const designMutations = {
     state.designMode = val
   },
   INIT_BIG_SCREEN_DATA(state, data) {
-    state.bigScreenData = data
+    // 确保传入的数据有components属性，且是数组
+    const safeData = {
+      ...data,
+      components: Array.isArray(data.components) ? data.components : []
+    }
+    state.bigScreenData = safeData
   },
   SET_BIG_SCREEN_DATA(state, params) {
     state.bigScreenData = Object.assign(state.bigScreenData, params)
   },
   INIT_COMPONENT_LIST(state, cpts) {
-    state.componentList = cpts
+    state.componentList = Array.isArray(cpts) ? cpts : []
   },
   INIT_FREQUENTLY_USED_COMPONENTS(state) {
     const cpts = localStorage.getItem('frequentlyUsedCpts')
@@ -209,9 +247,35 @@ const designMutations = {
       const tempVal = Object.assign(targetComponent, data)
       targetComponent = tempVal
     }
+  },
+  PUSH_HISTORY(state, snapshot) {
+    if (!Array.isArray(snapshot)) return
+    // 丢弃当前节点之后的重做分支
+    state.history = state.history.slice(0, state.historyIndex + 1)
+    state.history.push(snapshot)
+    // 限制历史长度，避免内存无限增长
+    if (state.history.length > 50) {
+      state.history.shift()
+    }
+    state.historyIndex = state.history.length - 1
+  },
+  RESTORE_HISTORY(state, snapshot) {
+    if (!Array.isArray(snapshot)) return
+    state.componentList = JSON.parse(JSON.stringify(snapshot))
+    // 恢复后原选中组件可能已不存在，清空选中状态
+    state.curComponent = {}
+    state.curComponentIndex = -1
   }
 }
 const designGetters = {
+  // 是否可撤销（下标 0 为初始快照）
+  canUndo(state) {
+    return state.historyIndex > 0
+  },
+  // 是否可重做
+  canRedo(state) {
+    return state.historyIndex < state.history.length - 1
+  },
   // 画布背景 分为点阵和网格 lattice / grid
   designAreaStyle(state) {
     if (state.canvasBgStyle === 'lattice') {
