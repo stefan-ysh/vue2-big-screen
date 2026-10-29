@@ -4,9 +4,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script>
 import { getDataJson, pollingRefresh } from '@/utils'
+import echartsMixin from '@/utils/echartsMixin'
 
 export default {
   name: 'RadarChart',
+  mixins: [echartsMixin],
   props: {
     cptId: {
       type: String,
@@ -18,9 +20,7 @@ export default {
   },
   data() {
     return {
-      uuid: '',
       chartOption: {},
-      chart: undefined,
       cptData: []
     }
   },
@@ -31,19 +31,6 @@ export default {
       },
       deep: true // 深度监听
     },
-    width() {
-      this.chart.resize()
-    },
-    height() {
-      this.chart.resize()
-    }
-  },
-  created() {
-    this.uuid = require('uuid').v1()
-  },
-  mounted() {
-    this.chart = this.$echarts.init(document.getElementById(this.uuid))
-    this.refreshCptData()
   },
   methods: {
     refreshCptData() {
@@ -151,7 +138,7 @@ export default {
         const convertFun = new Function('return ' + funcStr)
         convertFun()(this.chartOption)
       }
-      this.chart.setOption(this.chartOption)
+      this.renderChart(this.chartOption)
     }
   }
 }

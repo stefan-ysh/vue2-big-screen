@@ -1,7 +1,7 @@
 // import '../assets/style/animation.scss'
 import '@/assets/style/element-ui-reset.less'
 export default {
-  install(Vue, options) {
+  install(Vue) {
     // 1.读取lib文件夹下的文件
     // requeire.context('路径', 是否读取子文件夹, /正则匹配/)
     const files = require.context('../components', true, /\.vue$/)

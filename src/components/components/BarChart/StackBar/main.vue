@@ -21,9 +21,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script>
 import { getDataJson, pollingRefresh } from '@/utils'
+import echartsMixin from '@/utils/echartsMixin'
 
 export default {
   name: 'StackBar',
+  mixins: [echartsMixin],
   props: {
     width: Number,
     height: Number,
@@ -34,9 +36,7 @@ export default {
     return {
       sortType: '',
       series: [],
-      uuid: null,
       chartOption: {},
-      chart: undefined,
       activeLegends: undefined,
       cptData: {}
     }
@@ -48,27 +48,14 @@ export default {
       },
       deep: true
     },
-    width() {
-      this.chart.resize()
-    },
-    height() {
-      this.chart.resize()
-    }
   },
   created() {
-    this.uuid = require('uuid').v1()
     this.sortType = this.configProps.attribute.defaultSortType
   },
   mounted() {
-    const that = this
-    this.chart = this.$echarts.init(document.getElementById(this.uuid))
-    this.refreshCptData()
-    this.chart.on('click', params => {
-      // debugger
-    })
-    that.chart.on('legendselectchanged', params => {
-      that.activeLegends = params.selected
-      that.loadChart(that.configProps.attribute)
+    this.chart.on('legendselectchanged', params => {
+      this.activeLegends = params.selected
+      this.loadChart(this.configProps.attribute)
     })
   },
   methods: {
@@ -270,13 +257,8 @@ export default {
         //   }
         // }]
       }
-      // 图表处理
-      if (this.configProps.cptDataForm.convertChart) {
-        const funcStr = this.configProps.cptDataForm.convertChart
-        const convertFun = new Function('return ' + funcStr)
-        convertFun()(this.chartOption)
-      }
-      that.chart.setOption(that.chartOption)
+      // 渲染（含图表处理函数）
+      this.renderChart(that.chartOption)
     }
   }
 }

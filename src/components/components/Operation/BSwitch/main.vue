@@ -28,7 +28,8 @@ export default {
   },
   methods: {
     handleSwitch(val) {
-      console.log('[ val ] >', val)
+      // 供交互配置使用，切换时对外抛出当前值
+      this.$emit('change', val)
     },
     handleClickUrl() {
       if (this.configProps.attribute.url) {

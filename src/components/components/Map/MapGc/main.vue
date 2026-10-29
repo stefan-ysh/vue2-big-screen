@@ -4,9 +4,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script>
 import { getDataJson, pollingRefresh } from '@/utils'
+import echartsMixin from '@/utils/echartsMixin'
 
 export default {
   name: 'MapGc',
+  mixins: [echartsMixin],
   props: {
     cptId: String,
     width: Number,
@@ -15,9 +17,7 @@ export default {
   },
   data() {
     return {
-      uuid: '',
       chartOption: {},
-      chart: undefined,
       cptData: []
     }
   },
@@ -28,19 +28,6 @@ export default {
       },
       deep: true // 深度监听
     },
-    width() {
-      this.chart.resize()
-    },
-    height() {
-      this.chart.resize()
-    }
-  },
-  created() {
-    this.uuid = require('uuid').v1()
-  },
-  mounted() {
-    this.chart = this.$echarts.init(document.getElementById(this.uuid))
-    this.refreshCptData()
   },
   methods: {
     refreshCptData() {
@@ -140,7 +127,7 @@ export default {
           }
         ]
       }
-      that.chart.setOption(that.chartOption)
+      this.renderChart(that.chartOption)
     }
   }
 }

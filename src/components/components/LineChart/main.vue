@@ -4,9 +4,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script>
 import { getDataJson, pollingRefresh } from '@/utils'
+import echartsMixin from '@/utils/echartsMixin'
 
 export default {
   name: 'LineChart',
+  mixins: [echartsMixin],
   props: {
     cptId: String,
     width: Number,
@@ -15,9 +17,7 @@ export default {
   },
   data() {
     return {
-      uuid: '',
       chartOption: {},
-      chart: undefined,
       cptData: []
     }
   },
@@ -27,20 +27,7 @@ export default {
         this.loadChart(newObj)
       },
       deep: true // 深度监听
-    },
-    width() {
-      this.chart.resize()
-    },
-    height() {
-      this.chart.resize()
     }
-  },
-  created() {
-    this.uuid = require('uuid').v1()
-  },
-  mounted() {
-    this.chart = this.$echarts.init(document.getElementById(this.uuid))
-    this.refreshCptData()
   },
   methods: {
     refreshCptData() {
@@ -56,12 +43,13 @@ export default {
       const that = this
       const series = []
       let xData = []
-      this.cptData.forEach(c => {
+      const rows = Array.isArray(this.cptData) ? this.cptData : []
+      rows.forEach(c => {
         if (xData.length === 0) {
-          xData = c.xData.split(',')
+          xData = String(c.xData || '').split(',')
         }
         series.push({
-          data: c.yData.split(','),
+          data: String(c.yData || '').split(','),
           type: 'line',
           smooth: attribute.smooth,
           // 线条上的圆点
@@ -150,13 +138,8 @@ export default {
         },
         series
       }
-      // 图表处理
-      if (this.configProps.cptDataForm.convertChart) {
-        const funcStr = this.configProps.cptDataForm.convertChart
-        const convertFun = new Function('return ' + funcStr)
-        convertFun()(this.chartOption)
-      }
-      that.chart.setOption(that.chartOption)
+      // 渲染（含图表处理函数）
+      this.renderChart(that.chartOption)
     }
   }
 }

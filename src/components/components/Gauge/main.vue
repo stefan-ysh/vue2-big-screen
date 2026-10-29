@@ -4,9 +4,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script>
 import { getDataJson, pollingRefresh } from '@/utils'
+import echartsMixin from '@/utils/echartsMixin'
 
 export default {
   name: 'Dashboard',
+  mixins: [echartsMixin],
   props: {
     cptId: String,
     width: Number,
@@ -15,9 +17,7 @@ export default {
   },
   data() {
     return {
-      uuid: '',
       chartOption: {},
-      chart: null,
       cptData: {}
     }
   },
@@ -28,21 +28,12 @@ export default {
       },
       deep: true // 深度监听
     },
-    width() {
-      this.chart.resize()
-    },
-    height() {
-      this.chart.resize()
-    }
-  },
-  created() {
-    this.uuid = require('uuid').v1()
-  },
-  mounted() {
-    this.chart = this.$echarts.init(document.getElementById(this.uuid), 'dark')
-    this.refreshCptData()
   },
   methods: {
+    // 使用 echarts 暗色主题初始化
+    getChartTheme() {
+      return 'dark'
+    },
     refreshCptData() {
       pollingRefresh(this.uuid, this.configProps.cptDataForm, this.loadData)
     },
@@ -127,7 +118,7 @@ export default {
           }
         ]
       }
-      that.chart.setOption(that.chartOption)
+      this.renderChart(that.chartOption)
     }
   }
 }

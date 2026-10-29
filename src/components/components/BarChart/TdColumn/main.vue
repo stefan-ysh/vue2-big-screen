@@ -4,9 +4,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script>
 import { getDataJson, pollingRefresh } from '@/utils'
+import echartsMixin from '@/utils/echartsMixin'
 
 export default {
   name: 'TdColumnChart',
+  mixins: [echartsMixin],
   props: {
     cptId: String,
     width: Number,
@@ -15,9 +17,7 @@ export default {
   },
   data() {
     return {
-      uuid: null,
       chartOption: {},
-      chart: undefined,
       cptData: {}
     }
   },
@@ -27,21 +27,7 @@ export default {
         this.loadChart(newObj)
       },
       deep: true // 深度监听
-    },
-    width() {
-      this.chart.resize()
-    },
-    height() {
-      console.log('----', 11)
-      this.chart.resize()
     }
-  },
-  created() {
-    this.uuid = require('uuid').v1()
-  },
-  mounted() {
-    this.chart = this.$echarts.init(document.getElementById(this.uuid))
-    this.refreshCptData()
   },
   methods: {
     refreshCptData() {
@@ -172,7 +158,7 @@ export default {
           }
         ]
       }
-      that.chart.setOption(that.chartOption)
+      this.renderChart(that.chartOption)
     }
   }
 }

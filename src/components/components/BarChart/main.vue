@@ -4,9 +4,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script>
 import { getDataJson, pollingRefresh } from '@/utils'
+import echartsMixin from '@/utils/echartsMixin'
 
 export default {
   name: 'BarChart',
+  mixins: [echartsMixin],
   props: {
     width: Number,
     height: Number,
@@ -15,9 +17,7 @@ export default {
   },
   data() {
     return {
-      uuid: null,
       chartOption: {},
-      chart: undefined,
       cptData: {}
     }
   },
@@ -28,22 +28,6 @@ export default {
       },
       deep: true
     },
-    width() {
-      this.chart.resize()
-    },
-    height() {
-      this.chart.resize()
-    }
-  },
-  created() {
-    this.uuid = require('uuid').v1()
-  },
-  mounted() {
-    this.chart = this.$echarts.init(document.getElementById(this.uuid))
-    this.refreshCptData()
-    this.chart.on('click', params => {
-      // debugger
-    })
   },
   methods: {
     refreshCptData() {
@@ -155,13 +139,8 @@ export default {
           }
         ]
       }
-      // 图表处理
-      if (this.configProps.cptDataForm.convertChart) {
-        const funcStr = this.configProps.cptDataForm.convertChart
-        const convertFun = new Function('return ' + funcStr)
-        convertFun()(this.chartOption)
-      }
-      that.chart.setOption(that.chartOption)
+      // 渲染（含图表处理函数）
+      this.renderChart(that.chartOption)
     }
   }
 }

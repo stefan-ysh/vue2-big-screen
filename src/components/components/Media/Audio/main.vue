@@ -54,8 +54,10 @@ export default {
       })
     },
     compareResult(val, conditions) {
+      // val: 音频数据值；conditions: 播放条件，待实现条件判断
+      void val
+      void conditions
       this.autoplay = false
-      // 判断是否满足条件
     }
   }
 }
