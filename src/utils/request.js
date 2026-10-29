@@ -5,7 +5,8 @@ import { tansParams } from '@/utils/common'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 const service = axios.create({
-  baseURL: 'http://xxx.xxx.xxx',
+  // 后端接口基础地址，通过 .env 的 VUE_APP_BASE_API 配置
+  baseURL: process.env.VUE_APP_BASE_API || '',
   timeout: 30000
 })
 
@@ -22,7 +23,7 @@ service.interceptors.request.use(
     return config
   },
   error => {
-    Promise.reject(error)
+    return Promise.reject(error)
   }
 )
 

@@ -70,7 +70,12 @@ async function getDataJson(cptDataForm, id) {
   const dataSource = cptDataForm.dataSource
   // 静态数据
   if (dataSource === 1) {
-    res = JSON.parse(iptStr)
+    try {
+      res = JSON.parse(iptStr)
+    } catch (e) {
+      // 静态数据格式错误时回退为空对象，避免整个组件数据链崩塌
+      res = {}
+    }
   } else if (dataSource === 2) {
     // 接口请求
     const url = cptDataForm.apiUrl
@@ -154,12 +159,17 @@ async function getDataJson(cptDataForm, id) {
   // 处理数据函数
   if (cptDataForm.convertData) {
     const funcStr = cptDataForm.convertData
-    const convertFun = new Function('return ' + funcStr)
     if (currentCptRef) {
       loading && loadingMap.get(id).close()
       loading && loadingMap.delete(id)
     }
-    return convertFun()(res)
+    try {
+      const convertFun = new Function('return ' + funcStr)
+      return convertFun()(res)
+    } catch (e) {
+      // 转换函数执行失败时返回原始数据
+      return res
+    }
   } else {
     if (currentCptRef) {
       loading && loadingMap.get(id).close()
