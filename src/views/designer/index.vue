@@ -66,6 +66,7 @@
               :key="item.id"
               :ref="'div' + item.componentName + index"
               class="cpt-div"
+              :class="{ 'drop-anim': item.id === dropAnimId }"
               :style="commonCptStyle(item, index)"
               tabindex="0"
               @mousedown="showConfigPane($event, item, index)"
@@ -288,6 +289,9 @@ export default {
       historyTimer: null,
       // 拖拽时的吸附对齐辅助线 [{ type: 'v'|'h', pos }]
       snapLines: [],
+      // 刚拖入画布的组件 id，用于播放放置反馈动画
+      dropAnimId: '',
+      dropAnimTimer: null,
       // 背景透明度
       bgOpacity: 1,
       // 缩放按钮
@@ -419,6 +423,7 @@ export default {
     window.removeEventListener('keydown', this.handleKeyDown)
     window.removeEventListener('resize', this.initContainerSize)
     clearTimeout(this.historyTimer)
+    clearTimeout(this.dropAnimTimer)
   },
   methods: {
     convertAnimation(animation) {
@@ -843,6 +848,10 @@ export default {
     // 拖拽吸附：返回需要对齐的位移与参考线位置
     computeSnap(cpt) {
       const THRESHOLD = 6
+      // 吸附开关关闭时直接跳过
+      if (!this.$store.state.bigScreen.isShowSnap) {
+        return { dx: 0, dy: 0, lines: [] }
+      }
       const screenW = this.designData.screenWidth
       const screenH = this.designData.screenHeight
       // 候选对齐线：画布边缘/中线 + 其他组件的边缘/中线
@@ -959,6 +968,11 @@ export default {
       
       // 添加放置动画效果
       this.$store.dispatch('bigScreen/addCpt', cpt)
+      this.dropAnimId = id
+      clearTimeout(this.dropAnimTimer)
+      this.dropAnimTimer = setTimeout(() => {
+        this.dropAnimId = ''
+      }, 700)
       
       this.$nextTick(() => {
         // 添加组件引用
@@ -1102,7 +1116,22 @@ export default {
         transform-origin: 0 0;
         // 修复窗口大小变化导致的底部白条问题，暂时注释动画效果
         // transition: all .4s;
-        .snap-line {
+        .cpt-div.drop-anim .cpt-wrap {
+        animation: cpt-drop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      @keyframes cpt-drop-in {
+        from {
+          opacity: 0;
+          transform: scale(0.7);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .snap-line {
         position: absolute;
         background: #ff4d4f;
         z-index: 3000;

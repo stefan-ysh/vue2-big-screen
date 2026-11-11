@@ -40,6 +40,8 @@ const designState = {
   configPaneWidth: 300,
   // 是否显示组件坐标
   isShowCoord: false,
+  // 是否开启拖拽吸附对齐
+  isShowSnap: true,
   // 画布组件历史快照（撤销/重做），historyIndex 指向当前生效的快照
   history: [],
   historyIndex: -1
@@ -63,6 +65,10 @@ const designActions = {
   // 设置显示标尺 or not
   setRuleShowStatus({ commit }, data) {
     commit('SET_RULE_SHOW_STATUS', data)
+  },
+  // 设置拖拽吸附对齐 or not
+  setSnapShowStatus({ commit }, data) {
+    commit('SET_SNAP_SHOW_STATUS', data)
   },
   // 更改画布背景风格
   changeCanvasBgStyle({ state }, style) {
@@ -220,6 +226,9 @@ const designMutations = {
   },
   SET_RULE_SHOW_STATUS(state, data) {
     state.isShowRuler = data
+  },
+  SET_SNAP_SHOW_STATUS(state, data) {
+    state.isShowSnap = data
   },
   SET_CUR_COMPONENT(state, cpt) {
     // 图层滚动至图层容器中心可视区

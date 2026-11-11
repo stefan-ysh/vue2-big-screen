@@ -41,6 +41,7 @@
         </el-tooltip>
         <el-checkbox v-model="isShowCoord" class="operation-handler coord-bar">坐标</el-checkbox>
         <el-checkbox v-model="isShowRuler" class="operation-handler rule-bar">标尺</el-checkbox>
+        <el-checkbox v-model="isShowSnap" class="operation-handler snap-bar">吸附</el-checkbox>
         <el-tooltip class="operation-handler icon-btn" placement="bottom">
           <div slot="content">撤销 Ctrl+Z</div>
           <i
@@ -276,6 +277,14 @@ export default {
       },
       set(val) {
         this.$store.dispatch('bigScreen/setRuleShowStatus', val)
+      }
+    },
+    isShowSnap: {
+      get() {
+        return this.$store.state.bigScreen.isShowSnap
+      },
+      set(val) {
+        this.$store.dispatch('bigScreen/setSnapShowStatus', val)
       }
     }
   },
