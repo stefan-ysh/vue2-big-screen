@@ -16,6 +16,7 @@ export default {
       title: '数据表格',
       showTitle: true,
       titleHeight: 40,
+      rankHighlight: true,
       columns: [
         { label: '排名', prop: 'rank' },
         { label: '名称', prop: 'name' },

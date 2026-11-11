@@ -95,6 +95,12 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  }
 
   .card-title {
     font-size: 16px;

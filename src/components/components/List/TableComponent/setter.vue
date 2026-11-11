@@ -8,6 +8,10 @@
       <el-form-item label="显示标题">
         <el-switch v-model="attribute.showTitle" />
       </el-form-item>
+      <el-form-item label="排名高亮">
+        <el-switch v-model="attribute.rankHighlight" />
+        <span class="setter-tip">前三名显示金银铜徽标</span>
+      </el-form-item>
       <el-form-item label="表头颜色">
         <BColorPicker :data="attribute" field="headerColor" show-alpha />
       </el-form-item>
@@ -71,6 +75,12 @@ export default {
 </script>
 
 <style scoped>
+.setter-tip {
+  margin-left: 8px;
+  font-size: 11px;
+  color: #8a97ad;
+}
+
 .columns-error {
   color: #f56c6c;
   font-size: 12px;

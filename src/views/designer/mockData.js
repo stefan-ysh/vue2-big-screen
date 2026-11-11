@@ -970,6 +970,7 @@ export default {
           title: '区域物流量排行',
           showTitle: true,
           titleHeight: 40,
+          rankHighlight: true,
           columns: [
             { label: '排名', prop: 'rank' },
             { label: '地区', prop: 'region' },

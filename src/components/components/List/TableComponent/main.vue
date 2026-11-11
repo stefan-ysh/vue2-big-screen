@@ -15,7 +15,12 @@
         <tbody>
           <tr v-for="(row, rowIndex) in tableRows" :key="rowIndex">
             <td v-for="(column, colIndex) in tableColumns" :key="colIndex" :style="tdStyle">
-              {{ row[column.prop] }}
+              <span
+                v-if="isRankCell(column, row)"
+                class="rank-badge"
+                :class="'rank-' + row[column.prop]"
+              >{{ row[column.prop] }}</span>
+              <template v-else>{{ row[column.prop] }}</template>
             </td>
           </tr>
           <tr v-if="tableRows.length === 0">
@@ -80,6 +85,14 @@ export default {
         this.attribute.data ||
         (this.attribute.tableConfig && this.attribute.tableConfig.data)
       return Array.isArray(rows) ? rows : []
+    },
+    // 排名列高亮：开启 rankHighlight 且当前列为排名列、值为前三名时渲染奖牌色徽标
+    isRankCell() {
+      return (column, row) => {
+        if (!this.attribute.rankHighlight || column.prop !== 'rank') return false
+        const value = String(row[column.prop])
+        return ['1', '2', '3'].includes(value)
+      }
     },
     tableContainerStyle() {
       return {
@@ -187,6 +200,35 @@ export default {
     .empty-row {
       color: #7a8ba6;
       padding: 16px 0;
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-weight: bold;
+      line-height: 1;
+
+      &.rank-1 {
+        color: #ffd700;
+        background: rgba(255, 215, 0, 0.15);
+        border: 1px solid rgba(255, 215, 0, 0.55);
+      }
+
+      &.rank-2 {
+        color: #c0c0c0;
+        background: rgba(192, 192, 192, 0.15);
+        border: 1px solid rgba(192, 192, 192, 0.5);
+      }
+
+      &.rank-3 {
+        color: #cd7f32;
+        background: rgba(205, 127, 50, 0.15);
+        border: 1px solid rgba(205, 127, 50, 0.5);
+      }
     }
   }
 }
